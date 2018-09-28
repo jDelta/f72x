@@ -1,5 +1,5 @@
 {
-    "name": "jdelta/F72X",
+    "name": "jdelta/f72x",
     "type": "library",
     "description": "Modulo de facturación electrónica SUNAT UBL 2.1",
     "keywords": ["SUNAT", "UBL 2.1", "Integración", "Factura Elctrónica PHP", "Firma digital", "XML"],
