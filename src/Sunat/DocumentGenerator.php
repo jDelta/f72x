@@ -181,8 +181,9 @@ class DocumentGenerator {
         $DetailMatrix = new DetailMatrix();                 // Matriz de calculos
         $DetailMatrix->populate($items, $currencyID);
         $Invoice->setDetailMatrix($DetailMatrix);
+        $ln = count($items);
         // Loop
-        for ($i = 0; $i < count($items); $i++) {
+        for ($i = 0; $i < $ln; $i++) {
             self::addInvoiceLine($Invoice, $i);
         }
     }
@@ -383,10 +384,6 @@ class DocumentGenerator {
         $TaxTotal->addTaxSubTotal($TaxSubTotal);
     }
 
-    private static function generateDocCode() {
-        return '0501002017051400452';
-        //return time();
-    }
     public static function addAccountingSupplierParty(SunatDocument $Document) {
         // Info
         $partyName  = Company::getBusinessName();

@@ -48,10 +48,10 @@ class BaseComponent implements XmlSerializable {
         return $this;
     }
 
-    public function set($element, $value, $attribues = null) {
+    public function set($element, $value, $attributes = null) {
         if (property_exists($this, $element)) {
             $this->{$element} = $value;
-            if (is_array($attribues)) {
+            if (is_array($attributes)) {
                 return $this->setElementAttributes($element, $attributes);
             }
         } else {

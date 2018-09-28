@@ -17,15 +17,15 @@ class UBLExtension extends BaseComponent {
     /** @var mixed */
     protected $ExtensionContent;
 
-    function xmlSerialize(Writer $writer) {
+    public function xmlSerialize(Writer $writer) {
         $writer->write([SchemaNS::EXT . 'ExtensionContent' => $this->ExtensionContent]);
     }
 
-    function getExtensionContent() {
+    public function getExtensionContent() {
         return $this->ExtensionContent;
     }
 
-    function setExtensionContent($ExtensionContent) {
+    public function setExtensionContent($ExtensionContent) {
         $this->ExtensionContent = $ExtensionContent;
         return $this;
     }

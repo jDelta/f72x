@@ -24,7 +24,7 @@ class Note extends BaseComponent {
         $this->Value = $Value;
     }
 
-    function xmlSerialize(Writer $writer) {
+    public function xmlSerialize(Writer $writer) {
         $writer->write([
             'name'  => SchemaNS::CBC . 'Note',
             'value' => $this->Value,

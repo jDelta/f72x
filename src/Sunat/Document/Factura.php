@@ -23,20 +23,12 @@ class Factura extends SunatDocument {
     }
 
     /**
-     *    
-     * @return string Nombre del comprobante de acuerdo con las especificaciones de la SUNAT
-     */
-    public function getFileName() {
-        return Company::getRUC() . '-' . $this->InvoiceTypeCode . '-' . $this->ID . '.xml';
-    }
-
-    /**
      * The xmlSerialize method is called during xml writing.
      *
      * @param Writer $writer
      * @return void
      */
-    function xmlSerialize(Writer $writer) {
+    public function xmlSerialize(Writer $writer) {
         $companyRUC  = Company::getRUC();
         $companyName = Company::getCompanyName();
         // SchemaNS::EXT . 'UBLExtensions'

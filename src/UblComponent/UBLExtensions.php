@@ -17,7 +17,7 @@ class UBLExtensions extends BaseComponent {
     /** @var UBLExtension[] */
     protected $UBLExtensions = [];
 
-    function xmlSerialize(Writer $writer) {
+    public function xmlSerialize(Writer $writer) {
         foreach ($this->UBLExtensions as $ext) {
             $writer->write([
                 SchemaNS::EXT . 'UBLExtension' => $ext
@@ -25,11 +25,11 @@ class UBLExtensions extends BaseComponent {
         }
     }
 
-    function getUBLExtensions() {
+    public function getUBLExtensions() {
         return $this->UBLExtensions;
     }
 
-    function setUBLExtensions($UBLExtensions) {
+    public function setUBLExtensions($UBLExtensions) {
         $this->UBLExtensions = $UBLExtensions;
         return $this;
     }

@@ -10,6 +10,7 @@
 
 namespace F72X\Sunat\Document;
 
+use F72X\Company;
 use F72X\UblComponent\Invoice;
 use F72X\Sunat\DetailMatrix;
 
@@ -35,5 +36,11 @@ abstract class SunatDocument extends Invoice {
         $this->DetailMatrix = $DetailMatrix;
         return $this;
     }
-
+    /**
+     *    
+     * @return string Nombre del comprobante de acuerdo con las especificaciones de la SUNAT
+     */
+    public function getFileName() {
+        return Company::getRUC() . '-' . $this->InvoiceTypeCode . '-' . $this->ID . '.xml';
+    }
 }

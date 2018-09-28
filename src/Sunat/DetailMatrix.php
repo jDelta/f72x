@@ -206,14 +206,6 @@ class DetailMatrix extends XMatrix {
         return $this->get(self::COL_IGV_AFFECTATION, $rowIndex);
     }
 
-    public function isIgvTaxable($rowIndex) {
-        return $this->get(self::COL_IGV_TAXABLE, $rowIndex);
-    }
-
-    public function isIgvExempted($rowIndex) {
-        return $this->get(self::COL_IGV_EXEMPTED, $rowIndex);
-    }
-
     public function getUnitValue($rowIndex) {
         return $this->get(self::COL_UNIT_VALUE, $rowIndex);
     }

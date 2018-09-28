@@ -25,7 +25,7 @@ class XmlService extends Service {
         $this->xmlStandalone = $standalone;
     }
 
-    function write($rootElementName, $value, $contextUri = null) {
+    public function write($rootElementName, $value, $contextUri = null) {
         $me = $this;
         $w = $this->getWriter();
         $w->openMemory();
