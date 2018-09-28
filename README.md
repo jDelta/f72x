@@ -1,4 +1,8 @@
 # Modulo F72X
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jDelta/F72X/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jDelta/F72X/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/jDelta/F72X/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jDelta/F72X/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/jDelta/F72X/badges/build.png?b=master)](https://scrutinizer-ci.com/g/jDelta/F72X/build-status/master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/jDelta/F72X/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 Modulo de facturación electrónica SUNAT UBL 2.1
 
@@ -33,7 +37,7 @@ F72X::init([
 echo "1. CONFIGURACIÓN: OK<br>";
 // GENERAR FACTURA
 
-// fecha actual
+// fecha
 $dt =  new DateTime();
 $dt->setDate(2017, 5, 14);
 $dt->setTime(13, 25, 51);
