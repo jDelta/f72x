@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE l>
+<!-- catalogo de impuesto-->
+<l>
+<c id="01">Factura</c>
+<c id="03">Boleta de venta</c>
+<c id="06">Carta de porte aéreo</c>
+<c id="07">Nota de crédito</c>
+<c id="08">Nota de débito</c>
+<c id="09">Guía de remisión remitente</c>
+<c id="12">Ticket de máquina registradora</c>
+<c id="13">Documento emitido por bancos, instituciones financieras, crediticias y de seguros que se encuentren bajo el control de la Superintendencia de Banca y Seguros</c>
+<c id="14">Recibo servicios públicos</c>
+<c id="15">Boletos emitidos por el servicio de transporte terrestre regular urbano de pasajeros y el ferroviario público de pasajeros prestado en vía férrea local</c>
+<c id="16">Boleto de viaje emitido por las empresas de transporte público interprovincial de pasajeros</c>
+<c id="18">Documentos emitidos por las AFP</c>
+<c id="20">Comprobante de retención</c>
+<c id="21">Conocimiento de embarque por el servicio de transporte de carga marítima</c>
+<c id="24">Certificado de pago de regalías emitidas por PERUPETRO S.A.</c>
+<c id="31">Guía de remisión transportista</c>
+<c id="37">Documentos que emitan los concesionarios del servicio de revisiones técnicas</c>
+<c id="40">Comprobante de Percepción</c>
+<c id="41">Comprobante de Percepción – Venta interna ( físico - formato impreso)</c>
+<c id="43">Boleto de compañías de aviación transporte aéreo no regular</c>
+<c id="45">Documentos emitidos por centros educativos y culturales, universidades, asociaciones y fundaciones</c>
+<c id="56">Comprobante de pago SEAE</c>
+<c id="71">Guía de remisión remitente complementaria</c>
+<c id="72">Guía de remisión transportista complementaria</c>
+</l>

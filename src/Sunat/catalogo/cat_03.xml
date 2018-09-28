@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE l>
+<!-- catalogo de unidades de medida-->
+<l>
+    <c id="NIU">UNIDAD (BIENES)</c>
+    <c id="ZZ">UNIDAD (SERVICIOS)</c>
+</l>

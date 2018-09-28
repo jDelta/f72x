@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE l>
+<l>
+    <c id="L001" tipo="1">AT</c>
+    <c id="L002" tipo="1">MT2</c>
+    <c id="L003" tipo="1">MT3</c>
+    <c id="L004" tipo="1">MT4</c>
+    <c id="L005" tipo="1">BT2</c>
+    <c id="L006" tipo="1">BT3</c>
+    <c id="L009" tipo="1">BT5B NO RESIDENCIAL</c>
+    <c id="L010" tipo="1">BT6</c>
+    <c id="A011" tipo="2">COMERCIAL</c>
+    <c id="A012" tipo="2">INDUSTRIAL</c>
+    <c id="A014" tipo="2">DOMESTICO</c>
+    <c id="A015" tipo="2">SOCIAL</c>   
+</l>

@@ -1,0 +1,2 @@
+# Ejecutar este comando para convertir de .pfx a .pem, se requiere tener instalado openssl
+openssl pkcs12 -in LLAMA-PE-CERTIFICADO-DEMO-10465708790.pfx -out 10465708790_cert.pem -nodes -passin pass:10465708790
