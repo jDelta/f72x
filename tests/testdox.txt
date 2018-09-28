@@ -1,1 +1,6 @@
+s\Module
+ [x] Generate factura
+ [x] Detail matrix generation
+ [x] Detail matrix suma operaciones gravadas
+ [x] Get cat item
 
