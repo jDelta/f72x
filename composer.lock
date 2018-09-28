@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "86e9c4033fbea8cd35451d990b78ea28",
-    "content-hash": "dcc84139483c59e4f3e7ff0219fdd638",
+    "hash": "e5ea732416bcccf4cdad6af1aebfb76b",
+    "content-hash": "caa4d2a38f47af484a3f3c9c2c25fbef",
     "packages": [
         {
             "name": "greenter/xmldsig",
@@ -213,7 +213,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6"
+        "php": ">=5.6"
     },
     "platform-dev": []
 }
