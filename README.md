@@ -8,7 +8,7 @@ Modulo de facturación electrónica SUNAT UBL 2.1
 
 # Instalación
 ```ruby
-composer require jdelta/F72X
+composer require jdelta/f72x
 ````
 
 # Uso:
