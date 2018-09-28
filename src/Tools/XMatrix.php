@@ -1,8 +1,8 @@
 <?php
 
 /**
- * XMatrix
- * https://spacejx.com
+ * FACTURA ELECTRÓNICA SUNAT
+ * UBL 2.1
  * Version 1.0
  * 
  * Copyright 2018, Jaime Cruz
@@ -16,6 +16,10 @@ class XMatrix {
 
     private $_MATRIX = [];
     private $_ROW = [];
+
+    /**
+     * @var int|string[]
+     */
     protected $columns = 0;
     private $totalColumns = 0;
 
@@ -44,11 +48,12 @@ class XMatrix {
     public function get($columnIndex, $rowIndex) {
         return $this->_MATRIX[$rowIndex][$columnIndex];
     }
+
     public function getRow($rowIndex) {
         return $this->_MATRIX[$rowIndex];
     }
+
     private function completeMatrix($y) {
-        $i = 0;
         for ($i = 0; $i <= $y; $i++) {
             if (!isset($this->_MATRIX[$i])) {
                 $this->_MATRIX[$i] = $this->_ROW;
@@ -59,16 +64,18 @@ class XMatrix {
     public function getMatrix() {
         return $this->_MATRIX;
     }
+
     public function countRows() {
         return count($this->_MATRIX);
     }
+
     public function each(callable $fn) {
         foreach ($this->_MATRIX as &$row) {
             $fn($row);
         }
     }
 
-    function getHtml($matrix = null, $mainMatrix = true) {
+    public function getHtml($matrix = null, $mainMatrix = true) {
         $html = '';
         if ($mainMatrix) {
             $html = '<style>
@@ -107,7 +114,7 @@ class XMatrix {
                 if (is_array($value)) {
                     $html .= '<td>' . $this->getHtml($value, false) . '</td>';
                 } else {
-                    $class = is_float($value)|| is_int($value)?'class="align-r"':'';
+                    $class = is_float($value) || is_int($value) ? 'class="align-r"' : '';
                     $html .= "<td $class >$value</td>";
                 }
             }

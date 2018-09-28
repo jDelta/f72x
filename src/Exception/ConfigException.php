@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Gnsis
- * https://spacejx.com
+ * FACTURA ELECTRÓNICA SUNAT
+ * UBL 2.1
  * Version 1.0
  * 
  * Copyright 2018, Jaime Cruz

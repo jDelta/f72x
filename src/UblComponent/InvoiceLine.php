@@ -141,7 +141,7 @@ class InvoiceLine extends BaseComponent {
         return $this->AllowanceCharges;
     }
 
-    public function setAllowanceCharges(AllowanceCharges $AllowanceCharges) {
+    public function setAllowanceCharges(array $AllowanceCharges) {
         $this->AllowanceCharges = $AllowanceCharges;
         return $this;
     }

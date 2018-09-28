@@ -14,7 +14,7 @@ use Sabre\Xml\Writer;
 
 class UBLExtensions extends BaseComponent {
 
-    /** @var array[UBLExtension] */
+    /** @var UBLExtension[] */
     protected $UBLExtensions = [];
 
     function xmlSerialize(Writer $writer) {
