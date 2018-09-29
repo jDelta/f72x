@@ -2,5 +2,6 @@ s\Module
  [x] Generate factura
  [x] Detail matrix generation
  [x] Detail matrix suma operaciones gravadas
+ [x] Send bill
  [x] Get cat item
 

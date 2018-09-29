@@ -25,7 +25,7 @@ class ServiceGateway {
         $response = $xml->xpath("//applicationResponse")[0];
         // CDR
         $cdr = base64_decode($response);
-        file_put_contents("$fileDir/cdr/R$zipName", $cdr);
+        file_put_contents("$fileDir/cdr/R-$zipName", $cdr);
 //            $zip = new ZipArchive();
 //            if ($zip->open("$fileDir/cdr/$zipName") === TRUE) {
 ////                $cdrXml = $zip->getFromName("R-$invoiceName");

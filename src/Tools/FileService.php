@@ -20,7 +20,7 @@ class FileService {
         $zipFilename = explode('.', $filename)[0] . '.zip';
         $zip = new ZipArchive();
         if ($zip->open("$fileDir/zip/$zipFilename", ZipArchive::CREATE) === TRUE) {
-            $zip->addFile("$fileDir/sxml/$filename", $filename);
+            $zip->addFile("$fileDir/sxml/S-$filename", $filename);
             $zip->close();
         }
     }

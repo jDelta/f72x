@@ -22,7 +22,7 @@ class XmlDSig {
         $signer->setCertificateFromFile($cert);
 
         $xmlSigned = $signer->signFromFile($xmlPath);
-        file_put_contents("$repository/sxml/$xmlFileName", $xmlSigned);
+        file_put_contents("$repository/sxml/S-$xmlFileName", $xmlSigned);
     }
 
 }

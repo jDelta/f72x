@@ -6,7 +6,7 @@
 
 Modulo de facturación electrónica SUNAT UBL 2.1
 
-# Instalación
+# Instalación:
 ```ruby
 composer require jdelta/f72x
 ````
@@ -19,7 +19,15 @@ use F72X\F72X;
 use F72X\Sunat\DocumentGenerator;
 use F72X\Sunat\ServiceGateway;
 
-// INIICIAR MODULO
+// 1. CONFIGURAR EL MÓDULO
+// =======================
+$prodMode   = false; // true, para usar los servicios de producciòn de SUNAT.
+$certPath   = __DIR__ . '/cert/20100454523_cert.pem'; // Ruta del certificado digital.
+$repository = __DIR__ . '/repository';                // Directorio donde se guadaràn
+                                                      // las facturas, deberà contener
+                                                      // los siguientes subdirectorios:
+                                                      // (cdr, sxml, sml y zip).
+// Datos del emisor
 F72X::init([
     'RUC'                     => '20100454523',
     'RAZON_SOCIAL'            => 'Soporte Tecnológicos EIRL',
@@ -27,15 +35,14 @@ F72X::init([
     'USUARIO_SOL'             => 'MODDATOS',
     'CLAVE_SOL'               => 'moddatos',
     'CODIGO_DOMICILIO_FISCAL' => '0000',
-    'RUTA_CERTIFICADO'        => __DIR__ . '/cert/20100454523_cert.pem',
-    'RUTA_REPOSITORIO'        => __DIR__ . '/repository', // Directorio donde se almacenarán las facturas generadas
-                                                          // Debera contener los siguienes subdirectorios:
-                                                          // cdr, sxml, sml y zip
-    'MODO_PRODUCCION'         => FALSE
-]);
+    'RUTA_CERTIFICADO'        => $certPath,
+    'RUTA_REPOSITORIO'        => $repository
+], $prodMode);
 
 echo "1. CONFIGURACIÓN: OK<br>";
-// GENERAR FACTURA
+
+// 2. GENERAR FACTURA
+// ==================
 
 // fecha
 $dt =  new DateTime();
@@ -44,29 +51,29 @@ $dt->setTime(13, 25, 51);
 
 // data de la factura
 $dataFactura = [
-    'operationTypeCode' => '0101',              // Tipo de operación Catálogo #51
-    'voucherSeries'     => 1,                   // Serie de la factura
-    'voucherNumber'     => 4355,                // Número correlativo de la factura
-    'customerName'      => 'SERVICABINAS S.A.', // Razón social
-    'customerDocNumber' => '20587896411',       // RUC
-    'customerDocType'   => '6',                 // Tipo de documento Catálogo #6
-    'date'              => $dt,                 // Opcional, si no se especifica se usara la fecha del sistema!
-    'purchaseOrder'     => 7852166,             // Numero de orden de commpra,
+    'operationTypeCode' => '0101',              // Tipo de operación Catálogo #51.
+    'voucherSeries'     => 1,                   // Serie de la factura.
+    'voucherNumber'     => 4355,                // Número correlativo de la factura.
+    'customerName'      => 'SERVICABINAS S.A.', // Razón social del receptor.
+    'customerDocNumber' => '20587896411',       // RUC del receptor.
+    'customerDocType'   => '6',                 // Tipo de documento del receptor Catálogo #6.
+    'date'              => $dt,                 // Opcional, por defecto usará la fecha y hora del sistema.
+    'purchaseOrder'     => 7852166,             // Opcional, numero de orden de commpra.
     'allowances'        => [
         ['reasonCode'       => '00', 'multiplierFactor'  => 0.05]
     ],
     'items' => [
         [
-            'productCode'           => 'GLG199',    // Código
-            'sunatProductCode'      => '52161515',  // Código de producto SUNAT
-            'unitCode'              => 'NIU',       // Código de unidad
-            'quantity'              => 2000,        // Cantidad
-            'description'           => 'Grabadora LG Externo Modelo: GE20LU10', // Descripción detallada
-            'priceTypeCode'         => '01',        // Catálogo #16 [01:Precio Unitario|02:Valor Referencial]
-            'taxTypeCode'           => '1000',      // Catálogo #5
-            'igvAffectationCode'    => '10',        // Catálogo #7
-            'unitValue'             => 98.00,       // Valor unitario
-            'igvIncluded'           => true,        // true si el valor unitario incluye IGV
+            'productCode'           => 'GLG199',    // Código.
+            'sunatProductCode'      => '52161515',  // Código de producto SUNAT. Catálogo #25.
+            'unitCode'              => 'NIU',       // Código de unidad. Catálogo #3.
+            'quantity'              => 2000,        // Cantidad.
+            'description'           => 'Grabadora LG Externo Modelo: GE20LU10', // Descripción.
+            'priceTypeCode'         => '01',        // Catálogo #16.
+            'taxTypeCode'           => '1000',      // Catálogo #5.
+            'igvAffectationCode'    => '10',        // Catálogo #7.
+            'unitValue'             => 98.00,       // Valor unitario.
+            'igvIncluded'           => true,        // true si el IGV está incluido en el Valor unitario.
             'allowances'            => [
                 ['reasonCode' => '00', 'multiplierFactor'  => 0.1]
             ]
@@ -117,7 +124,8 @@ $dataFactura = [
 DocumentGenerator::generateFactura($dataFactura);
 echo "2. GENERACIÓN DE FACTURA Y FIRMA: OK<br>";
 
-// ENVIAR A SUNAT
+// 1. ENVIAR A SUNAT
+// =================
 ServiceGateway::sendBill('20100454523-01-F001-00004355.zip');
 echo "2. ENVIO Y RECEPCION SUNAT: OK<br>";
 ````

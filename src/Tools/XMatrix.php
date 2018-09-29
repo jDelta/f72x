@@ -14,6 +14,13 @@ use InvalidArgumentException;
 
 class XMatrix {
 
+    const PRINT_STYLE = '<style>
+    .xm-table{border:#a7a7a7 dashed 1px; border-collapse: collapse; margin: 5px;}
+    .xm-table td, .xm-table th{border: dashed 1px #1976D2;padding: 2px 4px;}
+    .xm-table th{border-bottom: solid 2px #1976D2;}
+    .align-r{text-align: right;}
+</style>';
+
     private $_MATRIX = [];
     private $_ROW = [];
 
@@ -75,53 +82,57 @@ class XMatrix {
         }
     }
 
-    public function getHtml($matrix = null, $mainMatrix = true) {
-        $html = '';
-        if ($mainMatrix) {
-            $html = '<style>
-            .xm-table{border:#a7a7a7 dashed 1px; border-collapse: collapse; margin: 5px;}
-            .xm-table td, .xm-table th{border: dashed 1px #1976D2;padding: 2px 4px;}
-            .xm-table th{border-bottom: solid 2px #1976D2;}
-            .align-r{text-align: right;}
-        </style>';
+    public function getHtml() {
+        $matrix = $this->_MATRIX;
+        $html = [];
+        $html[] = self::PRINT_STYLE;
+        $html[] = '<table class="xm-table">';
+        if (is_array($this->columns)) {
+            $html[] = '<tr><th>' . implode('</th><th>', $this->columns) . '</th></tr>';
+        } else {
+            $html[] = $this->getHtmlTableHead($matrix);
         }
-        $html .= '<table class="xm-table">';
+        $html[] = $this->getHtmlTableBody($matrix);
+        $html[] = '</table>';
+        return implode('', $html);
+    }
 
-        if (!$matrix) {
-            $matrix = $this->_MATRIX;
+    public function getHtmlTable(array $table) {
+        if (empty($table)) {
+            return '';
         }
-        if ($mainMatrix && is_array($this->columns)) {
-            $html .= '<tr><th>' . implode('</th><th>', $this->columns) . '</th></tr>';
+        return '<table>' . $this->getHtmlTableHead($table) . $this->getHtmlTableBody($table) . '</table>';
+    }
+
+    private function getHtmlTableHead(array $table) {
+        $html = [];
+        $keys = array_keys($table[0]);
+        $html[] = '<tr>';
+        foreach ($keys as $key) {
+            $html[] = '<th>' . $key . '</th>';
         }
-        if ($matrix) {
-            $header = '';
-            foreach ($matrix[0] as $key => $value) {
-                if (is_string($key)) {
-                    $header .= '<th>' . $key . '</th>';
-                } else {
-                    break;
-                }
-            }
-            if ($header) {
-                $html .= "<tr>$header</tr>";
-            }
-        }
-        foreach ($matrix as $row) {
-            $html .= '<tr>';
+        $html[] = '</tr>';
+        return implode('', $html);
+    }
+
+    private function getHtmlTableBody(array $table) {
+        $html = [];
+        foreach ($table as $row) {
+            $html[] = '<tr>';
             foreach ($row as $value) {
-                $value = !$value && is_array($value) ? '' : $value;
                 // if array recursive
                 if (is_array($value)) {
-                    $html .= '<td>' . $this->getHtml($value, false) . '</td>';
+                    $html[] = '<td>';
+                    $html[] = $this->getHtmlTable($value);
+                    $html[] = '</td>';
                 } else {
                     $class = is_float($value) || is_int($value) ? 'class="align-r"' : '';
-                    $html .= "<td $class >$value</td>";
+                    $html[] = "<td $class >$value</td>";
                 }
             }
-            $html .= '</tr>';
+            $html[] = '</tr>';
         }
-        $html .= '</table>';
-        return $html;
+        return implode('', $html);
     }
 
     public function sum($columnIndex) {

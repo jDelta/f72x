@@ -186,7 +186,7 @@ final class ModuleTest extends TestCase {
             $json['detalle'][] = $item;
         }
         $facturadorSUNATDataDir = 'F:\SUNAT/SFS_v1.2/sunat_archivos/sfs/DATA';
-                // Line jump
+        // Line jump
         $ENTER = chr(13) . chr(10);
         $cabContent = implode('|', $json['cabecera']);
 
@@ -220,9 +220,9 @@ final class ModuleTest extends TestCase {
         self::assertEquals($amount, 366525.42372881359);
     }
 
-//    public static function testSendBill() {
-//        ServiceGateway::sendBill('20100454523-01-F001-00004355.zip');
-//    }
+    public static function testSendBill() {
+        ServiceGateway::sendBill('20100454523-01-F001-00004355.zip');
+    }
 
     public function testGetCatItem() {
         $output = Catalogo::getCatItem(16, '01');
