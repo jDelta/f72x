@@ -1,4 +1,1 @@
-s\FSInputGeneration
- [x] Generar boleta
- [x] Generar factura
 

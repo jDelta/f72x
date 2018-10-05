@@ -13,7 +13,10 @@ return [
     'issueDate'         => $dt,                 // Fecha de emisión [opcional], si no se especifica se usara la fecha del sistema!
     'purchaseOrder'     => 7852166,             // Numero de orden de commpra,
     'allowances'        => [
-        ['reasonCode'       => '00', 'multiplierFactor'  => 0.05]
+        [
+            'reasonCode'       => '00', // Código de descuento Cátalogo #53
+            'multiplierFactor' => 0.05
+        ]
     ],
     'charges'           => [],
     'items' => [

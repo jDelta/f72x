@@ -14,7 +14,7 @@ return [
     'allowances'        => [
         [
             'reasonCode'       => '00', // Código de descuento Cátalogo #53
-            'multiplierFactor'  => 0.05
+            'multiplierFactor' => 0.05
         ]
     ],
     'charges'           => [],

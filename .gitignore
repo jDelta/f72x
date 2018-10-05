@@ -1,6 +1,6 @@
 /nbproject/private/
 /vendor/
-/tests/repository/cdr
-/tests/repository/sxml
-/tests/repository/xml
-/tests/repository/zip
+/tests/repository/cdr/
+/tests/repository/sxml/
+/tests/repository/xml/
+/tests/repository/zip/
