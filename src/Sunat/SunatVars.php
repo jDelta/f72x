@@ -1,9 +1,9 @@
 <?php
 
 /**
- * FACTURA ELECTRÓNICA SUNAT
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.0
+ * Version 1.1
  * 
  * Copyright 2018, Jaime Cruz
  */
@@ -18,7 +18,5 @@ class SunatVars {
     const DIR_CATS               = __DIR__.'/catalogo';
     const IGV         = 0.18;
     const IGV_PERCENT = 18.00;
-    const CAT16_UNITARY_PRICE = '01';
-    const CAT16_REF_VALUE     = '02';
 
 }

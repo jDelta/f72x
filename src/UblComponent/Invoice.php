@@ -1,9 +1,9 @@
 <?php
 
 /**
- * FACTURA ELECTRÓNICA SUNAT
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.0
+ * Version 1.1
  * 
  * Copyright 2018, Jaime Cruz
  */

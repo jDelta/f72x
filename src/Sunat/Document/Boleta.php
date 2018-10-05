@@ -15,7 +15,7 @@ use F72X\Tools\TemplateMgr;
 use F72X\UblComponent\SchemaNS;
 use Sabre\Xml\Writer;
 
-class Factura extends SunatDocument {
+class Boleta extends SunatDocument {
 
     /**
      * The xmlSerialize method is called during xml writing.
@@ -34,7 +34,7 @@ class Factura extends SunatDocument {
         ]);
         $this->writeLineJump($writer);
         $writer->writeRaw($UBLExtensions);
-        
+
         $writer->write([
             SchemaNS::CBC . 'UBLVersionID'      => self::UBL_VERSION_ID,
             SchemaNS::CBC . 'CustomizationID'   => self::CUSTUMIZATION_ID,

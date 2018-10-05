@@ -20,8 +20,8 @@ class F72X {
 
     /**
      * 
-     * @param boolean $config
-     * @param type $prodMode
+     * @param array $config
+     * @param boolean $prodMode
      */
     public static function init($config, $prodMode = false) {
         self::$production = $prodMode;

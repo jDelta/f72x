@@ -1,16 +1,16 @@
 <?php
 
 /**
- * FACTURA ELECTRÓNICA SUNAT
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.0
+ * Version 1.1
  * 
  * Copyright 2018, Jaime Cruz
  */
 
 namespace F72X\UblComponent;
 
-use F72X\Sunat\CurrencyOperations;
+use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
 class AlternativeConditionPrice extends BaseComponent {
@@ -31,7 +31,7 @@ class AlternativeConditionPrice extends BaseComponent {
         $writer->write([
             [
                 'name'          => SchemaNS::CBC . 'PriceAmount',
-                'value'         => CurrencyOperations::formatAmount($this->PriceAmount, self::DECIMALS),
+                'value'         => Operations::formatAmount($this->PriceAmount, self::DECIMALS),
                 'attributes'    => [
                     'currencyID' => $this->currencyID
                 ],

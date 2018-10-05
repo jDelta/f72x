@@ -1,16 +1,16 @@
 <?php
 
 /**
- * FACTURA ELECTRÓNICA SUNAT
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.0
+ * Version 1.1
  * 
  * Copyright 2018, Jaime Cruz
  */
 
 namespace F72X\UblComponent;
 
-use F72X\Sunat\CurrencyOperations;
+use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
 class AllowanceCharge extends BaseComponent {
@@ -61,20 +61,20 @@ class AllowanceCharge extends BaseComponent {
         ]);
         if ($me->MultiplierFactorNumeric) {
             $writer->write([
-                SchemaNS::CBC . 'MultiplierFactorNumeric' => CurrencyOperations::formatAmount($this->MultiplierFactorNumeric, self::DECIMALS),
+                SchemaNS::CBC . 'MultiplierFactorNumeric' => Operations::formatAmount($this->MultiplierFactorNumeric, self::DECIMALS),
             ]);
         }
         $writer->write([
             [
                 'name' => SchemaNS::CBC . 'Amount',
-                'value' => CurrencyOperations::formatAmount($this->Amount, self::DECIMALS),
+                'value' => Operations::formatAmount($this->Amount, self::DECIMALS),
                 'attributes' => [
                     'currencyID' => $me->currencyID
                 ]
             ],
             [
                 'name' => SchemaNS::CBC . 'BaseAmount',
-                'value' => CurrencyOperations::formatAmount($this->BaseAmount, self::DECIMALS),
+                'value' => Operations::formatAmount($this->BaseAmount, self::DECIMALS),
                 'attributes' => [
                     'currencyID' => $me->currencyID
                 ]

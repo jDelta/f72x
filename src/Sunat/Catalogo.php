@@ -1,9 +1,9 @@
 <?php
 
 /**
- * FACTURA ELECTRÓNICA SUNAT
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.0
+ * Version 1.1
  * 
  * Copyright 2018, Jaime Cruz
  */
@@ -14,6 +14,28 @@ use DOMDocument;
 use Sabre\Xml\Reader;
 
 class Catalogo {
+
+    /** @CAT1 Código tipo de documento */
+    const CAT1_FACTURA      = '01';
+    const CAT1_BOLETA       = '03';
+    const CAT1_NOTA_CREDITO = '07';
+    const CAT1_NOTA_DEBITO  = '08';
+
+    /** @CAT5 Tipo de impuesto*/
+    const CAT5_IGV   = '1000';
+    const CAT5_IVAP  = '1016';
+    const CAT5_ISC   = '2000';
+    const CAT5_EXP   = '9995';
+    const CAT5_GRA   = '9996';
+    const CAT5_EXO   = '9997';
+    const CAT5_INA   = '9998';
+    const CAT5_OTROS = '9999';
+
+    /** @CAT7 Tipo de afectación del IGV */
+    const CAT7_GRA_IGV        = '10';
+    /** @CAT16 Tipo de precio */
+    const CAT16_UNITARY_PRICE = '01';
+    const CAT16_REF_VALUE     = '02';
 
     /** @CAT6*/
     const IDENTIFICATION_DOC_DNI = '1';

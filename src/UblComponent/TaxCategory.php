@@ -1,16 +1,16 @@
 <?php
 
 /**
- * FACTURA ELECTRÓNICA SUNAT
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.0
+ * Version 1.1
  * 
  * Copyright 2018, Jaime Cruz
  */
 
 namespace F72X\UblComponent;
 
-use F72X\Sunat\CurrencyOperations;
+use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
 class TaxCategory extends BaseComponent {
@@ -42,7 +42,7 @@ class TaxCategory extends BaseComponent {
 
         if (!is_null($this->Percent)) {
             $writer->write([
-                SchemaNS::CBC . 'Percent' => CurrencyOperations::formatAmount($this->Percent, self::DECIMALS),
+                SchemaNS::CBC . 'Percent' => Operations::formatAmount($this->Percent, self::DECIMALS),
             ]);
         }
 

@@ -1,16 +1,16 @@
 <?php
 
 /**
- * FACTURA ELECTRÓNICA SUNAT
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.0
+ * Version 1.1
  * 
  * Copyright 2018, Jaime Cruz
  */
 
 namespace F72X\UblComponent;
 
-use F72X\Sunat\CurrencyOperations;
+use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
 class TaxSubTotal extends BaseComponent {
@@ -31,14 +31,14 @@ class TaxSubTotal extends BaseComponent {
         $writer->write([
             [
                 'name'  => SchemaNS::CBC . 'TaxableAmount',
-                'value' => CurrencyOperations::formatAmount($this->TaxableAmount, self::DECIMALS),
+                'value' => Operations::formatAmount($this->TaxableAmount, self::DECIMALS),
                 'attributes' => [
                     'currencyID' => $this->currencyID
                 ]
             ],
             [
                 'name'  => SchemaNS::CBC . 'TaxAmount',
-                'value' => CurrencyOperations::formatAmount($this->TaxAmount, self::DECIMALS),
+                'value' => Operations::formatAmount($this->TaxAmount, self::DECIMALS),
                 'attributes' => [
                     'currencyID' => $this->currencyID
                 ]
