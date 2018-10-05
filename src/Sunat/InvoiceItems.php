@@ -13,16 +13,6 @@ namespace F72X\Sunat;
 use F72X\Tools\XMatrix;
 
 class InvoiceItems extends XMatrix {
-
-    /** @CAT5 Tipo de impuesto*/
-    const CAT5_IGV   = '1000';
-    const CAT5_IVAP  = '1016';
-    const CAT5_ISC   = '2000';
-    const CAT5_EXP   = '9995';
-    const CAT5_GRA   = '9996';
-    const CAT5_EXO   = '9997';
-    const CAT5_INA   = '9998';
-    const CAT5_OTROS = '9999';
     
     const COL_PRODUCT_CODE          = 0;
     const COL_UNPSC                 = 1;

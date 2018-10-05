@@ -17,7 +17,6 @@ use F72X\Sunat\InvoiceItems;
 use F72X\Sunat\Catalogo;
 use F72X\Sunat\SunatVars;
 use F72X\Tools\UblHelper;
-
 use F72X\UblComponent\OrderReference;
 use F72X\UblComponent\Party;
 use F72X\UblComponent\PartyIdentification;
@@ -84,14 +83,14 @@ abstract class SunatDocument extends Invoice {
             $amount = $baseAmount * $k;
             UblHelper::addAllowanceCharge($this, $currencyType, 'false', $item['reasonCode'], $item['multiplierFactor'], $amount, $baseAmount);
         }
-       // Totales
-       $this->addInvoiceLegalMonetaryTotal();
-        
+        // Totales
+        $this->addInvoiceLegalMonetaryTotal();
     }
 
     public function getInvoiceDocument() {
         return $this->invoiceDocument;
     }
+
     /**
      * 
      * @return InvoiceItems
@@ -99,6 +98,7 @@ abstract class SunatDocument extends Invoice {
     public function getItems() {
         return $this->invoiceDocument->getItems();
     }
+
     public function getDetailMatrix() {
         return $this->_detailMatrix;
     }
@@ -107,6 +107,7 @@ abstract class SunatDocument extends Invoice {
         $this->_detailMatrix = $DetailMatrix;
         return $this;
     }
+
     private function addInvoiceItems() {
         $ln = $this->invoiceDocument->getTotalItems();
         // Loop
@@ -114,16 +115,18 @@ abstract class SunatDocument extends Invoice {
             $this->addInvoiceItem($i);
         }
     }
-    private function addInvoiceOrderReference(){
+
+    private function addInvoiceOrderReference() {
         $orderNumer = $this->invoiceDocument->getPurchaseOrder();
         if ($orderNumer) {
             // Xml Node
             $orderRef = new OrderReference();
             // Añadir al documento
             $this->setOrderReference($orderRef
-                    ->setID($orderNumer));
+                            ->setID($orderNumer));
         }
     }
+
     private function addInvoiceTaxes() {
         $Invoice                   = $this->invoiceDocument;
         $currencyID                = $Invoice->getCurrencyType();              // Tipo de moneda
@@ -209,7 +212,7 @@ abstract class SunatDocument extends Invoice {
         $priceTypeCode      = $Items->getPriceTypeCode($itemIndex);
         $taxTypeCode        = $Items->getTaxTypeCode($itemIndex);
         $igvAffectationCode = $Items->getIgvAffectationCode($itemIndex);
-        
+
         $itemValue          = $Items->getItemValue($itemIndex);
         $allowances         = $Items->getAllowances($itemIndex);
         $charges            = $Items->getCharges($itemIndex);
@@ -272,7 +275,7 @@ abstract class SunatDocument extends Invoice {
         // Añade item
         $this->addInvoiceLine($InvoiceLine);
     }
-    
+
     private function addInvoiceLegalMonetaryTotal() {
         $Invoice            = $this->invoiceDocument;
         $Items              = $this->getItems();
@@ -291,13 +294,14 @@ abstract class SunatDocument extends Invoice {
 
         $this->setLegalMonetaryTotal($LegalMonetaryTotal);
     }
+
     private function addInvoiceAccountingSupplierParty() {
         // Info
         $partyName  = Company::getBusinessName();
         $regName    = Company::getCompanyName();
         $docNumber  = Company::getRUC();
         $docType    = Catalogo::IDENTIFICATION_DOC_RUC;
-        
+
         // XML nodes
         $AccountingSupplierParty    = new AccountingSupplierParty();
         $Party                      = new Party();
@@ -310,7 +314,7 @@ abstract class SunatDocument extends Invoice {
                     'schemeURI'         => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06']);
         $PartyName                  = new PartyName();
         $PartyLegalEntity           = new PartyLegalEntity();
-        
+
         $AccountingSupplierParty
                 ->setParty($Party
                         ->setPartyIdentification($PartyIdentification
@@ -329,7 +333,7 @@ abstract class SunatDocument extends Invoice {
         $regName   = $Invoice->getCustomerRegName();
         $docNumber = $Invoice->getCustomerDocNumber();
         $docType   = $Invoice->getCustomerDocType();
-        
+
         // XML nodes
         $AccountingCustomerParty    = new AccountingCustomerParty();
         $Party                      = new Party();
@@ -341,7 +345,7 @@ abstract class SunatDocument extends Invoice {
                     'schemeID'          => $docType,
                     'schemeName'        => 'Documento de Identidad',
                     'schemeURI'         => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06']);
-        
+
         $AccountingCustomerParty
                 ->setParty($Party
                         ->setPartyIdentification($PartyIdentification
@@ -351,6 +355,7 @@ abstract class SunatDocument extends Invoice {
         // Add to Document
         $this->setAccountingCustomerParty($AccountingCustomerParty);
     }
+
     /**
      *    
      * @return string Nombre del comprobante de acuerdo con las especificaciones de la SUNAT

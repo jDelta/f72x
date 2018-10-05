@@ -10,6 +10,7 @@
 
 namespace F72X\Sunat;
 
+use DateTime;
 /**
  * InvoiceDocument
  * 
