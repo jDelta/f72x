@@ -1,1 +1,3 @@
+s\FSInputGeneration
+ [x] Generar tip
 

@@ -65,7 +65,7 @@ class InvoiceItems extends XMatrix {
         'COL_ITEM_PAYABLE_AMOUNT [base_imponible+IGV]'
     ];
 
-    public function populate($items,  $currencyCode) {
+    public function populate($items, $currencyCode) {
         foreach ($items as $idx => $item) {
             $allowances     = isset($item['allowances']) ? $item['allowances'] : [];
             $charges        = isset($item['charges']) ? $item['charges'] : [];

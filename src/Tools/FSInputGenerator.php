@@ -137,11 +137,11 @@ class FSInputGenerator {
 
 
     private static function getVariablesGlobales(InvoiceDocument $Invoice) {
-        $data=[];
+        $data         = [];
         $currencyType = $Invoice->getCurrencyType();
-        $allowances = $Invoice->getAllowances();
-        $charges = $Invoice->getCharges();
-        $baseAmount = $Invoice->getItems()->getTotalTaxableAmount();
+        $allowances   = $Invoice->getAllowances();
+        $charges      = $Invoice->getCharges();
+        $baseAmount   = $Invoice->getItems()->getTotalTaxableAmount();
         foreach ($allowances as $allowance) {
             $k = $allowance['multiplierFactor'];
             $amount = $baseAmount * $k;
