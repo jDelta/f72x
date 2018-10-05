@@ -70,14 +70,14 @@ class InvoiceItems extends XMatrix {
             $allowances     = isset($item['allowances']) ? $item['allowances'] : [];
             $charges        = isset($item['charges']) ? $item['charges'] : [];
             $igvAffectCode  = $item['igvAffectationCode'];
-            $priceType      = $item['priceType'];   // Tipo de precio
+            $priceType      = $item['priceType']; // Tipo de precio
             $grossUnitValue = $item['unitValue'];
             $igvIncluded    = $item['igvIncluded'];
             
             $unitValue         = $this->calcUnitValue($igvAffectCode, $grossUnitValue, $igvIncluded);      // Valor unitario
             $unitTaxedValue    = $this->calcUnitTaxedValue($igvAffectCode, $grossUnitValue, $igvIncluded); // Valor unitario incluyendo impuestos si son aplicables
             $unitBillableValue = $this->calcUnitBillableValue($unitValue, $priceType);                     // Valor unitario facturable
-            $quantity          = $item['quantity'];  // Cantidad
+            $quantity          = $item['quantity']; // Cantidad
 
             $itemValue            = $unitValue * $quantity;         // Valor de item
             $itemBillableValue    = $unitBillableValue * $quantity; // Valor de item

@@ -15,7 +15,7 @@ class SunatVars {
     const SUNAT_SERVICE_URL_BETA = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService';
     const SUNAT_SOL_USER_BETA    = 'MODDATOS';
     const SUNAT_SOL_KEY_BETA     = 'moddatos';
-    const DIR_CATS               = __DIR__.'/catalogo';
+    const DIR_CATS               = __DIR__ . '/catalogo';
     const IGV         = 0.18;
     const IGV_PERCENT = 18.00;
 

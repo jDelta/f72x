@@ -11,8 +11,7 @@ class ServiceGateway {
     public static function sendBill($zipName) {
 //        $invoiceName = substr($zipName, 0, -3) . 'xml';
         $service_url = F72X::isProductionMode() ?
-                SunatVars::SUNAT_SERVICE_URL_PROD :
-                SunatVars::SUNAT_SERVICE_URL_BETA;
+                SunatVars::SUNAT_SERVICE_URL_PROD : SunatVars::SUNAT_SERVICE_URL_BETA;
 
         $fileDir = Company::getRepositoryPath();
         $contentFile = file_get_contents("$fileDir/zip/$zipName");

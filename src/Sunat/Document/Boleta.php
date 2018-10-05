@@ -86,18 +86,18 @@ class Boleta extends SunatDocument {
                     'listAgencyName'    => 'United Nations Economic Commission for Europe'
                 ]
             ],
-            SchemaNS::CBC . 'LineCountNumeric'          => $this->LineCountNumeric
+            SchemaNS::CBC . 'LineCountNumeric' => $this->LineCountNumeric
         ]);
 
         // Order Reference
-        if($this->OrderReference){
+        if ($this->OrderReference) {
             $writer->write([
-                SchemaNS::CAC . 'OrderReference'            => $this->OrderReference
+                SchemaNS::CAC . 'OrderReference' => $this->OrderReference
             ]);
         }
 
         // Despatch Document Reference
-        if($this->DespatchDocumentReference){
+        if ($this->DespatchDocumentReference) {
             $writer->write([
                 SchemaNS::CAC . 'DespatchDocumentReference' => $this->DespatchDocumentReference
             ]);

@@ -61,9 +61,9 @@ class FSInputGenerator {
         for ($rowIndex = 0; $rowIndex < $ln; $rowIndex++) {
             $cat5Item = Catalogo::getCatItem(5, $Items->getTaxTypeCode($rowIndex));
             // IGV percent
-            if($cat5Item['id'] === Catalogo::CAT5_IGV){
+            if ($cat5Item['id'] === Catalogo::CAT5_IGV) {
                 $porIgvItem = Operations::formatAmount(SunatVars::IGV_PERCENT);
-            }else{
+            } else {
                 $porIgvItem = '0.00';
             }
             if ($Items->getPriceTypeCode($rowIndex) === Catalogo::CAT16_REF_VALUE) {
@@ -120,7 +120,7 @@ class FSInputGenerator {
         self::writeFSFile("$companyRUC-$invoiceType-$voucherId.CAB", $cabContent);
         self::writeFSFile("$companyRUC-$invoiceType-$voucherId.DET", $detContent);
         //CABECERA VARIABLE
-        if(!empty($json['variablesGlobales'])){
+        if (!empty($json['variablesGlobales'])) {
             $glovalVars = $json['variablesGlobales'];
             $varGlobalContent = '';
             foreach ($glovalVars as $row) {

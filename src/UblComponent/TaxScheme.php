@@ -12,7 +12,7 @@ namespace F72X\UblComponent;
 
 use Sabre\Xml\Writer;
 
-class TaxScheme extends BaseComponent{
+class TaxScheme extends BaseComponent {
 
     protected $ID;
     protected $IDAttributes = [];
