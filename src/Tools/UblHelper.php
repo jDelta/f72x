@@ -11,26 +11,13 @@
 namespace F72X\Tools;
 
 use F72X\Sunat\Catalogo;
-use F72X\UblComponent\OrderReference;
-use F72X\UblComponent\Party;
-use F72X\UblComponent\PartyIdentification;
-use F72X\UblComponent\PartyName;
-use F72X\UblComponent\AccountingSupplierParty;
-use F72X\UblComponent\AccountingCustomerParty;
-use F72X\UblComponent\PartyLegalEntity;
+use F72X\Sunat\Document\SunatDocument;
 use F72X\UblComponent\TaxTotal;
 use F72X\UblComponent\TaxSubTotal;
 use F72X\UblComponent\TaxCategory;
 use F72X\UblComponent\TaxScheme;
-use F72X\UblComponent\LegalMonetaryTotal;
 use F72X\UblComponent\InvoiceLine;
 use F72X\UblComponent\AllowanceCharge;
-use F72X\UblComponent\PricingReference;
-use F72X\UblComponent\AlternativeConditionPrice;
-use F72X\UblComponent\Item;
-use F72X\UblComponent\SellersItemIdentification;
-use F72X\UblComponent\CommodityClassification;
-use F72X\UblComponent\Price;
 
 class UblHelper {
 

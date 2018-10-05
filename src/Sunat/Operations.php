@@ -77,7 +77,7 @@ class Operations {
     /**
      * Aplica IGV?
      * 
-     * @param type $igvAffectCode @CAT7
+     * @param string $igvAffectCode @CAT7
      * @return boolean
      */
     public static function isIGVAffected($igvAffectCode) {

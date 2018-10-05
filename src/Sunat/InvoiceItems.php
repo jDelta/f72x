@@ -186,7 +186,7 @@ class InvoiceItems extends XMatrix {
     /**
      * IGV: Calcula el monto del IGV, si este es aplicable.
      * @param string $igvAffectCode
-     * @param type $baseAmount
+     * @param float $baseAmount
      * @return float
      */
     private function calcIgvAmount($igvAffectCode, $baseAmount) {
@@ -387,12 +387,5 @@ class InvoiceItems extends XMatrix {
     public function getCount() {
         return $this->countRows();
     }
-    /**
-     * 
-     * @param float $amount
-     * @return float
-     */
-    private function applyAllowancesAndCharges($amount) {
-        return Operations::applyAllowancesAndCharges($amount, $this->allowances, $this->charges);
-    }
+
 }

@@ -209,8 +209,8 @@ class InvoiceDocument {
     }
 
     /**
-     * 
-     * @return InvoiceItems
+     * Numero de items del documento
+     * @return int
      */
     public function getTotalItems() {
         return $this->_items->getCount();

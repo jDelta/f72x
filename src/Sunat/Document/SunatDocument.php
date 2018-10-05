@@ -111,7 +111,7 @@ abstract class SunatDocument extends Invoice {
         $ln = $this->invoiceDocument->getTotalItems();
         // Loop
         for ($i = 0; $i < $ln; $i++) {
-            self::addInvoiceItem($i);
+            $this->addInvoiceItem($i);
         }
     }
     private function addInvoiceOrderReference(){
