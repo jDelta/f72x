@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
+ * UBL 2.1
+ * Version 1.1
+ * 
+ * Copyright 2018, Jaime Cruz
+ */
+
 namespace F72X;
 
 use F72X\Exception\ConfigException;
@@ -43,7 +51,7 @@ class Company {
      * @return string
      */
     public static function getRUC() {
-        return self::get('RUC');
+        return self::get('ruc');
     }
 
     /**
@@ -51,7 +59,7 @@ class Company {
      * @return string
      */
     public static function getCompanyName() {
-        return self::get('RAZON_SOCIAL');
+        return self::get('razonSocial');
     }
 
     /**
@@ -59,7 +67,7 @@ class Company {
      * @return string
      */
     public static function getBusinessName() {
-        return self::get('NOMBRE_COMERCIAL');
+        return self::get('nombreComercial');
     }
 
     /**
@@ -67,7 +75,7 @@ class Company {
      * @return string
      */
     public static function getRegAddressCode() {
-        return self::get('CODIGO_DOMICILIO_FISCAL');
+        return self::get('codigoDomicilioFiscal');
     }
 
     /**
@@ -75,7 +83,7 @@ class Company {
      * @return string
      */
     public static function getSolUser() {
-        return self::get('USUARIO_SOL');
+        return self::get('usuarioSol');
     }
 
     /**
@@ -83,7 +91,7 @@ class Company {
      * @return string
      */
     public static function getSolKey() {
-        return self::get('CLAVE_SOL');
+        return self::get('claveSol');
     }
 
     /**
@@ -91,7 +99,7 @@ class Company {
      * @return string
      */
     public static function getCertPath() {
-        return self::get('RUTA_CERTIFICADO');
+        return self::get('certPath');
     }
 
     /**
@@ -99,7 +107,7 @@ class Company {
      * @return string
      */
     public static function getRepositoryPath() {
-        return self::get('RUTA_REPOSITORIO');
+        return self::get('repoPath');
     }
 
 }

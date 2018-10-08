@@ -1,32 +1,40 @@
 <?php
 
+/**
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
+ * UBL 2.1
+ * Version 1.1
+ * 
+ * Copyright 2018, Jaime Cruz
+ */
+
 namespace F72X;
 
 use F72X\Exception\ConfigException;
 
 class F72X {
 
-    private static $production;
+    private static $production = false;
     private static $requiredConfigFields = [
-        'RUC',
-        'RAZON_SOCIAL',
-        'NOMBRE_COMERCIAL',
-        'USUARIO_SOL',
-        'CLAVE_SOL',
-        'CODIGO_DOMICILIO_FISCAL',
-        'RUTA_CERTIFICADO',
-        'RUTA_REPOSITORIO'
+        'ruc',
+        'razonSocial',
+        'nombreComercial',
+        'codigoDomicilioFiscal',
+        'usuarioSol',
+        'claveSol',
+        'certPath',
+        'repoPath',
+        'prodMode'
     ];
 
     /**
      * 
-     * @param array $config
-     * @param boolean $prodMode
+     * @param array $cfg
      */
-    public static function init($config, $prodMode = false) {
-        self::$production = $prodMode;
-        self::validateConfig($config);
-        Company::setConfig($config);
+    public static function init(array $cfg) {
+        self::validateConfig($cfg);
+        self::$production = !!$cfg['prodMode'];
+        Company::setConfig($cfg);
     }
 
     public static function isProductionMode() {

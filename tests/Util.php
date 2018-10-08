@@ -8,14 +8,15 @@ final class Util {
 
     public static function initF72X() {
         F72X::init([
-            'RUC'                     => '20100454523',
-            'RAZON_SOCIAL'            => 'Soporte Tecnológicos EIRL',
-            'NOMBRE_COMERCIAL'        => 'Tu Soporte',
-            'USUARIO_SOL'             => 'MODDATOS',
-            'CLAVE_SOL'               => 'moddatos',
-            'CODIGO_DOMICILIO_FISCAL' => '0000',
-            'RUTA_CERTIFICADO'        => __DIR__.'/cert/20100454523_cert.pem',
-            'RUTA_REPOSITORIO'        => __DIR__.'/repository'
+            'ruc'                   => '20100454523',
+            'razonSocial'           => 'Soporte Tecnológicos EIRL',
+            'nombreComercial'       => 'Tu Soporte',
+            'codigoDomicilioFiscal' => '0000',
+            'usuarioSol'            => 'MODDATOS',
+            'claveSol'              => 'moddatos',
+            'certPath'              => __DIR__.'/certs/20100454523_2018_09_27.pem',
+            'repoPath'              => __DIR__.'/bills',
+            'prodMode'              => false
         ]);
     }
     public static function getCaseData($caseName) {
