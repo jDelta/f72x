@@ -21,23 +21,23 @@ use F72X\Sunat\ServiceGateway;
 
 // 1. CONFIGURAR EL MÓDULO
 // =======================
-$prodMode   = false; // true, para usar los servicios de producciòn de SUNAT.
-$certPath   = __DIR__ . '/cert/20100454523_cert.pem'; // Ruta del certificado digital.
-$repository = __DIR__ . '/repository';                // Directorio donde se guadaràn
-                                                      // las facturas, deberà contener
-                                                      // los siguientes subdirectorios:
-                                                      // (cdr, sxml, sml y zip).
+$prodMode = false; // true, para usar los servicios de producciòn de SUNAT.
+$certPath = __DIR__ . '/certs/20100454523_2018_09_27.pem'; // Ruta del certificado digital.
+$repoPath = __DIR__ . '/bills'; // Directorio donde se guadarán las facturas,
+                                // deberá contener los siguientes subdirectorios:
+                                // (cdr, sxml, sml y zip).
 // Datos del emisor
 F72X::init([
-    'RUC'                     => '20100454523',
-    'RAZON_SOCIAL'            => 'Soporte Tecnológicos EIRL',
-    'NOMBRE_COMERCIAL'        => 'Tu Soporte',
-    'USUARIO_SOL'             => 'MODDATOS',
-    'CLAVE_SOL'               => 'moddatos',
-    'CODIGO_DOMICILIO_FISCAL' => '0000',
-    'RUTA_CERTIFICADO'        => $certPath,
-    'RUTA_REPOSITORIO'        => $repository
-], $prodMode);
+    'ruc'                   => '20100454523',
+    'razonSocial'           => 'Soporte Tecnológicos EIRL',
+    'nombreComercial'       => 'Tu Soporte',
+    'codigoDomicilioFiscal' => '0000',
+    'usuarioSol'            => 'MODDATOS',
+    'claveSol'              => 'moddatos',
+    'certPath'              => $certPath,
+    'repoPath'              => $repoPath,
+    'prodMode'              => $prodMode
+]);
 
 echo "1. CONFIGURACIÓN: OK<br>";
 
