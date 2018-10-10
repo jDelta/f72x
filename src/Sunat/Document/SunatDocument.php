@@ -30,7 +30,6 @@ use F72X\UblComponent\TaxCategory;
 use F72X\UblComponent\TaxScheme;
 use F72X\UblComponent\LegalMonetaryTotal;
 use F72X\UblComponent\InvoiceLine;
-use F72X\UblComponent\AllowanceCharge;
 use F72X\UblComponent\PricingReference;
 use F72X\UblComponent\AlternativeConditionPrice;
 use F72X\UblComponent\Item;
@@ -76,12 +75,13 @@ abstract class SunatDocument extends Invoice {
         // Impuestos
         $this->addInvoiceTaxes();
         // Descuentos globales
-        $allowances = $document->getAllowances();
+        $ac = $document->getAllowancesAndCharges();
         $baseAmount = $Items->getTotalTaxableAmount();
-        foreach ($allowances as $item) {
+        foreach ($ac as $item) {
             $k = $item['multiplierFactor'];
             $amount = $baseAmount * $k;
-            UblHelper::addAllowanceCharge($this, $currencyType, 'false', $item['reasonCode'], $item['multiplierFactor'], $amount, $baseAmount);
+            $chargeIndicator = $item['isCharge'] ? 'true' : 'false';
+            UblHelper::addAllowanceCharge($this, $currencyType, $chargeIndicator, $item['reasonCode'], $item['multiplierFactor'], $amount, $baseAmount);
         }
         // Totales
         $this->addInvoiceLegalMonetaryTotal();
@@ -214,8 +214,7 @@ abstract class SunatDocument extends Invoice {
         $igvAffectationCode = $Items->getIgvAffectationCode($itemIndex);
 
         $itemValue          = $Items->getItemValue($itemIndex);
-        $allowances         = $Items->getAllowances($itemIndex);
-        $charges            = $Items->getCharges($itemIndex);
+        $ac                 = $Items->getAllowancesAndCharges($itemIndex);
         $itemTaxableAmount  = $Items->getTaxableAmount($itemIndex);
         $itemTaxAmount      = $Items->getIgv($itemIndex);
         $unitPrice          = $Items->getUnitTaxedValue($itemIndex);
@@ -223,17 +222,12 @@ abstract class SunatDocument extends Invoice {
         // Catálogo 5 Ipuesto aplicable
         $cat5Item = Catalogo::getCatItem(5, $taxTypeCode);
 
-        // Descuentos
-        foreach ($allowances as $item) {
+        // Descuentos y cargos
+        foreach ($ac as $item) {
             $multFactor = $item['multiplierFactor'];
             $amount = $itemValue * $multFactor;
-            UblHelper::addAllowanceCharge($InvoiceLine, $currencyID, 'false', $item['reasonCode'], $multFactor, $amount, $itemValue);
-        }
-        // Cargos
-        foreach ($charges as $item) {
-            $multFactor = $item['multiplierFactor'];
-            $amount = $itemValue * $multFactor;
-            UblHelper::addAllowanceCharge($InvoiceLine, $currencyID, 'true', $item['reasonCode'], $multFactor, $amount, $itemValue);
+            $chargeIndicator = $item['isCharge'] ? 'true' : 'false';
+            UblHelper::addAllowanceCharge($InvoiceLine, $currencyID, $chargeIndicator, $item['reasonCode'], $multFactor, $amount, $itemValue);
         }
 
         $InvoiceLine
@@ -360,8 +354,8 @@ abstract class SunatDocument extends Invoice {
      *    
      * @return string Nombre del comprobante de acuerdo con las especificaciones de la SUNAT
      */
-    public function getFileName() {
-        return Company::getRUC() . '-' . $this->InvoiceTypeCode . '-' . $this->ID . '.xml';
+    public function getBillName() {
+        return Company::getRUC() . '-' . $this->InvoiceTypeCode . '-' . $this->ID;
     }
 
 }

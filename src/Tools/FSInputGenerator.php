@@ -139,34 +139,20 @@ class FSInputGenerator {
     private static function getVariablesGlobales(InvoiceDocument $Invoice) {
         $data         = [];
         $currencyType = $Invoice->getCurrencyType();
-        $allowances   = $Invoice->getAllowances();
-        $charges      = $Invoice->getCharges();
+        $ac   = $Invoice->getAllowancesAndCharges();
         $baseAmount   = $Invoice->getItems()->getTotalTaxableAmount();
-        foreach ($allowances as $allowance) {
-            $k = $allowance['multiplierFactor'];
+        foreach ($ac as $item) {
+            $k = $item['multiplierFactor'];
             $amount = $baseAmount * $k;
+            $chargeIndicator = $item['isCharge'] ? 'true' : 'false';
             $item = [
-                'tipVariableGlobal'      => 'false',
-                'codTipoVariableGlobal'  => $allowance['reasonCode'],
+                'tipVariableGlobal'      => $chargeIndicator,
+                'codTipoVariableGlobal'  => $item['reasonCode'],
                 'porVariableGlobal'      => $k,
                 'monMontoVariableGlobal' => $currencyType,
                 'mtoVariableGlobal'      => Operations::formatAmount($amount),
                 'monBaseImponibleVariableGlobal' => $currencyType,
                 'mtoBaseImpVariableGlobal'       => Operations::formatAmount($baseAmount)
-            ];
-            $data[] = $item;
-        }
-        foreach ($charges as $allowance) {
-            $k = $allowance['multiplierFactor'];
-            $amount = $baseAmount * $k;
-            $item = [
-                'tipVariableGlobal'      => 'true',
-                'codTipoVariableGlobal'  => $allowance['reasonCode'],
-                'porVariableGlobal'      => $k,
-                'monMontoVariableGlobal' => $currencyType,
-                'mtoVariableGlobal'      => $amount,
-                'monBaseImponibleVariableGlobal' => $currencyType,
-                'mtoBaseImpVariableGlobal'       => $baseAmount
             ];
             $data[] = $item;
         }

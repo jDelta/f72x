@@ -28,8 +28,9 @@ class F72X {
     ];
 
     /**
-     * 
-     * @param array $cfg
+     * Inicializa el módulo con la configuración del contribuyente.
+     * @param array $cfg datos del contribuyente
+     * @throws ConfigException
      */
     public static function init(array $cfg) {
         self::validateConfig($cfg);
@@ -41,11 +42,22 @@ class F72X {
         return self::$production;
     }
 
-    private static function validateConfig($config) {
+    /**
+     * 
+     * @param type $config
+     * @throws ConfigException
+     */
+    private static function validateConfig(array $config) {
         foreach (self::$requiredConfigFields as $field) {
             if (!isset($config[$field])) {
-                throw new ConfigException(sprintf('La propiedad %s es obligatoria, por favor revise su cofiguración!', $field));
+                throw new ConfigException(sprintf('La propiedad %s es obligatoria, por favor revise su cofiguración.', $field));
             }
+        }
+        if (!file_exists($config['certPath'])) {
+            throw new ConfigException(sprintf('No se encuentra su certificado verifique la ubicación %s, sea la correcta.', $config['certPath']));
+        }
+        if (!file_exists($config['repoPath'])) {
+            throw new ConfigException(sprintf('No se encuentra el directorio que será usado para guardar los documentos electronicos verifique la ubicación %s, sea la correcta.', $config['repoPath']));
         }
     }
 

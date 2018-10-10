@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <parser>
+        <target>docs</target>
+    </parser>
+    <transformer>
+        <target>docs</target>
+    </transformer>
+    <files>
+        <directory>src</directory>
+        <directory>tests/*</directory>
+        <ignore>vendor/*</ignore>
+    </files>
+    <transformations>
+        <template name="responsive-twig"/>
+    </transformations>
+</phpdoc>

@@ -46,8 +46,7 @@ class InvoiceDocument {
     /** @var InvoiceItems */
     private $_items;
     private $_rawItems;
-    private $allowances;
-    private $charges;
+    private $allowancesAndCharges = [];
 
     /**
      * 
@@ -75,13 +74,11 @@ class InvoiceDocument {
         $this->customerDocNumber = $data['customerDocNumber'];
         $this->customerRegName = mb_strtoupper($data['customerRegName']);
         $this->_items = $items;
-        $this->allowances = $data['allowances'];
-        $this->charges = $data['charges'];
+        $this->allowancesAndCharges = $data['allowancesCharges'];
     }
 
     private function addDefaults(array &$data) {
-        $data['allowances'] = isset($data['allowances']) ? $data['allowances'] : [];
-        $data['charges']    = isset($data['charges']) ? $data['charges'] : [];
+        $data['allowancesCharges'] = isset($data['allowancesCharges']) ? $data['allowancesCharges'] : [];
         $data['issueDate']  = isset($data['issueDate']) ? $data['issueDate'] : new DateTime();
         $data['purchaseOrder'] = isset($data['purchaseOrder']) ? $data['purchaseOrder'] : null;
     }
@@ -221,21 +218,12 @@ class InvoiceDocument {
         return $this->_rawItems;
     }
 
-    public function getAllowances() {
-        return $this->allowances;
+    public function getAllowancesAndCharges() {
+        return $this->allowancesAndCharges;
     }
 
-    public function setAllowances($allowances) {
-        $this->allowances = $allowances;
-        return $this;
-    }
-
-    public function getCharges() {
-        return $this->charges;
-    }
-
-    public function setCharges($charges) {
-        $this->charges = $charges;
+    public function setAllowancesAndCharges($allowancesAndCharges) {
+        $this->allowancesAndCharges = $allowancesAndCharges;
         return $this;
     }
 
@@ -317,7 +305,7 @@ class InvoiceDocument {
     public function getTotalAllowances() {
         $totalItems = $this->_items->getTotalAllowances();
         $totalTaxableAmountItems = $this->_items->getTotalTaxableAmount();
-        $globalAllowancesAmount = Operations::getTotalAllowanceCharge($totalTaxableAmountItems, $this->allowances);
+        $globalAllowancesAmount = Operations::getTotalAllowances($totalTaxableAmountItems, $this->allowancesAndCharges);
         return $totalItems + $globalAllowancesAmount;
     }
     /**
@@ -383,7 +371,7 @@ class InvoiceDocument {
      * @return float
      */
     private function applyAllowancesAndCharges($amount) {
-        return Operations::applyAllowancesAndCharges($amount, $this->allowances, $this->charges);
+        return Operations::applyAllowancesAndCharges($amount, $this->allowancesAndCharges);
     }
 
 }

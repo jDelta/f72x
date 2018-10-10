@@ -11,13 +11,13 @@ return [
     'customerDocNumber' => '46237547',                  // DNI
     'customerRegName'   => 'LUANA KARINA PAZOS ATOCHE', // Nombre de cliente
     'issueDate'         => $dt,                         // Opcional, si no se especifica se usara la fecha del sistema!
-    'allowances'        => [
+    'allowancesCharges' => [
         [
+            'isCharge'         => false,
             'reasonCode'       => '00', // Código de descuento Cátalogo #53
             'multiplierFactor' => 0.05
         ]
     ],
-    'charges'           => [],
     'items' => [
         [
             'productCode'        => 'REF564',    // Código

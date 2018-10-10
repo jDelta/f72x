@@ -14,9 +14,11 @@ use F72X\Tools\XmlService;
 use F72X\Tools\XmlDSig;
 use F72X\Tools\FileService;
 use F72X\Company;
+use F72X\Repository;
 use F72X\Sunat\Document\SunatDocument;
 use F72X\Sunat\Document\Factura;
 use F72X\Sunat\Document\Boleta;
+use F72X\Exception\InvalidInputException;
 
 class DocumentGenerator {
 
@@ -29,11 +31,16 @@ class DocumentGenerator {
      * @param string $currencyType
      */
     public static function generateFactura(array $data, $currencyType = 'PEN') {
+        // Validate input
+        self::validateData($data, Catalogo::CAT1_FACTURA);
+        // Core invoice
         $Invoice = new InvoiceDocument($data, Catalogo::CAT1_FACTURA, $currencyType);
         // Documento XML para la factura
         $XmlDoc = new Factura($Invoice);
         self::processSutatDoc($XmlDoc);
+        return $XmlDoc;
     }
+
     /**
      * Generar Boleta
      * 
@@ -43,10 +50,22 @@ class DocumentGenerator {
      * @param string $currencyType
      */
     public static function generateBoleta(array $data, $currencyType = 'PEN') {
+        // Validate input
+        self::validateData($data, Catalogo::CAT1_BOLETA);
+        // Core invoice
         $Invoice = new InvoiceDocument($data, Catalogo::CAT1_BOLETA, $currencyType);
         // Documento XML para la factura
         $XmlDoc = new Boleta($Invoice);
         self::processSutatDoc($XmlDoc);
+        return $XmlDoc;
+    }
+
+    private static function validateData(array $data, $type) {
+        $validator = new InputValidator($data, $type);
+        // Input validation
+        if (!$validator->isValid()) {
+            throw new InvalidInputException($validator->getErrors());
+        }
     }
 
     private static function processSutatDoc(SunatDocument $XmlDoc) {
@@ -59,16 +78,16 @@ class DocumentGenerator {
     }
 
     private static function singInvoice(SunatDocument $Document) {
-        $xmlFile = $Document->getFileName();
-        XmlDSig::sign($xmlFile);
+        $billName = $Document->getBillName();
+        XmlDSig::sign($billName);
     }
 
     private static function zipInvoice(SunatDocument $Document) {
-        $xmlFile = $Document->getFileName();
-        FileService::doZip($xmlFile);
+        $billName = $Document->getBillName();
+        FileService::doZip("$billName.xml");
     }
 
-    public static function saveInvoice(SunatDocument $invoice) {
+    private static function saveInvoice(SunatDocument $invoice) {
         $repository = Company::getRepositoryPath();
         $xmlService = new XmlService('1.0', 'ISO-8859-1');
 
@@ -83,8 +102,9 @@ class DocumentGenerator {
             "urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2"   => 'udt',
             "http://www.w3.org/2001/XMLSchema-instance"                                     => 'xsi'
         ];
-        $fileName = $invoice->getFileName();
-        file_put_contents("$repository/xml/$fileName", $xmlService->write('Invoice', $invoice));
+        $billName = $invoice->getBillName();
+        $billContent = $xmlService->write('Invoice', $invoice);
+        Repository::saveBill($billName, $billContent);
     }
 
 }

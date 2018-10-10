@@ -41,8 +41,7 @@ final class InvoiceGenerationTest extends TestCase {
                 'customerRegName'   => $Invoice->getCustomerRegName(),
                 'issueDate'         => $Invoice->getIssueDate(),
                 'purchaseOrder'     => $Invoice->getPurchaseOrder(),
-                'allowances'        => $Invoice->getAllowances(),
-                'charges'           => $Invoice->getCharges(),
+                'allowancesCharges' => $Invoice->getAllowancesAndCharges(),
                 'items'             => $Invoice->getRawItems(),
                 'totalTaxes'        => (float)Operations::formatAmount($Invoice->getTotalTaxes()),
                 'taxableAmount'     => (float)Operations::formatAmount($Invoice->getTaxableAmount()),
@@ -63,8 +62,7 @@ final class InvoiceGenerationTest extends TestCase {
                 'customerDocNumber'   => $Invoice->getCustomerDocNumber(),
                 'customerRegName'     => $Invoice->getCustomerRegName(),
                 'issueDate'           => $Invoice->getIssueDate(),
-                'allowances'          => $Invoice->getAllowances(),
-                'charges'             => $Invoice->getCharges(),
+                'allowancesCharges'   => $Invoice->getAllowancesAndCharges(),
                 'items'               => $Invoice->getRawItems(),
                 'totalTaxes'          => (float)Operations::formatAmount($Invoice->getTotalTaxes()),
                 'totalFreeOperations' => (float)Operations::formatAmount($Invoice->getTotalFreeOperations()),
@@ -82,7 +80,6 @@ final class InvoiceGenerationTest extends TestCase {
         // Calculate totals
         $rows = $Items->countRows();
         $Items->set(InvoiceItems::COL_IGV,   $rows, $Items->sum(InvoiceItems::COL_IGV));
-        $Items->set(InvoiceItems::COL_ALLOWANCES, $rows, $Items->sum(InvoiceItems::COL_ALLOWANCES));
         $Items->set(InvoiceItems::COL_ITEM_BILLABLE_VALUE, $rows, $Items->sum(InvoiceItems::COL_ITEM_BILLABLE_VALUE));
         $Items->set(InvoiceItems::COL_ITEM_PAYABLE_AMOUNT, $rows, $Items->sum(InvoiceItems::COL_ITEM_PAYABLE_AMOUNT));
         $Items->set(InvoiceItems::COL_ITEM_TAXABLE_AMOUNT, $rows, $Items->sum(InvoiceItems::COL_ITEM_TAXABLE_AMOUNT));

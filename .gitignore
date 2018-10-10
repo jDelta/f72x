@@ -1,6 +1,4 @@
 /nbproject/private/
 /vendor/
-/tests/bills/cdr/
-/tests/bills/sxml/
-/tests/bills/xml/
-/tests/bills/zip/
+/docs/
+/tests/testdox.txt

@@ -3,26 +3,25 @@
 namespace F72X\Tools;
 
 use F72X\Company;
+use F72X\Repository;
 use Greenter\XMLSecLibs\Sunat\SignedXml;
 
 class XmlDSig {
 
     /**
      * 
-     * @param string $xmlFileName
+     * @param string $billName
      */
-    public static function sign($xmlFileName) {
-        // Directories
-        $repository = Company::getRepositoryPath();
+    public static function sign($billName) {
         $cert = Company::getCertPath();
         // Load the XML to be signed
-        $xmlPath = "$repository/xml/$xmlFileName";
+        $xmlPath = Repository::getBillPath($billName);
 
         $signer = new SignedXml();
         $signer->setCertificateFromFile($cert);
 
-        $xmlSigned = $signer->signFromFile($xmlPath);
-        file_put_contents("$repository/sxml/S-$xmlFileName", $xmlSigned);
+        $signedXml = $signer->signFromFile($xmlPath);
+        Repository::saveSignedBill($billName, $signedXml);
     }
 
 }

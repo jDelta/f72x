@@ -19,36 +19,47 @@ class Operations {
     /**
      * 
      * @param float $amount
-     * @param array $allowances
-     * @param array $charges
+     * @param array $items
      * @return float
      */
-    public static function applyAllowancesAndCharges($amount, $allowances = [], $charges = []) {
+    public static function applyAllowancesAndCharges($amount, array $items = []) {
         if (!$amount) {
             return 0;
         }
         $totalAllowances = 0;
         $totalCharges = 0;
-        foreach ($allowances as $allowanceItem) {
-            $k = $allowanceItem['multiplierFactor'];
-            $totalAllowances += $amount * $k;
-        }
-        foreach ($charges as $chargeItem) {
-            $k = $chargeItem['multiplierFactor'];
-            $totalCharges += $amount * $k;
+        foreach ($items as $item) {
+            $isCharge = $item['isCharge'];
+            $k = $item['multiplierFactor'];
+            $r = $amount * $k;
+            if($isCharge){
+                $totalCharges += $r;
+            }else{
+                $totalAllowances += $r;
+            }
+            
         }
         return $amount - $totalAllowances + $totalCharges;
     }
 
-    public static function getTotalAllowanceCharge($amount, $items = []) {
+    public static function getTotalAllowanceCharge($amount, array $items, $isCharge) {
         $total = 0;
         foreach ($items as $item) {
             $k = $item['multiplierFactor'];
-            $total += $amount * $k;
+            if ($item['isCharge'] == $isCharge) {
+                $total += $amount * $k;
+            }
         }
         return $total;
     }
 
+    public static function getTotalCharges($amount, array $items) {
+        return self::getTotalAllowanceCharge($amount, $items, true);
+    }
+
+    public static function getTotalAllowances($amount, array $items) {
+        return self::getTotalAllowanceCharge($amount, $items, false);
+    }
     /**
      * Calcular IGV
      * @param float $baseAmount

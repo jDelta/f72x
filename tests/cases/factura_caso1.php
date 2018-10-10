@@ -12,13 +12,13 @@ return [
     'customerRegName'   => 'SERVICABINAS S.A.', // Razón social
     'issueDate'         => $dt,                 // Fecha de emisión [opcional], si no se especifica se usara la fecha del sistema!
     'purchaseOrder'     => 7852166,             // Numero de orden de commpra,
-    'allowances'        => [
+    'allowancesCharges' => [
         [
+            'isCharge'         => false,
             'reasonCode'       => '00', // Código de descuento Cátalogo #53
             'multiplierFactor' => 0.05
         ]
     ],
-    'charges'           => [],
     'items' => [
         [
             'productCode'        => 'GLG199',    // Código
@@ -31,8 +31,12 @@ return [
             'igvAffectationCode' => '10',        // Catálogo #7
             'unitValue'          => 98.00,       // Valor unitario
             'igvIncluded'        => true,        // true si el valor unitario incluye IGV
-            'allowances'         => [
-                ['reasonCode' => '00', 'multiplierFactor'  => 0.1]
+            'allowancesCharges'  => [
+                [
+                    'isCharge'         => false,
+                    'reasonCode'       => '00',
+                    'multiplierFactor' => 0.1
+                ]
             ]
         ],
         [
@@ -46,8 +50,12 @@ return [
             'igvAffectationCode' => '10',
             'unitValue'          => 620.00,
             'igvIncluded'        => true,
-            'allowances'         => [
-                ['reasonCode' => '00', 'multiplierFactor'  => 0.15]
+            'allowancesCharges'  => [
+                [
+                    'isCharge'         => false,
+                    'reasonCode'       => '00',
+                    'multiplierFactor' => 0.15
+                ]
             ]
         ],
         [

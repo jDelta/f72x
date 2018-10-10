@@ -15,6 +15,17 @@ use Sabre\Xml\Reader;
 
 class Catalogo {
 
+    const CAT_TAX_DOCUMENT_TYPE    = 1;
+    const CAT_CURRENCY_TYPE        = 2;
+    const CAT_MEASUREMENT_UNIT     = 3;
+    const CAT_COUNTRY_CODE         = 4;
+    const CAT_TAX_TYPE             = 5;
+    const CAT_IDENT_DOCUMENT_TYPE  = 6;
+    const CAT_IGV_AFFECTATION_TYPE = 7;
+    const CAT_ISC_CALC_SYSTEM_TYPE = 8;
+    const CAT_NOTA_CREDITO_TYPE    = 9;
+    const CAT_NOTA_DEBITO_TYPE     = 10;
+    const CAT_FACTURA_TYPE         = 51;
     /** @CAT1 Código tipo de documento */
     const CAT1_FACTURA      = '01';
     const CAT1_BOLETA       = '03';
@@ -43,6 +54,11 @@ class Catalogo {
 
     private static $_CAT = [];
 
+    public static function itemExist($catNumber, $itemID) {
+        $items = self::getCatItems($catNumber);
+        return key_exists($itemID, $items);
+    }
+    
     public static function getCatItem($catNumber, $itemID, $key = 'id') {
         $items = self::getCatItems($catNumber);
         foreach ($items as $item) {
@@ -68,15 +84,17 @@ class Catalogo {
 
         $catData = $reader->parse();
         $items = $catData['value'];
+        $itemsO = [];
         foreach ($items as &$item) {
             unset($item['name']); // Here because the item may contain the name attribute!
             foreach ($item['attributes'] as $attKey => $att) {
                 $item[$attKey] = $att;
             }
             unset($item['attributes']);
+            $itemsO[$item['id']] = $item;
         }
         // Cache
-        self::$_CAT['CAT_' . $catNumber] = $items;
+        self::$_CAT['CAT_' . $catNumber] = $itemsO;
         return self::$_CAT['CAT_' . $catNumber];
     }
 

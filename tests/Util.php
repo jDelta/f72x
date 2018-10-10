@@ -15,7 +15,7 @@ final class Util {
             'usuarioSol'            => 'MODDATOS',
             'claveSol'              => 'moddatos',
             'certPath'              => __DIR__.'/certs/20100454523_2018_09_27.pem',
-            'repoPath'              => __DIR__.'/bills',
+            'repoPath'              => __DIR__.'/edocs',
             'prodMode'              => false
         ]);
     }

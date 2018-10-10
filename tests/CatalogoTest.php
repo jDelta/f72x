@@ -7,17 +7,28 @@ use PHPUnit\Framework\TestCase;
 
 final class CatalogoTest extends TestCase {
 
+    public function testGetCatItems() {
+        $expected = [
+            'NIU' => ['id' => 'NIU', 'value' => 'UNIDAD (BIENES)'],
+            'ZZ'  => ['id' => 'ZZ', 'value' => 'UNIDAD (SERVICIOS)']
+        ];
+        $actual = Catalogo::getCatItems(3);
+        self::assertEquals($expected, $actual);
+    }
+
+    public static function testItemExist() {
+        self::assertTrue(Catalogo::itemExist(3, 'NIU'));
+        self::assertTrue(Catalogo::itemExist(3, 'ZZ'));
+        self::assertFalse(Catalogo::itemExist(3, 'XX'));
+    }
+
     public function testGetCatItem() {
-        $output = Catalogo::getCatItem(16, '01');
         $expected = [
             'id' => '01',
             'value' => 'Precio unitario (incluye el IGV)'
         ];
-        self::assertEquals($expected, $output);
-    }
-
-    public static function getCaseData($caseName) {
-        return require "cases/$caseName.php";
+        $actual = Catalogo::getCatItem(16, '01');
+        self::assertEquals($expected, $actual);
     }
 
 }

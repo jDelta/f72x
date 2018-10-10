@@ -23,9 +23,9 @@ use F72X\Sunat\ServiceGateway;
 // =======================
 $prodMode = false; // true, para usar los servicios de producciòn de SUNAT.
 $certPath = __DIR__ . '/certs/20100454523_2018_09_27.pem'; // Ruta del certificado digital.
-$repoPath = __DIR__ . '/bills'; // Directorio donde se guadarán las facturas,
+$repoPath = __DIR__ . '/edocs'; // Directorio donde se guadarán las facturas,
                                 // deberá contener los siguientes subdirectorios:
-                                // (cdr, sxml, sml y zip).
+                                // (bill, signedbill, zippedbill y cdr).
 // Datos del emisor
 F72X::init([
     'ruc'                   => '20100454523',
@@ -59,10 +59,11 @@ $dataFactura = [
     'customerRegName'   => 'SERVICABINAS S.A.', // Razón social
     'issueDate'         => $dt,                 // Fecha de emisión [opcional], si no se especifica se usara la fecha del sistema!
     'purchaseOrder'     => 7852166,             // Numero de orden de commpra,
-    'allowances'        => [
+    'allowancesCharges' => [
         [
-            'reasonCode'       => '00', // Código de descuento Cátalogo #53
-            'multiplierFactor' => 0.05
+            'isCharge'         => false, // true cuando se trata de un cargo
+            'reasonCode'       => '00',  // Código de descuento Cátalogo #53
+            'multiplierFactor' => 0.05   // Factor de multiplicación use 0.07 para representar 7%
         ]
     ],
     'charges'           => [],
@@ -78,8 +79,12 @@ $dataFactura = [
             'igvAffectationCode' => '10',        // Catálogo #7
             'unitValue'          => 98.00,       // Valor unitario
             'igvIncluded'        => true,        // true si el valor unitario incluye IGV
-            'allowances'         => [
-                ['reasonCode' => '00', 'multiplierFactor'  => 0.1]
+            'allowancesCharges'  => [
+                [
+                    'isCharge'         => false, // true cuando se trata de un cargo
+                    'reasonCode'       => '00',  // Código de descuento Cátalogo #53
+                    'multiplierFactor' => 0.1    // Factor de multiplicación use 0.07 para representar 7%
+                ]
             ]
         ],
         [
@@ -93,8 +98,12 @@ $dataFactura = [
             'igvAffectationCode' => '10',
             'unitValue'          => 620.00,
             'igvIncluded'        => true,
-            'allowances'         => [
-                ['reasonCode' => '00', 'multiplierFactor'  => 0.15]
+            'allowancesCharges'  => [
+                [
+                    'isCharge'         => false,
+                    'reasonCode'       => '00',
+                    'multiplierFactor' => 0.15
+                ]
             ]
         ],
         [
@@ -125,11 +134,16 @@ $dataFactura = [
 ];
 
 // generar
-DocumentGenerator::generateFactura($dataFactura);
+$boletaSunat = DocumentGenerator::generateFactura($dataFactura);
 echo "2. GENERACIÓN DE FACTURA Y FIRMA: OK<br>";
 
 // 1. ENVIAR A SUNAT
 // =================
-ServiceGateway::sendBill('20100454523-01-F001-00004355.zip');
-echo "2. ENVIO Y RECEPCION SUNAT: OK<br>";
+$billName = $boletaSunat->getBillName();
+$response = ServiceGateway::sendBill($billName);
+echo "3. ENVIO Y RECEPCION SUNAT: OK";
+echo '<pre>';
+echo "CDR:";
+print_r($response);
+echo '</pre>';
 ````

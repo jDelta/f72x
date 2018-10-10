@@ -40,4 +40,11 @@ SEC;
         parent::__construct($wsdl, $options);
     }
 
+    public static function getService() {
+        $serviceUrl = F72X::isProductionMode() ?
+                SunatVars::SUNAT_SERVICE_URL_PROD : SunatVars::SUNAT_SERVICE_URL_BETA;
+
+        return new SunatSoapClient("$serviceUrl?wsdl", ['trace' => true]);
+    }
+
 }
