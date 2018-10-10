@@ -44,7 +44,7 @@ class F72X {
 
     /**
      * 
-     * @param type $config
+     * @param array $config
      * @throws ConfigException
      */
     private static function validateConfig(array $config) {

@@ -71,11 +71,12 @@ class InputValidator {
             if ($field == 'customerDocNumber') {
                 $validation['type'] = $this->getDocTypeValidator();
             }
-            $this->validateItem($field, $validation, $this->data);
+            $this->validateItem($field, $validation);
         }
     }
 
-    private function validateItem($field, $validation, $data) {
+    private function validateItem($field, $validation) {
+        $data = $this->data;
         $fieldExist = isset($data[$field]);
         $fieldValue = $fieldExist ? $data[$field] : null;
 
@@ -115,23 +116,24 @@ class InputValidator {
     }
 
     private function getDocTypeValidator() {
-        $doctypeExist = isset($this->data['customerDocType']);
-        $doctypeValue = $doctypeExist ? $this->data['customerDocType'] : null;
-        if ($doctypeExist && Catalogo::itemExist(Catalogo::CAT_IDENT_DOCUMENT_TYPE, $doctypeValue)) {
-            //@CAT6
-            switch ($doctypeValue) {
-                case '1': return 'Dni';
-                case '6': return 'Ruc';
-                case '0': 
-                case '7':
-                case 'A':
-                case 'B':
-                case 'C':
-                case 'D':
-                case 'E': return null;
-            }
+        $data = $this->data;
+        $docType = isset($data['customerDocType']) ? $data['customerDocType'] : null;
+        return is_null($docType) ? null : $this->getDocType($docType);
+    }
+
+    private function getDocType($docType) {
+        switch ($docType) {
+            case '1': return 'Dni';
+            case '6': return 'Ruc';
+            case '0':
+            case '7':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            default : return null;
         }
-        return null;
     }
 
 }

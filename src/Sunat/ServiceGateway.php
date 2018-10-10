@@ -1,35 +1,36 @@
 <?php
 
+/**
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
+ * UBL 2.1
+ * Version 1.1
+ * 
+ * Copyright 2018, Jaime Cruz
+ */
+
 namespace F72X\Sunat;
 
-use ZipArchive;
-use F72X\F72X;
 use F72X\Company;
 use F72X\Repository;
-use F72X\Tools\FileService;
 
 class ServiceGateway {
 
     /**
      * 
-     * @param type $billName El nombre del documento electrónico.
+     * @param string $billName El nombre del documento electrónico.
+     * @return array
      */
     public static function sendBill($billName) {
-//        $invoiceName = substr($zipName, 0, -3) . 'xml';
         $repository = Company::getRepositoryPath();
         $contentFile = file_get_contents("$repository/zippedbill/$billName.zip");
 
         $soapService = SunatSoapClient::getService();
         $soapService->__soapCall('sendBill', [['fileName' => "$billName.zip", 'contentFile' => $contentFile]]);
-        try {
-            $serverResponse = $soapService->__getLastResponse();
-            // Save Constancia de recepción
-            self::saveCdr($serverResponse, $billName);
-            // Get Response info
-            return FileService::getCdrInfo($billName);
-        } catch (Exception $exc) {
-            throw new Exception();
-        }
+        $serverResponse = $soapService->__getLastResponse();
+        // Save Constancia de recepción
+        self::saveCdr($serverResponse, $billName);
+        // Get Response info
+        return Repository::getCdrInfo($billName);
     }
 
     private static function saveCdr($response, $billName) {

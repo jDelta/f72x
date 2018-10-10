@@ -12,8 +12,6 @@ namespace F72X\Sunat;
 
 use F72X\Tools\XmlService;
 use F72X\Tools\XmlDSig;
-use F72X\Tools\FileService;
-use F72X\Company;
 use F72X\Repository;
 use F72X\Sunat\Document\SunatDocument;
 use F72X\Sunat\Document\Factura;
@@ -84,13 +82,11 @@ class DocumentGenerator {
 
     private static function zipInvoice(SunatDocument $Document) {
         $billName = $Document->getBillName();
-        FileService::doZip("$billName.xml");
+        Repository::zipBill($billName);
     }
 
     private static function saveInvoice(SunatDocument $invoice) {
-        $repository = Company::getRepositoryPath();
         $xmlService = new XmlService('1.0', 'ISO-8859-1');
-
         $xmlService->namespaceMap = [
             "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"                        => '',
             "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"      => 'cac',
