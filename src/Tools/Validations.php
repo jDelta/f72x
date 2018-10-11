@@ -38,9 +38,7 @@ class Validations {
      * If the third parameter *strict* is set to **false**
      * then the **isIn** function wont check the
      * *needle* in the *haystack*.
-     * types of the
-
-     * @return type
+     * @return boolean
      */
     public static function isIn($needle, array $haystack, $strict = true) {
         return in_array($needle, $haystack, $strict);

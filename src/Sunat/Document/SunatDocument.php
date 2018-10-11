@@ -77,12 +77,7 @@ abstract class SunatDocument extends Invoice {
         // Descuentos globales
         $ac = $document->getAllowancesAndCharges();
         $baseAmount = $Items->getTotalTaxableAmount();
-        foreach ($ac as $item) {
-            $k = $item['multiplierFactor'];
-            $amount = $baseAmount * $k;
-            $chargeIndicator = $item['isCharge'] ? 'true' : 'false';
-            UblHelper::addAllowanceCharge($this, $currencyType, $chargeIndicator, $item['reasonCode'], $item['multiplierFactor'], $amount, $baseAmount);
-        }
+        UblHelper::addAllowancesCharges($this, $ac, $baseAmount, $currencyType);
         // Totales
         $this->addInvoiceLegalMonetaryTotal();
     }
@@ -207,7 +202,7 @@ abstract class SunatDocument extends Invoice {
         $unitCode           = $Items->getUnitCode($itemIndex);
         $quantity           = $Items->getQunatity($itemIndex);
         $description        = $Items->getDescription($itemIndex);
-        $currencyID         = $Items->getCurrencyCode($itemIndex);
+        $currencyType       = $Items->getCurrencyCode($itemIndex);
         $unitBillableValue  = $Items->getUnitBillableValue($itemIndex);
         $priceTypeCode      = $Items->getPriceTypeCode($itemIndex);
         $taxTypeCode        = $Items->getTaxTypeCode($itemIndex);
@@ -223,29 +218,24 @@ abstract class SunatDocument extends Invoice {
         $cat5Item = Catalogo::getCatItem(5, $taxTypeCode);
 
         // Descuentos y cargos
-        foreach ($ac as $item) {
-            $multFactor = $item['multiplierFactor'];
-            $amount = $itemValue * $multFactor;
-            $chargeIndicator = $item['isCharge'] ? 'true' : 'false';
-            UblHelper::addAllowanceCharge($InvoiceLine, $currencyID, $chargeIndicator, $item['reasonCode'], $multFactor, $amount, $itemValue);
-        }
+        UblHelper::addAllowancesCharges($InvoiceLine, $ac, $itemValue, $currencyType);
 
         $InvoiceLine
-                ->setCurrencyID($currencyID)                    // Tipo de moneda
+                ->setCurrencyID($currencyType)                    // Tipo de moneda
                 ->setID($itemIndex + 1)                         // Número de orden
                 ->setUnitCode($unitCode)                        // Codigo de unidad de medida
                 ->setInvoicedQuantity($quantity)                // Cantidad
                 ->setLineExtensionAmount($itemTaxableAmount)    // Valor de venta del ítem, sin impuestos
                 ->setPricingReference($PricingReference
                         ->setAlternativeConditionPrice($AlternativeConditionPrice
-                                ->setCurrencyID($currencyID)            // Tipo de moneda
+                                ->setCurrencyID($currencyType)            // Tipo de moneda
                                 ->setPriceAmount($unitPrice)            // Precio de venta unitario
                                 ->setPriceTypeCode($priceTypeCode)))    // Price
                 ->setTaxTotal($TaxTotal
-                        ->setCurrencyID($currencyID)
+                        ->setCurrencyID($currencyType)
                         ->setTaxAmount($itemTaxAmount)
                         ->addTaxSubTotal($TaxSubTotal
-                                ->setCurrencyID($currencyID)            // Tipo de moneda
+                                ->setCurrencyID($currencyType)            // Tipo de moneda
                                 ->setTaxableAmount($itemTaxableAmount)  // Valor de venta del item sin impuestos
                                 ->setTaxAmount($itemTaxAmount)          // IGV
                                 ->setTaxCategory($TaxCategory
@@ -263,7 +253,7 @@ abstract class SunatDocument extends Invoice {
                         ->setCommodityClassification($CommodityClassification
                                 ->setItemClassificationCode($sunatProductCode)))    // Código de producto SUNAT
                 ->setPrice($Price
-                        ->setCurrencyID($currencyID)    // Tipo de moneda
+                        ->setCurrencyID($currencyType)    // Tipo de moneda
                         ->setPriceAmount($unitBillableValue)    // Precio unitario del item
         );
         // Añade item

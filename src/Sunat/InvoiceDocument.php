@@ -11,6 +11,7 @@
 namespace F72X\Sunat;
 
 use DateTime;
+
 /**
  * InvoiceDocument
  * 
@@ -79,7 +80,7 @@ class InvoiceDocument {
 
     private function addDefaults(array &$data) {
         $data['allowancesCharges'] = isset($data['allowancesCharges']) ? $data['allowancesCharges'] : [];
-        $data['issueDate']  = isset($data['issueDate']) ? $data['issueDate'] : new DateTime();
+        $data['issueDate'] = isset($data['issueDate']) ? $data['issueDate'] : new DateTime();
         $data['purchaseOrder'] = isset($data['purchaseOrder']) ? $data['purchaseOrder'] : null;
     }
 
@@ -238,6 +239,7 @@ class InvoiceDocument {
         $totalItems = $this->_items->getTotalTaxableOperations();
         return $this->applyAllowancesAndCharges($totalItems);
     }
+
     /**
      * Monto con impuestos
      * 
@@ -258,6 +260,7 @@ class InvoiceDocument {
     public function getTotalTaxableOperations() {
         return $this->getTaxableAmount();
     }
+
     /**
      * Total operaciones gratuitas
      * @return float
@@ -286,6 +289,7 @@ class InvoiceDocument {
         $totalItems = $this->_items->getTotalUnaffectedOperations();
         return $this->applyAllowancesAndCharges($totalItems);
     }
+
     /**
      * Valor de venta
      * 
@@ -308,6 +312,7 @@ class InvoiceDocument {
         $globalAllowancesAmount = Operations::getTotalAllowances($totalTaxableAmountItems, $this->allowancesAndCharges);
         return $totalItems + $globalAllowancesAmount;
     }
+
     /**
      * Total a pagar
      * 
@@ -319,8 +324,8 @@ class InvoiceDocument {
      */
     public function getPayableAmount() {
         // Totals
-        $totalTaxableOperations  = $this->getTotalTaxableOperations();
-        $totalIGV                = $this->getIGV();
+        $totalTaxableOperations = $this->getTotalTaxableOperations();
+        $totalIGV = $this->getIGV();
         $totalExemptedOperations = $this->getTotalExemptedOperations();
         return $totalTaxableOperations + $totalIGV + $totalExemptedOperations;
     }
@@ -334,8 +339,8 @@ class InvoiceDocument {
      * @return float
      */
     public function getTotalTaxes() {
-        $IGV  = $this->getIGV();
-        $ISC  = $this->getISC();
+        $IGV = $this->getIGV();
+        $ISC = $this->getISC();
         $IVAP = $this->getIVAP();
         return $IGV + $ISC + $IVAP;
     }
@@ -357,6 +362,7 @@ class InvoiceDocument {
     public function getISC() {
         return Operations::calcISC();
     }
+
     /**
      * IVAP
      * @IMP
@@ -365,6 +371,7 @@ class InvoiceDocument {
     public function getIVAP() {
         return Operations::calcIVAP();
     }
+
     /**
      * 
      * @param float $amount

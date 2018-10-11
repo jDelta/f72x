@@ -24,6 +24,22 @@ class UblHelper {
     /**
      * 
      * @param SunatDocument|InvoiceLine $target
+     * @param array $allowancesCharges
+     * @param float $baseAmount
+     * @param string $currencyType
+     */
+    public static function addAllowancesCharges($target, array $allowancesCharges, $baseAmount, $currencyType) {
+        foreach ($allowancesCharges as $item) {
+            $k = $item['multiplierFactor'];
+            $amount = $baseAmount * $k;
+            $chargeIndicator = $item['isCharge'] ? 'true' : 'false';
+            self::addAllowanceCharge($target, $currencyType, $chargeIndicator, $item['reasonCode'], $item['multiplierFactor'], $amount, $baseAmount);
+        }
+    }
+
+    /**
+     * 
+     * @param SunatDocument|InvoiceLine $target
      * @param string $currencyID
      * @param string $ChargeIndicator
      * @param string $AllowanceChargeReasonCode
@@ -70,6 +86,7 @@ class UblHelper {
                                 ->setID($taxTypeCode)
                                 ->setName($cat5Item['name'])
                                 ->setTaxTypeCode($cat5Item['UN_ECE_5153'])));
+        // Add item
         $TaxTotal->addTaxSubTotal($TaxSubTotal);
     }
 

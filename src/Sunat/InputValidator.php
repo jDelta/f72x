@@ -104,8 +104,7 @@ class InputValidator {
         switch ($type) {
             case 'Array':
                 return $field == 'items' ?
-                        'El campo items debe ser de tipo array.' :
-                        "Se espera que el campo $field sea un array.";
+                    'El campo items debe ser de tipo array.' : "Se espera que el campo $field sea un array.";
             case 'Dni':
                 return "$value no es un DNI valido.";
             case 'Ruc':
@@ -122,18 +121,12 @@ class InputValidator {
     }
 
     private function getDocType($docType) {
-        switch ($docType) {
-            case '1': return 'Dni';
-            case '6': return 'Ruc';
-            case '0':
-            case '7':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            default : return null;
-        }
+        // @IMP cases: 0, 7, A, B, C, D, E
+        $cases = [
+            '1' => 'Dni',
+            '6' => 'Ruc'
+        ];
+        return isset($cases[$docType]) ? $cases[$docType] : null;
     }
 
 }
