@@ -32,12 +32,11 @@ class Operations {
             $isCharge = $item['isCharge'];
             $k = $item['multiplierFactor'];
             $r = $amount * $k;
-            if($isCharge){
+            if ($isCharge) {
                 $totalCharges += $r;
-            }else{
+            } else {
                 $totalAllowances += $r;
             }
-            
         }
         return $amount - $totalAllowances + $totalCharges;
     }
@@ -60,6 +59,7 @@ class Operations {
     public static function getTotalAllowances($amount, array $items) {
         return self::getTotalAllowanceCharge($amount, $items, false);
     }
+
     /**
      * Calcular IGV
      * @param float $baseAmount
@@ -77,6 +77,7 @@ class Operations {
     public static function calcISC() {
         return 0;
     }
+
     /**
      * Calcular IVAP
      * @IMP
@@ -85,6 +86,7 @@ class Operations {
     public static function calcIVAP() {
         return 0;
     }
+
     /**
      * Aplica IGV?
      * 
