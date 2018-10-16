@@ -24,7 +24,7 @@ class F72X {
         'claveSol',
         'cconfigPath',
         'repoPath',
-        'certName',
+        'certificate',
         'prodMode'
     ];
 

@@ -16,7 +16,7 @@ final class Util {
             'claveSol'              => 'moddatos',
             'cconfigPath'           => __DIR__.'/companyconfig',
             'repoPath'              => __DIR__.'/edocs',
-            'certName'              => '20100454523_2018_09_27.pem',
+            'certificate'           => '20100454523_2018_09_27.pem',
             'prodMode'              => false
         ]);
     }

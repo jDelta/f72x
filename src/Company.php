@@ -99,7 +99,7 @@ class Company {
      * @return string
      */
     public static function getCertPath() {
-        return self::get('cconfigPath') . '/certs/' . self::get('certName');
+        return self::get('cconfigPath') . '/certs/' . self::get('certificate');
     }
 
     /**

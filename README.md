@@ -47,8 +47,8 @@ $repoPath = __DIR__ . '/edocs';
  */
 $cfgPath   = __DIR__ . '/companyconfig';
 
-// Nombre del ertificado digital.
-$certName = '20100454523_2018_09_27.pem';
+// Nombre del ertificado digital a ser usado para las firmas
+$certificate = '20100454523_2018_09_27.pem';
 // Datos del emisor
 F72X::init([
     'ruc'                   => '20100454523',
@@ -59,7 +59,7 @@ F72X::init([
     'claveSol'              => 'moddatos',
     'cconfigPath'           => $cfgPath,
     'repoPath'              => $repoPath,
-    'certName'              => $certName,
+    'certificate'           => $certificate,
     'prodMode'              => $prodMode
 ]);
 
