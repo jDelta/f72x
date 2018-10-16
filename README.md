@@ -19,13 +19,36 @@ use F72X\F72X;
 use F72X\Sunat\DocumentGenerator;
 use F72X\Sunat\ServiceGateway;
 
-// 1. CONFIGURAR EL MÓDULO
-// =======================
-$prodMode = false; // true, para usar los servicios de producciòn de SUNAT.
-$certPath = __DIR__ . '/certs/20100454523_2018_09_27.pem'; // Ruta del certificado digital.
-$repoPath = __DIR__ . '/edocs'; // Directorio donde se guadarán las facturas,
-                                // deberá contener los siguientes subdirectorios:
-                                // (bill, signedbill, zippedbill y cdr).
+/**
+ * =======================
+ * 1. CONFIGURAR EL MÓDULO
+ * =======================
+ */
+
+// Modo producccion: true, para usar los servicios de producciòn de SUNAT.
+$prodMode = false;
+
+/**
+ * Repositorio digital:
+ * Consta de los diguientes subdirectorios:
+ *     - bill      : Facturas y Boletas en xml
+ *     - signedbill: Facturas firmadas
+ *     - zippedbill: Facturas comprimidas listas para ser enviadas a sunat
+ *     - crd       : Constancias de recepción
+ */
+$repoPath = __DIR__ . '/edocs';
+
+/**
+ * Directorio de configuración del emisor
+ * =======================================
+ * Consta de los diguientes subdirectorios:
+ *     - certs: Certificados
+ *     - lists: Listas personalizadas
+ */
+$cfgPath   = __DIR__ . '/companyconfig';
+
+// Nombre del ertificado digital.
+$certName = '20100454523_2018_09_27.pem';
 // Datos del emisor
 F72X::init([
     'ruc'                   => '20100454523',
@@ -34,8 +57,9 @@ F72X::init([
     'codigoDomicilioFiscal' => '0000',
     'usuarioSol'            => 'MODDATOS',
     'claveSol'              => 'moddatos',
-    'certPath'              => $certPath,
+    'cconfigPath'           => $cfgPath,
     'repoPath'              => $repoPath,
+    'certName'              => $certName,
     'prodMode'              => $prodMode
 ]);
 
@@ -52,11 +76,12 @@ $dt->setTime(13, 25, 51);
 // data de la factura
 $dataFactura = [
     'operationType'     => '0101',              // Tipo de operación Catálogo #51
-    'voucherSeries'     => 1,                   // Serie de la factura
+    'voucherSeries'     => 'F001',              // Serie de la factura
     'voucherNumber'     => 4355,                // Número correlativo de la factura
     'customerDocType'   => '6',                 // Tipo de documento Catálogo #6
     'customerDocNumber' => '20587896411',       // RUC
     'customerRegName'   => 'SERVICABINAS S.A.', // Razón social
+    'customerAddress'   => '215 NY STREET',     // Dirección del cliente
     'issueDate'         => $dt,                 // Fecha de emisión [opcional], si no se especifica se usara la fecha del sistema!
     'purchaseOrder'     => 7852166,             // Numero de orden de commpra,
     'allowancesCharges' => [

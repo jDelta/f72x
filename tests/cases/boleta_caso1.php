@@ -5,11 +5,12 @@ $dt->setDate(2017, 6, 24);
 $dt->setTime(13, 25, 51);
 return [
     'operationType'     => '0101',                      // Tipo de operación Catálogo #51
-    'voucherSeries'     => 1,                           // Serie de la factura
+    'voucherSeries'     => 'B001',                      // Serie de la factura
     'voucherNumber'     => 3652,                        // Número correlativo de la factura
     'customerDocType'   => '1',                         // Tipo de documento Catálogo #6
     'customerDocNumber' => '46237547',                  // DNI
     'customerRegName'   => 'LUANA KARINA PAZOS ATOCHE', // Nombre de cliente
+    'customerAddress'   => '485 UNIVERSAL STREET',      // Dirección del cliente
     'issueDate'         => $dt,                         // Opcional, si no se especifica se usara la fecha del sistema!
     'allowancesCharges' => [
         [

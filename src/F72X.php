@@ -22,8 +22,9 @@ class F72X {
         'codigoDomicilioFiscal',
         'usuarioSol',
         'claveSol',
-        'certPath',
+        'cconfigPath',
         'repoPath',
+        'certName',
         'prodMode'
     ];
 
@@ -53,12 +54,18 @@ class F72X {
                 throw new ConfigException(sprintf('La propiedad %s es obligatoria, por favor revise su cofiguración.', $field));
             }
         }
-        if (!file_exists($config['certPath'])) {
-            throw new ConfigException(sprintf('No se encuentra su certificado verifique la ubicación %s, sea la correcta.', $config['certPath']));
+        if (!file_exists($config['cconfigPath'])) {
+            throw new ConfigException(sprintf('No se encuentra el directorio de configuración del contribuyente, verifique la ubicación %s sea la correcta.', $config['cconfigPath']));
         }
         if (!file_exists($config['repoPath'])) {
-            throw new ConfigException(sprintf('No se encuentra el directorio que será usado para guardar los documentos electronicos verifique la ubicación %s, sea la correcta.', $config['repoPath']));
+            throw new ConfigException(sprintf('No se encuentra el directorio que será usado para guardar los documentos electronicos, verifique la ubicación %s sea la correcta.', $config['repoPath']));
         }
     }
 
+    public static function getModuleDir() {
+        return __DIR__.'/..';
+    }
+    public static function getTempDir() {
+        return self::getModuleDir().'/temp';
+    }
 }

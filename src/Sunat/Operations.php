@@ -10,10 +10,24 @@
 
 namespace F72X\Sunat;
 
+use NumberToWords\NumberToWords;
+
 class Operations {
 
     public static function formatAmount($amount, $decimals = 2) {
         return number_format($amount, $decimals, '.', '');
+    }
+
+    public static function getAmountInWords($amount, $currency = '') {
+        $formatedNumber = self::formatAmount($amount);
+
+        $parts = explode('.', $formatedNumber);
+        $intPart = $parts[0];
+        $decimalPart = $parts[1];
+        $numberTransformer = (new NumberToWords())->getNumberTransformer('es');
+        $t1 = mb_strtoupper($numberTransformer->toWords($intPart));
+        $t2 = $t1 . " Y $decimalPart/100";
+        return $currency ? "$t2 $currency" : $t2;
     }
 
     /**

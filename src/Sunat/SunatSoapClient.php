@@ -47,4 +47,9 @@ SEC;
         return new SunatSoapClient("$serviceUrl?wsdl", ['trace' => true]);
     }
 
+    public static function getCdrService() {
+        $serviceUrl = SunatVars::SUNAT_CDR_SERVICE_URL;
+        return new SunatSoapClient("$serviceUrl?wsdl", ['trace' => true]);
+    }
+
 }

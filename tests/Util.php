@@ -14,8 +14,9 @@ final class Util {
             'codigoDomicilioFiscal' => '0000',
             'usuarioSol'            => 'MODDATOS',
             'claveSol'              => 'moddatos',
-            'certPath'              => __DIR__.'/certs/20100454523_2018_09_27.pem',
+            'cconfigPath'           => __DIR__.'/companyconfig',
             'repoPath'              => __DIR__.'/edocs',
+            'certName'              => '20100454523_2018_09_27.pem',
             'prodMode'              => false
         ]);
     }

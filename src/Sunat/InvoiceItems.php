@@ -63,7 +63,9 @@ class InvoiceItems extends XMatrix {
         'COL_ITEM_PAYABLE_AMOUNT [base_imponible+IGV]'
     ];
 
+    private $rawData = [];
     public function populate($items, $currencyCode) {
+        $this->rawData = $items;
         foreach ($items as $idx => $item) {
             $ac             = isset($item['allowancesCharges']) ? $item['allowancesCharges'] : [];
             $igvAffectCode  = $item['igvAffectationCode'];
@@ -83,7 +85,7 @@ class InvoiceItems extends XMatrix {
             $itemTaxableAmount    = $this->calcItemTaxableAmount($itemValue, $priceType, $ac);         // Valor de venta del ítem = (Valor del item - Descuentos + Cargos), 0 si el valor del item es referencial!
             $igvAmount            = $this->calcIgvAmount($igvAffectCode, $itemTaxableAmount); // Afectación al IGV por item
             
-            $itemIgvTaxed         = $itemBillableValue + $igvAmount;
+            $itemPayableAmount    = $itemBillableValue + $igvAmount;
             
             $this->set(self::COL_PRODUCT_CODE,        $idx, $item['productCode']);
             $this->set(self::COL_UNPSC,               $idx, $item['sunatProductCode']);
@@ -106,8 +108,12 @@ class InvoiceItems extends XMatrix {
             $this->set(self::COL_CHARGES_AMOUNT,      $idx, $itemChargesAmount);
             $this->set(self::COL_ITEM_TAXABLE_AMOUNT, $idx, $itemTaxableAmount);
             $this->set(self::COL_IGV,                 $idx, $igvAmount);
-            $this->set(self::COL_ITEM_PAYABLE_AMOUNT, $idx, $itemIgvTaxed);
+            $this->set(self::COL_ITEM_PAYABLE_AMOUNT, $idx, $itemPayableAmount);
         }
+    }
+
+    public function getRawData() {
+        return $this->rawData;
     }
 
     /**
@@ -239,10 +245,21 @@ class InvoiceItems extends XMatrix {
         return $this->get(self::COL_UNIT_TAXED_VALUE, $rowIndex);
     }
 
+    /**
+     * Valor de item: Valor del item si considerar si es facturado al cliente o es transferido gratuitamente
+     * @param int $rowIndex
+     * @return float
+     */
     public function getItemValue($rowIndex) {
         return $this->get(self::COL_ITEM_VALUE, $rowIndex);
     }
 
+    /**
+     * Valor facturable
+     * Valor que figura en la factura del cliente como precio que el cliente deberá pagar
+     * @param int $rowIndex
+     * @return float
+     */
     public function getItemBillableValue($rowIndex) {
         return $this->get(self::COL_ITEM_BILLABLE_VALUE, $rowIndex);
     }

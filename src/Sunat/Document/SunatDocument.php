@@ -48,18 +48,18 @@ abstract class SunatDocument extends Invoice {
     /** @var InvoiceItems */
     private $_detailMatrix;
 
-    public function __construct(InvoiceDocument $document) {
-        $this->invoiceDocument = $document;
-        $currencyType = $document->getCurrencyType();
-        $Items = $document->getItems();
+    public function __construct(InvoiceDocument $Invoice) {
+        $this->invoiceDocument = $Invoice;
+        $currencyType = $Invoice->getCurrencyType();
+        $Items = $Invoice->getItems();
         // Invoice Type
-        $this->setInvoiceTypeCode($document->getInvoiceType());
+        $this->setInvoiceTypeCode($Invoice->getInvoiceType());
         // ID
-        $this->setID($document->getVoucherId());
+        $this->setID($Invoice->getVoucherId());
         // Tipo de operación
-        $this->setProfileID($document->getOperationType());
+        $this->setProfileID($Invoice->getOperationType());
         // Fecha de emisión
-        $this->setIssueDate($document->getIssueDate());
+        $this->setIssueDate($Invoice->getIssueDate());
         // Tipo de moneda
         $this->setDocumentCurrencyCode($currencyType);
         // Orden de compra
@@ -69,13 +69,13 @@ abstract class SunatDocument extends Invoice {
         // Información del cliente
         $this->addInvoiceAccountingCustomerParty();
         // Total items
-        $this->setLineCountNumeric($document->getTotalItems());
+        $this->setLineCountNumeric($Invoice->getTotalItems());
         // Detalle
         $this->addInvoiceItems();
         // Impuestos
         $this->addInvoiceTaxes();
         // Descuentos globales
-        $ac = $document->getAllowancesAndCharges();
+        $ac = $Invoice->getAllowancesAndCharges();
         $baseAmount = $Items->getTotalTaxableAmount();
         UblHelper::addAllowancesCharges($this, $ac, $baseAmount, $currencyType);
         // Totales
@@ -345,7 +345,7 @@ abstract class SunatDocument extends Invoice {
      * @return string Nombre del comprobante de acuerdo con las especificaciones de la SUNAT
      */
     public function getBillName() {
-        return Company::getRUC() . '-' . $this->InvoiceTypeCode . '-' . $this->ID;
+        return $this->invoiceDocument->getBillName();
     }
 
 }

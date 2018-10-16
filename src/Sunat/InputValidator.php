@@ -85,18 +85,18 @@ class InputValidator {
         $type = $validation['type'];
         // Required
         if ($required && !$fieldExist) {
-            $this->errors = "$field es requerido.";
+            $this->errors[] = "$field es requerido.";
         }
         if (!$fieldExist) {
             return;
         }
         // Data type
         if ($type && !Validations::{'is' . $type}($fieldValue)) {
-            $this->errors = $this->getTypeErrorValidationMessage($field, $fieldValue, $type);
+            $this->errors[] = $this->getTypeErrorValidationMessage($field, $fieldValue, $type);
         }
         // In catalog
         if ($catNumber && !Catalogo::itemExist($catNumber, $fieldValue)) {
-            $this->errors = "El valor $fieldValue en el campo $field no existe en el Cátalogo N° $catNumber.";
+            $this->errors[] = "El valor $fieldValue en el campo $field no existe en el Cátalogo N° $catNumber.";
         }
     }
 

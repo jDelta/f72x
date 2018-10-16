@@ -11,7 +11,7 @@
 namespace F72X\Sunat;
 
 use DateTime;
-
+use F72X\Company;
 /**
  * InvoiceDocument
  * 
@@ -23,13 +23,16 @@ use DateTime;
 class InvoiceDocument {
 
     const BOLETA_PREFIX = 'B';
+    const BOLETA_NAME = 'BOLETA';
     const FACTURA_PREFIX = 'F';
+    const FACTURA_NAME = 'FACTURA';
 
     private $_rawData;
     private $invoiceType;
     private $currencyType;
     private $voucherId;
     private $voucherIdPrefix;
+    private $voucherName;
     private $voucherSeries;
     private $voucherNumber;
 
@@ -42,6 +45,7 @@ class InvoiceDocument {
     private $customerDocType;
     private $customerDocNumber;
     private $customerRegName;
+    private $customerAddress;
     private $purchaseOrder;
 
     /** @var InvoiceItems */
@@ -65,7 +69,7 @@ class InvoiceDocument {
         $this->addDefaults($data);
         $this->currencyType = $currencyType;
         $this->voucherSeries = $data['voucherSeries'];
-        $this->voucherNumber = $data['voucherNumber'];
+        $this->voucherNumber = str_pad($data['voucherNumber'], 8, '0', STR_PAD_LEFT);
         // requires voucherSeries and voucherNumber
         $this->setTypeProperties($type);
         $this->issueDate = $data['issueDate'];
@@ -74,6 +78,7 @@ class InvoiceDocument {
         $this->customerDocType = $data['customerDocType'];
         $this->customerDocNumber = $data['customerDocNumber'];
         $this->customerRegName = mb_strtoupper($data['customerRegName']);
+        $this->customerAddress = mb_strtoupper($data['customerAddress']);
         $this->_items = $items;
         $this->allowancesAndCharges = $data['allowancesCharges'];
     }
@@ -88,10 +93,12 @@ class InvoiceDocument {
         $this->invoiceType = $type;
         if ($type === Catalogo::CAT1_BOLETA) {
             $this->voucherIdPrefix = self::BOLETA_PREFIX;
+            $this->voucherName = self::BOLETA_NAME;
         } else {
             $this->voucherIdPrefix = self::FACTURA_PREFIX;
+            $this->voucherName = self::FACTURA_NAME;
         }
-        $this->voucherId = $this->voucherIdPrefix . str_pad($this->voucherSeries, 3, '0', STR_PAD_LEFT) . '-' . str_pad($this->voucherNumber, 8, '0', STR_PAD_LEFT);
+        $this->voucherId = $this->voucherSeries . '-' . $this->voucherNumber;
     }
 
     public function getVoucherId() {
@@ -116,6 +123,10 @@ class InvoiceDocument {
 
     public function getVoucherIdPrefix() {
         return $this->voucherIdPrefix;
+    }
+
+    public function getVoucherName() {
+        return $this->voucherName;
     }
 
     public function getVoucherSeries() {
@@ -187,6 +198,14 @@ class InvoiceDocument {
 
     public function setCustomerRegName($customerRegName) {
         $this->customerRegName = $customerRegName;
+        return $this;
+    }
+    public function getCustomerAddress() {
+        return $this->customerAddress;
+    }
+
+    public function setCustomerAddress($customerAddress) {
+        $this->customerAddress = $customerAddress;
         return $this;
     }
 
@@ -380,5 +399,7 @@ class InvoiceDocument {
     private function applyAllowancesAndCharges($amount) {
         return Operations::applyAllowancesAndCharges($amount, $this->allowancesAndCharges);
     }
-
+    public function getBillName() {
+        return Company::getRUC() . '-' . $this->invoiceType . '-' . $this->voucherId;
+    }
 }

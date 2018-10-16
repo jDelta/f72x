@@ -12,6 +12,7 @@ namespace F72X\Sunat;
 
 use F72X\Tools\XmlService;
 use F72X\Tools\XmlDSig;
+use F72X\Tools\PdfGenerator;
 use F72X\Repository;
 use F72X\Sunat\Document\SunatDocument;
 use F72X\Sunat\Document\Factura;
@@ -35,7 +36,7 @@ class DocumentGenerator {
         $Invoice = new InvoiceDocument($data, Catalogo::CAT1_FACTURA, $currencyType);
         // Documento XML para la factura
         $XmlDoc = new Factura($Invoice);
-        self::processSutatDoc($XmlDoc);
+        self::processSunatDoc($XmlDoc);
         return $XmlDoc;
     }
 
@@ -54,7 +55,7 @@ class DocumentGenerator {
         $Invoice = new InvoiceDocument($data, Catalogo::CAT1_BOLETA, $currencyType);
         // Documento XML para la factura
         $XmlDoc = new Boleta($Invoice);
-        self::processSutatDoc($XmlDoc);
+        self::processSunatDoc($XmlDoc);
         return $XmlDoc;
     }
 
@@ -66,13 +67,15 @@ class DocumentGenerator {
         }
     }
 
-    private static function processSutatDoc(SunatDocument $XmlDoc) {
+    private static function processSunatDoc(SunatDocument $XmlDoc) {
         // Save Document
         self::saveInvoice($XmlDoc);
         // Sign Document
         self::singInvoice($XmlDoc);
         // Compress Document
         self::zipInvoice($XmlDoc);
+        // Generate 
+        self::generatePdf($XmlDoc);
     }
 
     private static function singInvoice(SunatDocument $Document) {
@@ -83,6 +86,12 @@ class DocumentGenerator {
     private static function zipInvoice(SunatDocument $Document) {
         $billName = $Document->getBillName();
         Repository::zipBill($billName);
+    }
+
+    private static function generatePdf(SunatDocument $Document) {
+        $billName = $Document->getBillName();
+        $Invoice = $Document->getInvoiceDocument();
+        PdfGenerator::generateFactura($Invoice, $billName);
     }
 
     private static function saveInvoice(SunatDocument $invoice) {

@@ -1,4 +1,5 @@
 /nbproject/private/
+/src/composer.lock
 /vendor/
 /docs/
 /tests/testdox.txt

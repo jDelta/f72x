@@ -1,25 +1,3 @@
-s\Catalogo
- [x] Get cat items
- [x] Item exist
- [x] Get cat item
-
-s\FSInputGeneration
- [x] Generar tip
-
-s\InputValidator
- [x] Validate base
-
-s\InvoiceGeneration
- [x] Generate factura
- [x] Generat boleta
- [x] Invoice document right calcs for factura
- [x] Invoice document right calcs for boleta
- [x] Get cat item
-
-s\Repository
- [x] Gdr info
-
-s\SendToSunat
- [x] Send boleta case 1
- [x] Send factura case 1
+s\PdfGenerator
+ [x] Gen
 

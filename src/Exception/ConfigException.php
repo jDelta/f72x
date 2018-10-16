@@ -14,6 +14,6 @@ use Exception;
 
 class ConfigException extends Exception {
 
-    protected $message = 'Olvidaste configurar el Modulo F72X usa \F72X\F72::init($config)';
+    protected $message = 'Error de configuración del modulo F72X';
 
 }

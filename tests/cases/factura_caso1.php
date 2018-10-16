@@ -5,11 +5,12 @@ $dt->setDate(2017, 5, 14);
 $dt->setTime(13, 25, 51);
 return [
     'operationType'     => '0101',              // Tipo de operación Catálogo #51
-    'voucherSeries'     => 1,                   // Serie de la factura
+    'voucherSeries'     => 'F001',              // Serie de la factura
     'voucherNumber'     => 4355,                // Número correlativo de la factura
     'customerDocType'   => '6',                 // Tipo de documento Catálogo #6
     'customerDocNumber' => '20587896411',       // RUC
     'customerRegName'   => 'SERVICABINAS S.A.', // Razón social
+    'customerAddress'   => '215 NY STREET',     // Dirección del cliente
     'issueDate'         => $dt,                 // Fecha de emisión [opcional], si no se especifica se usara la fecha del sistema!
     'purchaseOrder'     => 7852166,             // Numero de orden de commpra,
     'allowancesCharges' => [

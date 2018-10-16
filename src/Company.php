@@ -27,7 +27,7 @@ class Company {
     private static function get($key) {
         $value = null;
         if (empty(self::$_CONFIG)) {
-            throw new ConfigException();
+            throw new ConfigException('Olvidaste configurar el Modulo F72X usa \F72X\F72::init($config)');
         }
         if (isset(self::$_CONFIG[$key])) {
             $value = self::$_CONFIG[$key];
@@ -99,7 +99,7 @@ class Company {
      * @return string
      */
     public static function getCertPath() {
-        return self::get('certPath');
+        return self::get('cconfigPath') . '/certs/' . self::get('certName');
     }
 
     /**
@@ -108,6 +108,21 @@ class Company {
      */
     public static function getRepositoryPath() {
         return self::get('repoPath');
+    }
+    /**
+     * 
+     * @return string
+     */
+    public static function getListsPath() {
+        return self::get('cconfigPath').'/lists';
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public static function getTplsPath() {
+        return self::get('cconfigPath').'/tpls';
     }
 
 }

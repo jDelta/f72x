@@ -11,6 +11,8 @@
 namespace F72X\Sunat;
 
 use DOMDocument;
+use F72X\Company;
+use F72X\Exception\ConfigException;
 use Sabre\Xml\Reader;
 
 class Catalogo {
@@ -53,7 +55,7 @@ class Catalogo {
     const IDENTIFICATION_DOC_RUC = '6';
 
     private static $_CAT = [];
-
+    private static $_LIST = [];
     public static function itemExist($catNumber, $itemID) {
         $items = self::getCatItems($catNumber);
         return key_exists($itemID, $items);
@@ -102,4 +104,39 @@ class Catalogo {
         return 'cat_' . str_pad($catNumeber, 2, '0', STR_PAD_LEFT) . '.xml';
     }
 
+    public static function getCurrencyPlural($currencyType) {
+        $currencies = self::getCustomList('currencies');
+        if(isset($currencies[$currencyType])){
+            return $currencies[$currencyType];
+        }
+        throw new ConfigException("El tipo de moneda $currencyType aún no ha sido configurado para su uso.");
+    }
+
+    public static function getUnitName($unitCode) {
+        return self::getCustomListItem('unitcode', $unitCode);
+    }
+
+    public static function getCustomListItem($listName, $itemId) {
+        $customList = self::getCustomList($listName);
+        if(isset($customList[$itemId])){
+            return $customList[$itemId];
+        }
+        throw new ConfigException("El codigó de item $itemId no existe en la lista $listName");
+    }
+    public static function getCustomList($listName) {
+        // returns from cache
+        if (isset(self::$_LIST['LIST_' . $listName])) {
+            return self::$_LIST['LIST_' . $listName];
+        }
+        $path = Company::getListsPath();
+        $fileName = "$path/$listName.php";
+        if(file_exists($fileName)){
+            $path = Company::getListsPath();
+            $list = require $fileName;
+            // Cache
+            self::$_CAT['LIST_' . $listName] = $list;
+            return $list;
+        }
+        throw new ConfigException("No se encontró el archivo $listName.php dentro de su directorio de listas personalizadas.");
+    }
 }

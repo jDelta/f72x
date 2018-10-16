@@ -27,6 +27,11 @@ class Repository {
     public static function saveCdr($billName, $billContent) {
         self::saveFile("cdr/R$billName.zip", $billContent);
     }
+
+    public static function savePDF($billName, $fileContent) {
+        self::saveFile("printable/$billName.pdf", $fileContent);
+    }
+
     public static function zipBill($billName) {
         $rp = self::getRepositoryPath();
         $zip = new ZipArchive();
@@ -35,6 +40,7 @@ class Repository {
             $zip->close();
         }
     }
+
     public static function billExist($billName) {
         $rp = self::getRepositoryPath();
         return fileExists("$rp/bill/$billName.xml");
@@ -58,6 +64,7 @@ class Repository {
         $rp = self::getRepositoryPath();
         file_put_contents("$rp/$filePath", $fileContent);
     }
+
     public static function getCdrInfo($billName) {
         $rp = self::getRepositoryPath();
         $zip = new ZipArchive();
@@ -79,14 +86,15 @@ class Repository {
         $respNode = $origin['DocumentResponse'];
         return [
             'id' => $origin['ID'],
-            'invoiceId'    => $respNode['DocumentReference']['ID'],
-            'receiverId'   => $respNode['RecipientParty']['PartyIdentification']['ID'],
-            'issueDate'    => $origin['IssueDate'],
-            'issueTime'    => $origin['IssueTime'],
+            'invoiceId' => $respNode['DocumentReference']['ID'],
+            'receiverId' => $respNode['RecipientParty']['PartyIdentification']['ID'],
+            'issueDate' => $origin['IssueDate'],
+            'issueTime' => $origin['IssueTime'],
             'responseDate' => $origin['ResponseDate'],
             'responseTime' => $origin['ResponseTime'],
             'responseCode' => $respNode['Response']['ResponseCode'],
             'responseDesc' => $respNode['Response']['Description']
         ];
     }
+
 }
