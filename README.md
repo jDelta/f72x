@@ -65,8 +65,11 @@ F72X::init([
 
 echo "1. CONFIGURACIÓN: OK<br>";
 
-// 2. GENERAR FACTURA
-// ==================
+/**
+ * ==================
+ * 2. GENERAR FACTURA
+ * ==================
+ */
 
 // fecha
 $dt =  new DateTime();
@@ -162,8 +165,11 @@ $dataFactura = [
 $boletaSunat = DocumentGenerator::generateFactura($dataFactura);
 echo "2. GENERACIÓN DE FACTURA Y FIRMA: OK<br>";
 
-// 1. ENVIAR A SUNAT
-// =================
+/**
+ * ==================
+ * 3. ENVIAR A SUNAT
+ * ==================
+ */
 $billName = $boletaSunat->getBillName();
 $response = ServiceGateway::sendBill($billName);
 echo "3. ENVIO Y RECEPCION SUNAT: OK";

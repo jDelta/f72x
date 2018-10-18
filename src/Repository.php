@@ -60,6 +60,25 @@ class Repository {
         return "$rp/bill/$billName.xml";
     }
 
+    public static function getSignedBillPath($billName) {
+        $rp = self::getRepositoryPath();
+        return "$rp/signedbill/S-$billName.xml";
+    }
+
+    public static function getZippedBillPath($billName) {
+        $rp = self::getRepositoryPath();
+        return "$rp/zippedbill/$billName.zip";
+    }
+
+    public static function getZippedBillContent($billName) {
+        return file_get_contents(self::getZippedBillPath($billName));
+    }
+
+    public static function getPdfPath($billName) {
+        $rp = self::getRepositoryPath();
+        return "$rp/printable/$billName.pdf";
+    }
+
     private static function saveFile($filePath, $fileContent) {
         $rp = self::getRepositoryPath();
         file_put_contents("$rp/$filePath", $fileContent);
@@ -95,6 +114,42 @@ class Repository {
             'responseCode' => $respNode['Response']['ResponseCode'],
             'responseDesc' => $respNode['Response']['Description']
         ];
+    }
+
+    public static function xmlStream($billName) {
+        $filePath = self::getBillPath($billName);
+        if (file_exists($filePath)) {
+            header('Content-Type: application/xml');
+            header("Content-Disposition: attachment;filename=$billName.xml");
+            header('Cache-Control:max-age=0');
+            echo file_get_contents($filePath);
+            exit();
+        }
+        throw new FileException("El archivo: $filePath no existe.");
+    }
+
+    public static function signedXmlStream($billName) {
+        $filePath = self::getSignedBillPath($billName);
+        if (file_exists($filePath)) {
+            header('Content-Type: application/xml');
+            header("Content-Disposition: attachment;filename=S-$billName.xml");
+            header('Cache-Control:max-age=0');
+            echo file_get_contents($filePath);
+            exit();
+        }
+        throw new FileException("El archivo: $filePath no existe.");
+    }
+
+    public static function pdfStream($billName) {
+        $filePath = self::getPdfPath($billName);
+        if (file_exists($filePath)) {
+            header('Content-Type: application/pdf');
+            header("Content-Disposition: attachment;filename=$billName.pdf");
+            header('Cache-Control:max-age=0');
+            echo file_get_contents($filePath);
+            exit();
+        }
+        throw new FileException("El archivo: $filePath no existe.");
     }
 
 }

@@ -10,7 +10,6 @@
 
 namespace F72X\Sunat;
 
-use F72X\Company;
 use F72X\Repository;
 
 class ServiceGateway {
@@ -21,8 +20,7 @@ class ServiceGateway {
      * @return array
      */
     public static function sendBill($billName) {
-        $repository = Company::getRepositoryPath();
-        $contentFile = file_get_contents("$repository/zippedbill/$billName.zip");
+        $contentFile = Repository::getZippedBillContent($billName);
 
         $soapService = SunatSoapClient::getService();
         $soapService->__soapCall('sendBill', [['fileName' => "$billName.zip", 'contentFile' => $contentFile]]);
