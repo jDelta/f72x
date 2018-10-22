@@ -45,10 +45,10 @@ class PdfGenerator {
         $payableInWords = Operations::getAmountInWords($payableAmount, $currency);
         return [
             'companyRuc'           => Company::getRUC(),
-            'voucherIdPrefix'      => $inv->getVoucherIdPrefix(),
-            'voucherSeries'        => $inv->getVoucherSeries(),
-            'voucherNumber'        => $inv->getVoucherNumber(),
-            'voucherName'          => $inv->getVoucherName(),
+            'invoiceIdPrefix'      => $inv->getInvoiceIdPrefix(),
+            'invoiceSeries'        => $inv->getInvoiceSeries(),
+            'invoiceNumber'        => $inv->getInvoiceNumber(),
+            'invoiceName'          => $inv->getInvoiceName(),
             'currency'             => $currency,
             'customerRegName'      => $inv->getCustomerRegName(),
             'customerDocNumber'    => $inv->getCustomerDocNumber(),
@@ -77,7 +77,6 @@ class PdfGenerator {
             $items2[]= [
                 'productCode'       => $Items->getProductCode($i),
                 'quantity'          => $Items->getQunatity($i),
-                'unitValue'         => $Items->getUnitValue($i),
                 'unitName'          => Catalogo::getUnitName($Items->getUnitCode($i)),
                 'unitBillableValue' => $Items->getUnitBillableValue($i),
                 'itemPayableAmount' => $Items->getPayableAmount($i),
@@ -101,14 +100,14 @@ class PdfGenerator {
     private static function getQrContent(InvoiceDocument $inv) {
         $ruc               = Company::getRUC();
         $invoiveType       = $inv->getInvoiceType();
-        $voucherSeries     = $inv->getVoucherSeries();
-        $seriesNumber      = $inv->getVoucherNumber();
+        $invoiceSeries     = $inv->getInvoiceSeries();
+        $seriesNumber      = $inv->getInvoiceNumber();
         $igv               = Operations::formatAmount($inv->getIGV());
         $payableAmount     = Operations::formatAmount($inv->getPayableAmount());
         $issueDate         = $inv->getIssueDate()->format('Y-m-d');
         $customerDocType   = $inv->getCustomerDocType();
         $customerDocNumber = $inv->getCustomerDocNumber();
-        return "$ruc|$invoiveType|$voucherSeries|$seriesNumber|$igv|$payableAmount|$issueDate|$customerDocType|$customerDocNumber";
+        return "$ruc|$invoiveType|$invoiceSeries|$seriesNumber|$igv|$payableAmount|$issueDate|$customerDocType|$customerDocNumber";
     }
     private static function getRenderer() {
         $loader = new Twig_Loader_Filesystem();

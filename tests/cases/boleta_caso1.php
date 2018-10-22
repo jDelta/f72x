@@ -5,8 +5,8 @@ $dt->setDate(2017, 6, 24);
 $dt->setTime(13, 25, 51);
 return [
     'operationType'     => '0101',                      // Tipo de operación Catálogo #51
-    'voucherSeries'     => 'B001',                      // Serie de la factura
-    'voucherNumber'     => 3652,                        // Número correlativo de la factura
+    'invoiceSeries'     => 'B001',                      // Serie de la factura
+    'invoiceNumber'     => 3652,                        // Número correlativo de la factura
     'customerDocType'   => '1',                         // Tipo de documento Catálogo #6
     'customerDocNumber' => '46237547',                  // DNI
     'customerRegName'   => 'LUANA KARINA PAZOS ATOCHE', // Nombre de cliente
@@ -28,9 +28,9 @@ return [
             'description'        => 'Refrigeradora marca “AXM” no frost de 200 ltrs.', // Descripción detallada
             'priceType'          => '01',        // Catálogo #16 [01:Precio Unitario|02:Valor Referencial]
             'taxType'            => '1000',      // Catálogo #5
-            'igvAffectationCode' => '10',        // Catálogo #7
-            'unitValue'          => 998.00,      // Valor unitario
-            'igvIncluded'        => true         // true si el valor unitario incluye IGV
+            'igvAffectationType' => '10',        // Catálogo #7
+            'unitPrice'          => 998.00,      // Precio Unitario/Valor refencial
+            'igvIncluded'        => true         // true si Precio Unitario incluye IGV
         ],
         [
             'productCode'        => 'COC124',
@@ -40,8 +40,8 @@ return [
             'description'        => 'Cocina a gas GLP, marca “AXM” de 5 hornillas',
             'priceType'          => '01',
             'taxType'            => '1000',
-            'igvAffectationCode' => '10',
-            'unitValue'          => 750.00,
+            'igvAffectationType' => '10',
+            'unitPrice'          => 750.00,
             'igvIncluded'        => true
         ]
 //        [
@@ -52,8 +52,8 @@ return [
 //            'description'        => 'Sixpack de gaseosa “Guerené” de 400 ml',
 //            'priceType'          => '02',
 //            'taxType'            => '9996',
-//            'igvAffectationCode' => '31',
-//            'unitValue'          => 4.80,
+//            'igvAffectationType' => '31',
+//            'unitPrice'          => 4.80,
 //            'igvIncluded'        => false
 //        ]
     ],

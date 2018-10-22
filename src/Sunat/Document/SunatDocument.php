@@ -55,7 +55,7 @@ abstract class SunatDocument extends Invoice {
         // Invoice Type
         $this->setInvoiceTypeCode($Invoice->getInvoiceType());
         // ID
-        $this->setID($Invoice->getVoucherId());
+        $this->setID($Invoice->getInvoiceId());
         // Tipo de operación
         $this->setProfileID($Invoice->getOperationType());
         // Fecha de emisión
@@ -206,7 +206,7 @@ abstract class SunatDocument extends Invoice {
         $unitBillableValue  = $Items->getUnitBillableValue($itemIndex);
         $priceTypeCode      = $Items->getPriceTypeCode($itemIndex);
         $taxTypeCode        = $Items->getTaxTypeCode($itemIndex);
-        $igvAffectationCode = $Items->getIgvAffectationCode($itemIndex);
+        $igvAffectationType = $Items->getIgvAffectationType($itemIndex);
 
         $itemValue          = $Items->getItemValue($itemIndex);
         $ac                 = $Items->getAllowancesAndCharges($itemIndex);
@@ -220,6 +220,16 @@ abstract class SunatDocument extends Invoice {
         // Descuentos y cargos
         UblHelper::addAllowancesCharges($InvoiceLine, $ac, $itemValue, $currencyType);
 
+        // Config Item
+        $Item->setDescription($description); // Descripción
+        // Código de producto
+        if ($productCode) {
+            $Item->setSellersItemIdentification($SellersItemIdentification->setID($productCode));
+        }
+        // Código de producto SUNAT
+        if ($sunatProductCode) {
+            $Item->setCommodityClassification($CommodityClassification->setItemClassificationCode($sunatProductCode));
+        }
         $InvoiceLine
                 ->setCurrencyID($currencyType)                    // Tipo de moneda
                 ->setID($itemIndex + 1)                         // Número de orden
@@ -241,17 +251,12 @@ abstract class SunatDocument extends Invoice {
                                 ->setTaxCategory($TaxCategory
                                         ->setID($cat5Item['categoria'])                     // Codigo de categoria de immpuestos @CAT5
                                         ->setPercent(SunatVars::IGV_PERCENT)                // Porcentaje de IGV (18.00)
-                                        ->setTaxExemptionReasonCode($igvAffectationCode)    // Código de afectación del IGV
+                                        ->setTaxExemptionReasonCode($igvAffectationType)    // Código de afectación del IGV
                                         ->setTaxScheme($TaxScheme
                                                 ->setID($taxTypeCode)                       // Codigo de categoria de impuesto
                                                 ->setName($cat5Item['name'])
                                                 ->setTaxTypeCode($cat5Item['UN_ECE_5153'])))))
-                ->setItem($Item
-                        ->setDescription($description)                              // Descripción
-                        ->setSellersItemIdentification($SellersItemIdentification
-                                ->setID($productCode))                              // Código de producto
-                        ->setCommodityClassification($CommodityClassification
-                                ->setItemClassificationCode($sunatProductCode)))    // Código de producto SUNAT
+                ->setItem($Item)
                 ->setPrice($Price
                         ->setCurrencyID($currencyType)    // Tipo de moneda
                         ->setPriceAmount($unitBillableValue)    // Precio unitario del item

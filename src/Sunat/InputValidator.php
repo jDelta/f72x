@@ -22,10 +22,10 @@ class InputValidator {
             'required' => true,
             'inCat' => Catalogo::CAT_FACTURA_TYPE
         ],
-        'voucherSeries' => [
+        'invoiceSeries' => [
             'required' => true
         ],
-        'voucherNumber' => [
+        'invoiceNumber' => [
             'required' => true
         ],
         'customerDocType' => [

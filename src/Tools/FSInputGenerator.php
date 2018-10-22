@@ -86,7 +86,7 @@ class FSInputGenerator {
                 'mtoBaseIgvItem'        => Operations::formatAmount($Items->getTaxableAmount($rowIndex)),
                 'nomTributoIgvItem'     => $cat5Item['name'],
                 'codTipTributoIgvItem'  => $cat5Item['UN_ECE_5153'],
-                'tipAfeIGV'             => $Items->getIgvAffectationCode($rowIndex),
+                'tipAfeIGV'             => $Items->getIgvAffectationType($rowIndex),
                 'porIgvItem'            => $porIgvItem,
                 'codTriISC'             => '-',
                 'mtoIscItem'            => '0.00',
@@ -115,10 +115,10 @@ class FSInputGenerator {
         for ($rowIndex = 0; $rowIndex < $ln; $rowIndex++) {
             $detContent .= implode('|', $json['detalle'][$rowIndex]) . $ENTER;
         }
-        $voucherId   = $Invoice->getVoucherId();
+        $invoiceId   = $Invoice->getInvoiceId();
         $invoiceType = $Invoice->getInvoiceType();
-        self::writeFSFile("$companyRUC-$invoiceType-$voucherId.CAB", $cabContent);
-        self::writeFSFile("$companyRUC-$invoiceType-$voucherId.DET", $detContent);
+        self::writeFSFile("$companyRUC-$invoiceType-$invoiceId.CAB", $cabContent);
+        self::writeFSFile("$companyRUC-$invoiceType-$invoiceId.DET", $detContent);
         //CABECERA VARIABLE
         if (!empty($json['variablesGlobales'])) {
             $glovalVars = $json['variablesGlobales'];
@@ -126,7 +126,7 @@ class FSInputGenerator {
             foreach ($glovalVars as $row) {
                 $varGlobalContent .= implode('|', $row) . $ENTER;
             }
-            self::writeFSFile("$companyRUC-$invoiceType-$voucherId.ACV", $varGlobalContent);
+            self::writeFSFile("$companyRUC-$invoiceType-$invoiceId.ACV", $varGlobalContent);
         }
     }
 

@@ -10,7 +10,7 @@ final class CatalogoTest extends TestCase {
     public function testGetCatItems() {
         $expected = [
             'NIU' => ['id' => 'NIU', 'value' => 'UNIDAD (BIENES)'],
-            'ZZ'  => ['id' => 'ZZ', 'value' => 'UNIDAD (SERVICIOS)']
+            'ZZ'  => ['id' => 'ZZ',  'value' => 'UNIDAD (SERVICIOS)']
         ];
         $actual = Catalogo::getCatItems(3);
         self::assertEquals($expected, $actual);
@@ -30,5 +30,9 @@ final class CatalogoTest extends TestCase {
         $actual = Catalogo::getCatItem(16, '01');
         self::assertEquals($expected, $actual);
     }
-
+    public function testGeneratePhpArrays() {
+        $path = __DIR__;
+        Catalogo::catItemsToPhpArray(5, __DIR__.'/cat5.txt');
+        Catalogo::catItemsToPhpArray(7, __DIR__.'/cat7.txt');
+    }
 }

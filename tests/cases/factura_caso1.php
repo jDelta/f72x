@@ -5,8 +5,8 @@ $dt->setDate(2017, 5, 14);
 $dt->setTime(13, 25, 51);
 return [
     'operationType'     => '0101',              // Tipo de operación Catálogo #51
-    'voucherSeries'     => 'F001',              // Serie de la factura
-    'voucherNumber'     => 4355,                // Número correlativo de la factura
+    'invoiceSeries'     => 'F001',              // Serie de la factura
+    'invoiceNumber'     => 4355,                // Número correlativo de la factura
     'customerDocType'   => '6',                 // Tipo de documento Catálogo #6
     'customerDocNumber' => '20587896411',       // RUC
     'customerRegName'   => 'SERVICABINAS S.A.', // Razón social
@@ -29,9 +29,9 @@ return [
             'description'        => 'Grabadora LG Externo Modelo: GE20LU10', // Descripción detallada
             'priceType'          => '01',        // Catálogo #16 [01:Precio Unitario|02:Valor Referencial]
             'taxType'            => '1000',      // Catálogo #5
-            'igvAffectationCode' => '10',        // Catálogo #7
-            'unitValue'          => 98.00,       // Valor unitario
-            'igvIncluded'        => true,        // true si el valor unitario incluye IGV
+            'igvAffectationType' => '10',        // Catálogo #7
+            'unitPrice'          => 98.00,       // Precio Unitario/Valor refencial
+            'igvIncluded'        => true,        // true si Precio Unitario incluye IGV
             'allowancesCharges'  => [
                 [
                     'isCharge'         => false,
@@ -48,8 +48,8 @@ return [
             'description'        => 'Monitor LCD ViewSonic VG2028WM 20',
             'priceType'          => '01',
             'taxType'            => '1000',
-            'igvAffectationCode' => '10',
-            'unitValue'          => 620.00,
+            'igvAffectationType' => '10',
+            'unitPrice'          => 620.00,
             'igvIncluded'        => true,
             'allowancesCharges'  => [
                 [
@@ -67,8 +67,8 @@ return [
             'description'        => 'Memoria DDR-3 B1333 Kingston',
             'priceType'          => '01',
             'taxType'            => '9997',
-            'igvAffectationCode' => '20',
-            'unitValue'          => 52.00,
+            'igvAffectationType' => '20',
+            'unitPrice'          => 52.00,
             'igvIncluded'        => false
         ],
         [
@@ -79,8 +79,8 @@ return [
             'description'        => 'Teclado Microsoft SideWinder X6',
             'priceType'          => '01',
             'taxType'            => '1000',
-            'igvAffectationCode' => '10',
-            'unitValue'          => 196.00,
+            'igvAffectationType' => '10',
+            'unitPrice'          => 196.00,
             'igvIncluded'        => true
         ]
 //        [
@@ -91,8 +91,8 @@ return [
 //            'description'        => 'Web cam Genius iSlim 310',
 //            'priceType'          => '02',
 //            'taxType'            => '9996',
-//            'igvAffectationCode' => '31',
-//            'unitValue'          => 30.00,
+//            'igvAffectationType' => '31',
+//            'unitPrice'          => 30.00,
 //            'igvIncluded'        => false
 //        ]
     ],

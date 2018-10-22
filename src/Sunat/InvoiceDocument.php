@@ -30,11 +30,11 @@ class InvoiceDocument {
     private $_rawData;
     private $invoiceType;
     private $currencyType;
-    private $voucherId;
-    private $voucherIdPrefix;
-    private $voucherName;
-    private $voucherSeries;
-    private $voucherNumber;
+    private $invoiceId;
+    private $invoiceIdPrefix;
+    private $invoiceName;
+    private $invoiceSeries;
+    private $invoiceNumber;
 
     /** @var DateTime */
     private $issueDate;
@@ -68,9 +68,9 @@ class InvoiceDocument {
         $this->_rawItems = $data['items'];
         $this->addDefaults($data);
         $this->currencyType = $currencyType;
-        $this->voucherSeries = $data['voucherSeries'];
-        $this->voucherNumber = str_pad($data['voucherNumber'], 8, '0', STR_PAD_LEFT);
-        // requires voucherSeries and voucherNumber
+        $this->invoiceSeries = $data['invoiceSeries'];
+        $this->invoiceNumber = str_pad($data['invoiceNumber'], 8, '0', STR_PAD_LEFT);
+        // requires invoiceSeries and invoiceNumber
         $this->setTypeProperties($type);
         $this->issueDate = $data['issueDate'];
         $this->purchaseOrder = $data['purchaseOrder'];
@@ -92,17 +92,17 @@ class InvoiceDocument {
     private function setTypeProperties($type) {
         $this->invoiceType = $type;
         if ($type === Catalogo::CAT1_BOLETA) {
-            $this->voucherIdPrefix = self::BOLETA_PREFIX;
-            $this->voucherName = self::BOLETA_NAME;
+            $this->invoiceIdPrefix = self::BOLETA_PREFIX;
+            $this->invoiceName = self::BOLETA_NAME;
         } else {
-            $this->voucherIdPrefix = self::FACTURA_PREFIX;
-            $this->voucherName = self::FACTURA_NAME;
+            $this->invoiceIdPrefix = self::FACTURA_PREFIX;
+            $this->invoiceName = self::FACTURA_NAME;
         }
-        $this->voucherId = $this->voucherSeries . '-' . $this->voucherNumber;
+        $this->invoiceId = $this->invoiceSeries . '-' . $this->invoiceNumber;
     }
 
-    public function getVoucherId() {
-        return $this->voucherId;
+    public function getInvoiceId() {
+        return $this->invoiceId;
     }
 
     public function getRawData() {
@@ -121,29 +121,29 @@ class InvoiceDocument {
         return $this->currencyType;
     }
 
-    public function getVoucherIdPrefix() {
-        return $this->voucherIdPrefix;
+    public function getInvoiceIdPrefix() {
+        return $this->invoiceIdPrefix;
     }
 
-    public function getVoucherName() {
-        return $this->voucherName;
+    public function getInvoiceName() {
+        return $this->invoiceName;
     }
 
-    public function getVoucherSeries() {
-        return $this->voucherSeries;
+    public function getInvoiceSeries() {
+        return $this->invoiceSeries;
     }
 
-    public function setVoucherSeries($voucherSeries) {
-        $this->voucherSeries = $voucherSeries;
+    public function setInvoiceSeries($invoiceSeries) {
+        $this->invoiceSeries = $invoiceSeries;
         return $this;
     }
 
-    public function getVoucherNumber() {
-        return $this->voucherNumber;
+    public function getInvoiceNumber() {
+        return $this->invoiceNumber;
     }
 
-    public function setVoucherNumber($voucherNumber) {
-        $this->voucherNumber = $voucherNumber;
+    public function setInvoiceNumber($invoiceNumber) {
+        $this->invoiceNumber = $invoiceNumber;
         return $this;
     }
 
@@ -400,6 +400,6 @@ class InvoiceDocument {
         return Operations::applyAllowancesAndCharges($amount, $this->allowancesAndCharges);
     }
     public function getBillName() {
-        return Company::getRUC() . '-' . $this->invoiceType . '-' . $this->voucherId;
+        return Company::getRUC() . '-' . $this->invoiceType . '-' . $this->invoiceId;
     }
 }

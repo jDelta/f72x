@@ -68,9 +68,9 @@ class InvoiceItems extends XMatrix {
         $this->rawData = $items;
         foreach ($items as $idx => $item) {
             $ac             = isset($item['allowancesCharges']) ? $item['allowancesCharges'] : [];
-            $igvAffectCode  = $item['igvAffectationCode'];
+            $igvAffectCode  = $item['igvAffectationType'];
             $priceType      = $item['priceType']; // Tipo de precio
-            $grossUnitValue = $item['unitValue'];
+            $grossUnitValue = $item['unitPrice'];
             $igvIncluded    = $item['igvIncluded'];
             
             $unitValue         = $this->calcUnitValue($igvAffectCode, $grossUnitValue, $igvIncluded);      // Valor unitario
@@ -96,7 +96,7 @@ class InvoiceItems extends XMatrix {
             // Códigos de catálogos predefinidos
             $this->set(self::COL_PRICE_TYPE,          $idx, $priceType);
             $this->set(self::COL_TAX_TYPE,            $idx, $item['taxType']);
-            $this->set(self::COL_IGV_AFFECTATION,     $idx, $item['igvAffectationCode']);
+            $this->set(self::COL_IGV_AFFECTATION,     $idx, $item['igvAffectationType']);
 
             $this->set(self::COL_UNIT_VALUE,          $idx, $unitValue);
             $this->set(self::COL_UNIT_BILLABLE_VALUE, $idx, $unitBillableValue);
@@ -229,7 +229,7 @@ class InvoiceItems extends XMatrix {
         return $this->get(self::COL_TAX_TYPE, $rowIndex);
     }
 
-    public function getIgvAffectationCode($rowIndex) {
+    public function getIgvAffectationType($rowIndex) {
         return $this->get(self::COL_IGV_AFFECTATION, $rowIndex);
     }
 

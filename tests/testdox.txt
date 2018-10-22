@@ -2,6 +2,7 @@ s\Catalogo
  [x] Get cat items
  [x] Item exist
  [x] Get cat item
+ [x] Generate php arrays
 
 s\FSInputGeneration
  [x] Generar tip

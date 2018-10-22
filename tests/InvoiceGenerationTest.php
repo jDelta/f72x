@@ -34,8 +34,8 @@ final class InvoiceGenerationTest extends TestCase {
         $Invoice = new InvoiceDocument($in, 'B');
         $out = [
                 'operationType'     => $Invoice->getOperationType(),
-                'voucherSeries'     => $Invoice->getVoucherSeries(),
-                'voucherNumber'     => (int)$Invoice->getVoucherNumber(),
+                'invoiceSeries'     => $Invoice->getInvoiceSeries(),
+                'invoiceNumber'     => (int)$Invoice->getInvoiceNumber(),
                 'customerDocType'   => $Invoice->getCustomerDocType(),
                 'customerDocNumber' => $Invoice->getCustomerDocNumber(),
                 'customerRegName'   => $Invoice->getCustomerRegName(),
@@ -57,8 +57,8 @@ final class InvoiceGenerationTest extends TestCase {
         $Invoice = new InvoiceDocument($in, 'B');
         $out = [
                 'operationType'       => $Invoice->getOperationType(),
-                'voucherSeries'       => $Invoice->getVoucherSeries(),
-                'voucherNumber'       => (int)$Invoice->getVoucherNumber(),
+                'invoiceSeries'       => $Invoice->getInvoiceSeries(),
+                'invoiceNumber'       => (int)$Invoice->getInvoiceNumber(),
                 'customerDocType'     => $Invoice->getCustomerDocType(),
                 'customerDocNumber'   => $Invoice->getCustomerDocNumber(),
                 'customerRegName'     => $Invoice->getCustomerRegName(),

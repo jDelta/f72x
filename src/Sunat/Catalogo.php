@@ -139,4 +139,17 @@ class Catalogo {
         }
         throw new ConfigException("No se encontró el archivo $listName.php dentro de su directorio de listas personalizadas.");
     }
+
+    public static function catItemsToPhpArray($catNumber, $resultPath) {
+        $items = Catalogo::getCatItems($catNumber);
+        $lines = [];
+        $ENTER = chr(13) . chr(10);
+        foreach ($items as $item) {
+            $lines[] = "    ['id' => '" . $item['id'] . "', 'value' => '" . $item['value'] . "']";
+        }
+        $joinedLines = implode(',' . $ENTER, $lines);
+        $result = "[" . $ENTER . $joinedLines . $ENTER . "]";
+        file_put_contents($resultPath, $result);
+    }
+
 }
