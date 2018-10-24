@@ -24,7 +24,7 @@ class Company {
      * @param string $key
      * @return string
      */
-    private static function get($key) {
+    public static function get($key) {
         $value = null;
         if (empty(self::$_CONFIG)) {
             throw new ConfigException('Olvidaste configurar el Modulo F72X usa \F72X\F72::init($config)');
