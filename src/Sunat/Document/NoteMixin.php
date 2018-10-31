@@ -10,33 +10,10 @@
 
 namespace F72X\Sunat\Document;
 
-use F72X\Company;
-use F72X\Sunat\DataMap;
-use F72X\Sunat\InvoiceItems;
-use F72X\Sunat\Catalogo;
-use F72X\Sunat\SunatVars;
-use F72X\Tools\UblHelper;
-use F72X\UblComponent\OrderReference;
-use F72X\UblComponent\Party;
-use F72X\UblComponent\PartyIdentification;
-use F72X\UblComponent\PartyName;
-use F72X\UblComponent\AccountingSupplierParty;
-use F72X\UblComponent\AccountingCustomerParty;
-use F72X\UblComponent\PartyLegalEntity;
-use F72X\UblComponent\TaxTotal;
-use F72X\UblComponent\TaxSubTotal;
-use F72X\UblComponent\TaxCategory;
-use F72X\UblComponent\TaxScheme;
-use F72X\UblComponent\LegalMonetaryTotal;
-use F72X\UblComponent\InvoiceLine;
-use F72X\UblComponent\CreditNoteLine;
-use F72X\UblComponent\DebitNoteLine;
-use F72X\UblComponent\PricingReference;
-use F72X\UblComponent\AlternativeConditionPrice;
-use F72X\UblComponent\Item;
 use F72X\UblComponent\DiscrepancyResponse;
 use F72X\UblComponent\BillingReference;
 use F72X\UblComponent\InvoiceDocumentReference;
+use F72X\UblComponent\RequestedMonetaryTotal;
 
 trait NoteMixin {
 
@@ -77,5 +54,21 @@ trait NoteMixin {
         // Add Node
         $this->setBillingReference($BillingReference);
     }
+    private function addRequestedMonetaryTotal() {
+        $dataMap            = $this->dataMap;
+        $currencyID         = $this->getDocumentCurrencyCode(); // Tipo de moneda
+        $totalAllowances    = $dataMap->getTotalAllowances();   // Total descuentos
+        $payableAmount      = $dataMap->getPayableAmount();     // Total a pagar
+        $billableAmount     = $dataMap->getBillableValue();
+        // RequestedMonetaryTotal
+        $RequestedMonetaryTotal = new RequestedMonetaryTotal();
+        $RequestedMonetaryTotal
+                ->setCurrencyID($currencyID)
+                ->setLineExtensionAmount($billableAmount)
+                ->setTaxInclusiveAmount($payableAmount)
+                ->setAllowanceTotalAmount($totalAllowances)
+                ->setPayableAmount($payableAmount);
 
+        $this->setRequestedMonetaryTotal($RequestedMonetaryTotal);
+    }
 }

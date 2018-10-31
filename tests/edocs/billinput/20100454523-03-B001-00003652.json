@@ -1,0 +1,49 @@
+{
+    "currencyCode": "PEN",
+    "operationType": "0101",
+    "documentSeries": "B001",
+    "documentNumber": 3652,
+    "customerDocType": "1",
+    "customerDocNumber": "46237547",
+    "customerRegName": "LUANA KARINA PAZOS ATOCHE",
+    "customerAddress": "485 UNIVERSAL STREET",
+    "issueDate": "2017-05-14T13:25:51",
+    "allowancesCharges": [
+        {
+            "isCharge": false,
+            "reasonCode": "00",
+            "multiplierFactor": 0.05
+        }
+    ],
+    "items": [
+        {
+            "productCode": "REF564",
+            "unspsc": "52141501",
+            "unitCode": "NIU",
+            "quantity": 1,
+            "description": "Refrigeradora marca \u201cAXM\u201d no frost de 200 ltrs.",
+            "priceType": "01",
+            "taxType": "1000",
+            "igvAffectationType": "10",
+            "unitPrice": 998,
+            "igvIncluded": true
+        },
+        {
+            "productCode": "COC124",
+            "unspsc": "95141606",
+            "unitCode": "NIU",
+            "quantity": 1,
+            "description": "Cocina a gas GLP, marca \u201cAXM\u201d de 5 hornillas",
+            "priceType": "01",
+            "taxType": "1000",
+            "igvAffectationType": "10",
+            "unitPrice": 750,
+            "igvIncluded": true
+        }
+    ],
+    "totalTaxes": 253.31,
+    "totalFreeOperations": 0,
+    "taxableAmount": 1407.29,
+    "totalAllowances": 74.07,
+    "payableAmount": 1660.6
+}

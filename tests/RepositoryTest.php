@@ -12,7 +12,7 @@ final class RepositoryTest extends TestCase {
     }
 
     public function testGdrInfo() {
-        Repository::getCdrInfo('20100454523-01-F001-00004355');
+//        Repository::getCdrInfo('20100454523-01-F001-00004355');
     }
 
     public function removeBillDocs() {

@@ -1,0 +1,87 @@
+{
+    "currencyCode": "PEN",
+    "operationType": "0101",
+    "documentSeries": "F001",
+    "documentNumber": 4355,
+    "customerDocType": "6",
+    "customerDocNumber": "20587896411",
+    "customerRegName": "SERVICABINAS S.A.",
+    "customerAddress": "215 NY STREET",
+    "issueDate": "2017-05-14T13:25:51",
+    "purchaseOrder": 7852166,
+    "allowancesCharges": [
+        {
+            "isCharge": false,
+            "reasonCode": "00",
+            "multiplierFactor": 0.05
+        }
+    ],
+    "items": [
+        {
+            "productCode": "GLG199",
+            "unspsc": "52161515",
+            "unitCode": "NIU",
+            "quantity": 2000,
+            "description": "Grabadora LG Externo Modelo: GE20LU10",
+            "priceType": "01",
+            "taxType": "1000",
+            "igvAffectationType": "10",
+            "unitPrice": 98,
+            "igvIncluded": true,
+            "allowancesCharges": [
+                {
+                    "isCharge": false,
+                    "reasonCode": "00",
+                    "multiplierFactor": 0.1
+                }
+            ]
+        },
+        {
+            "productCode": "MVS546",
+            "unspsc": "43211902",
+            "unitCode": "NIU",
+            "quantity": 300,
+            "description": "Monitor LCD ViewSonic VG2028WM 20",
+            "priceType": "01",
+            "taxType": "1000",
+            "igvAffectationType": "10",
+            "unitPrice": 620,
+            "igvIncluded": true,
+            "allowancesCharges": [
+                {
+                    "isCharge": false,
+                    "reasonCode": "00",
+                    "multiplierFactor": 0.15
+                }
+            ]
+        },
+        {
+            "productCode": "MPC35",
+            "unspsc": "43202010",
+            "unitCode": "NIU",
+            "quantity": 250,
+            "description": "Memoria DDR-3 B1333 Kingston",
+            "priceType": "01",
+            "taxType": "9997",
+            "igvAffectationType": "20",
+            "unitPrice": 52,
+            "igvIncluded": false
+        },
+        {
+            "productCode": "TMS22",
+            "unspsc": "43211706",
+            "unitCode": "NIU",
+            "quantity": 500,
+            "description": "Teclado Microsoft SideWinder X6",
+            "priceType": "01",
+            "taxType": "1000",
+            "igvAffectationType": "10",
+            "unitPrice": 196,
+            "igvIncluded": true
+        }
+    ],
+    "taxableAmount": 348199.15,
+    "totalTaxes": 62675.85,
+    "totalAllowances": 59230.51,
+    "payableAmount": 423225
+}

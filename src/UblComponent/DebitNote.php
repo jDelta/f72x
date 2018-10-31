@@ -12,7 +12,7 @@ namespace F72X\UblComponent;
 
 use DateTime;
 
-abstract class DebitNote extends BaseComponent {
+class DebitNote extends BaseComponent {
 
     /** @var UBLExtensions */
     protected $UBLExtensions;
@@ -49,8 +49,8 @@ abstract class DebitNote extends BaseComponent {
     /** @var TaxTotal */
     protected $TaxTotal;
 
-    /** @var LegalMonetaryTotal */
-    protected $LegalMonetaryTotal;
+    /** @var RequestedMonetaryTotal */
+    protected $RequestedMonetaryTotal;
 
     /** @var DebitNoteLine[] */
     protected $DebitNoteLines = [];
@@ -180,12 +180,12 @@ abstract class DebitNote extends BaseComponent {
         return $this;
     }
 
-    public function getLegalMonetaryTotal() {
-        return $this->LegalMonetaryTotal;
+    public function getRequestedMonetaryTotal() {
+        return $this->RequestedMonetaryTotal;
     }
 
-    public function setLegalMonetaryTotal(LegalMonetaryTotal $LegalMonetaryTotal) {
-        $this->LegalMonetaryTotal = $LegalMonetaryTotal;
+    public function setRequestedMonetaryTotal(RequestedMonetaryTotal $RequestedMonetaryTotal) {
+        $this->RequestedMonetaryTotal = $RequestedMonetaryTotal;
         return $this;
     }
 

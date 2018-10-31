@@ -20,9 +20,6 @@ abstract class SunatInvoice extends Invoice {
     const UBL_VERSION_ID = '2.1';
     const CUSTUMIZATION_ID = '2.0';
 
-    /** @var DataMap */
-    private $dataMap;
-
     public function __construct(DataMap $Invoice) {
         $this->dataMap = $Invoice;
         $currencyCode = $Invoice->getCurrencyCode();

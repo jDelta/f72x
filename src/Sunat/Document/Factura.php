@@ -17,12 +17,9 @@ use Sabre\Xml\Writer;
 
 class Factura extends SunatInvoice {
 
-    /**
-     * The xmlSerialize method is called during xml writing.
-     *
-     * @param Writer $writer
-     * @return void
-     */
+    protected $UBLVersionID = '2.1';
+    protected $CustomizationID = '2.0';
+
     public function xmlSerialize(Writer $writer) {
         $companyRUC  = Company::getRUC();
         $companyName = Company::getCompanyName();
@@ -36,8 +33,8 @@ class Factura extends SunatInvoice {
         $writer->writeRaw($UBLExtensions);
         
         $writer->write([
-            SchemaNS::CBC . 'UBLVersionID'      => self::UBL_VERSION_ID,
-            SchemaNS::CBC . 'CustomizationID'   => self::CUSTUMIZATION_ID,
+            SchemaNS::CBC . 'UBLVersionID'         => $this->UBLVersionID,
+            SchemaNS::CBC . 'CustomizationID'      => $this->CustomizationID,
             [
                 'name' => SchemaNS::CBC . 'ProfileID',
                 'value' => $this->ProfileID,

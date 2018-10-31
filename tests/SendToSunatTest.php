@@ -37,7 +37,7 @@ final class SendToSunatTest extends TestCase {
         self::assertEquals($expected, $actual);
     }
 
-    public static function testSendNotaCreditoCase1() {
+    public static function testSendCreditNoteCase1() {
         $expected = [
             'responseCode' => '0',
             'responseDesc' => 'La Nota de Credito numero FC01-00000211, ha sido aceptada'
@@ -49,5 +49,16 @@ final class SendToSunatTest extends TestCase {
         ];
         self::assertEquals($expected, $actual);
     }
-
+    public static function testSendDebitNoteCase1() {
+        $expected = [
+            'responseCode' => '0',
+            'responseDesc' => 'La Nota de Debito numero FD01-00000211, ha sido aceptada'
+        ];
+        $response = ServiceGateway::sendBill('20100454523-08-FD01-00000211');
+        $actual = [
+            'responseCode' => $response['responseCode'],
+            'responseDesc' => $response['responseDesc']
+        ];
+        self::assertEquals($expected, $actual);
+    }
 }

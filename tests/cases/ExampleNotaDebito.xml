@@ -6,7 +6,6 @@
            xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
            xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
            xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2"
-           xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1"
            xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <ext:UBLExtensions>
@@ -57,8 +56,6 @@
             </ext:ExtensionContent>
         </ext:UBLExtension>
     </ext:UBLExtensions>
-    Nota de Débito Electrónica ~ 47 ~
-    Guía de elaboración de documentos electrónicos XML - UBL 2.1
     <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
     <cbc:CustomizationID>2.0</cbc:CustomizationID>
     <cbc:ID>FD01-211</cbc:ID>

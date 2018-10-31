@@ -23,15 +23,16 @@ final class InvoiceGenerationTest extends TestCase {
         Repository::removeBillDocs('20100454523-01-F001-00004355', false);
         Repository::removeBillDocs('20100454523-03-B001-00003652', false);
         Repository::removeBillDocs('20100454523-07-FC01-00000211', false);
+        Repository::removeBillDocs('20100454523-08-FD01-00000211', false);
     }
     public function testGenerateFactura() {
         $data = self::getCaseData('factura_caso1');
-        $xmlInvice = DocumentGenerator::createInvoice('FACTURA',$data);
+        $xmlInvice = DocumentGenerator::createInvoice('FAC',$data);
         DocumentGenerator::generateFiles($xmlInvice);
     }
     public function testGeneratBoleta() {
         $data = self::getCaseData('boleta_caso1');
-        $xmlInvice = DocumentGenerator::createInvoice('BOLETA',$data);
+        $xmlInvice = DocumentGenerator::createInvoice('BOL',$data);
         DocumentGenerator::generateFiles($xmlInvice);
     }
     public function testGenerateCreditNote() {
@@ -40,13 +41,20 @@ final class InvoiceGenerationTest extends TestCase {
         DocumentGenerator::generateFiles($xmlDoc);
     }
 
+    public function testGenerateDebitNote() {
+        $data = self::getCaseData('notadebito_caso1');
+        $xmlDoc = DocumentGenerator::createDebitNote($data);
+        DocumentGenerator::generateFiles($xmlDoc);
+    }
+
     public function testDataMapRightCalcsForFactura() {
         $in = self::getCaseData('factura_caso1');
-        $Invoice = new DataMap($in, 'B');
+        $Invoice = new DataMap($in, Catalogo::DOCTYPE_FACTURA);
         $out = [
+                'currencyCode'      => $Invoice->getCurrencyCode(),
                 'operationType'     => $Invoice->getOperationType(),
-                'documentSeries'     => $Invoice->getDocumentSeries(),
-                'documentNumber'     => (int)$Invoice->getDocumentNumber(),
+                'documentSeries'    => $Invoice->getDocumentSeries(),
+                'documentNumber'    => (int)$Invoice->getDocumentNumber(),
                 'customerDocType'   => $Invoice->getCustomerDocType(),
                 'customerDocNumber' => $Invoice->getCustomerDocNumber(),
                 'customerRegName'   => $Invoice->getCustomerRegName(),
@@ -65,11 +73,12 @@ final class InvoiceGenerationTest extends TestCase {
 
     public function testDataMapRightCalcsForBoleta() {
         $in = self::getCaseData('boleta_caso1');
-        $Invoice = new DataMap($in, 'B');
+        $Invoice = new DataMap($in, Catalogo::DOCTYPE_BOLETA);
         $out = [
+                'currencyCode'        => $Invoice->getCurrencyCode(),
                 'operationType'       => $Invoice->getOperationType(),
-                'documentSeries'       => $Invoice->getDocumentSeries(),
-                'documentNumber'       => (int)$Invoice->getDocumentNumber(),
+                'documentSeries'      => $Invoice->getDocumentSeries(),
+                'documentNumber'      => (int)$Invoice->getDocumentNumber(),
                 'customerDocType'     => $Invoice->getCustomerDocType(),
                 'customerDocNumber'   => $Invoice->getCustomerDocNumber(),
                 'customerRegName'     => $Invoice->getCustomerRegName(),

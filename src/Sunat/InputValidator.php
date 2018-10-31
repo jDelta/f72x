@@ -118,7 +118,7 @@ class InputValidator {
             case Catalogo::DOCTYPE_FACTURA      :
             case Catalogo::DOCTYPE_BOLETA       : return self::$invoiceValidations;
             case Catalogo::DOCTYPE_NOTA_CREDITO : return self::$creditNoteValidations;
-            case Catalogo::DOCTYPE_NOTA_CREDITO : return self::$creditNoteValidations;
+            case Catalogo::DOCTYPE_NOTA_DEBITO  : return self::$creditNoteValidations;
         }
     }
     private function validateItem($field, $validation) {

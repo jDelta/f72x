@@ -1,0 +1,21 @@
+[
+    ['id' => '10', 'value' => 'Gravado - Operación Onerosa'],
+    ['id' => '11', 'value' => 'Gravado – Retiro por premio'],
+    ['id' => '12', 'value' => 'Gravado – Retiro por donación'],
+    ['id' => '13', 'value' => 'Gravado – Retiro '],
+    ['id' => '14', 'value' => 'Gravado – Retiro por publicidad'],
+    ['id' => '15', 'value' => 'Gravado – Bonificaciones'],
+    ['id' => '16', 'value' => 'Gravado – Retiro por entrega a trabajadores'],
+    ['id' => '17', 'value' => 'Gravado - IVAP'],
+    ['id' => '20', 'value' => 'Exonerado - Operación Onerosa'],
+    ['id' => '21', 'value' => 'Exonerado - Transferencia gratuita'],
+    ['id' => '30', 'value' => 'Inafecto - Operación Onerosa'],
+    ['id' => '31', 'value' => 'Inafecto – Retiro por Bonificación'],
+    ['id' => '32', 'value' => 'Inafecto – Retiro'],
+    ['id' => '33', 'value' => 'Inafecto – Retiro por Muestras Médicas'],
+    ['id' => '34', 'value' => 'Inafecto - Retiro por Convenio Colectivo'],
+    ['id' => '35', 'value' => 'Inafecto – Retiro por premio'],
+    ['id' => '36', 'value' => 'Inafecto - Retiro por publicidad'],
+    ['id' => '37', 'value' => 'Inafecto - Transferencia gratuita'],
+    ['id' => '40', 'value' => 'Exportación']
+]

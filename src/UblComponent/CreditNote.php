@@ -12,7 +12,7 @@ namespace F72X\UblComponent;
 
 use DateTime;
 
-abstract class CreditNote extends BaseComponent {
+class CreditNote extends BaseComponent {
 
     /** @var UBLExtensions */
     protected $UBLExtensions;

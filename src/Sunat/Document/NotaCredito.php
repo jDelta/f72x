@@ -23,7 +23,6 @@ class NotaCredito extends CreditNote {
 
     protected $UBLVersionID = '2.1';
     protected $CustomizationID = '2.0';
-    protected $NoteGeneratorSofwareCode;
 
     public function __construct(DataMap $Invoice) {
         $this->dataMap = $Invoice;
@@ -81,14 +80,10 @@ class NotaCredito extends CreditNote {
         // cac:Signature
         $writer->writeRaw($Signature);
         $writer->write([
-            SchemaNS::CAC . 'AccountingSupplierParty'   => $this->AccountingSupplierParty,
-            SchemaNS::CAC . 'AccountingCustomerParty'   => $this->AccountingCustomerParty
-        ]);
-        $writer->write([
-            SchemaNS::CAC . 'TaxTotal' => $this->TaxTotal
-        ]);
-        $writer->write([
-            SchemaNS::CAC . 'LegalMonetaryTotal' => $this->LegalMonetaryTotal
+            SchemaNS::CAC . 'AccountingSupplierParty' => $this->AccountingSupplierParty,
+            SchemaNS::CAC . 'AccountingCustomerParty' => $this->AccountingCustomerParty,
+            SchemaNS::CAC . 'TaxTotal'                => $this->TaxTotal,
+            SchemaNS::CAC . 'LegalMonetaryTotal'      => $this->LegalMonetaryTotal
         ]);
 
         // Detalle
@@ -97,15 +92,6 @@ class NotaCredito extends CreditNote {
                 SchemaNS::CAC . 'CreditNoteLine' => $Line
             ]);
         }
-    }
-
-    public function getNoteGeneratorSofwareCode() {
-        return $this->NoteGeneratorSofwareCode;
-    }
-
-    public function setNoteGeneratorSofwareCode($NoteGeneratorSofwareCode) {
-        $this->NoteGeneratorSofwareCode = $NoteGeneratorSofwareCode;
-        return $this;
     }
 
 }

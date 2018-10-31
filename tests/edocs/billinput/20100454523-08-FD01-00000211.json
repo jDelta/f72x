@@ -1,0 +1,28 @@
+{
+    "currencyCode": "PEN",
+    "type": "02",
+    "documentSeries": "FD01",
+    "documentNumber": 211,
+    "affectedDocType": "01",
+    "affectedDocId": "F001-4355",
+    "customerDocType": "6",
+    "customerDocNumber": "20587896411",
+    "customerRegName": "SERVICABINAS S.A.",
+    "customerAddress": "215 NY STREET",
+    "issueDate": "2017-06-25T20:25:41",
+    "description": "Ampliaci\u00f3n de garant\u00eda de memoria DDR-3B1333Kingston",
+    "items": [
+        {
+            "productCode": "GLG199",
+            "unspsc": "32101622",
+            "unitCode": "ZZ",
+            "quantity": 250,
+            "description": "Ampliaci\u00f3n de garant\u00eda de memoria DDR-B1333 Kingston",
+            "priceType": "01",
+            "taxType": "1000",
+            "igvAffectationType": "10",
+            "unitPrice": 5,
+            "igvIncluded": true
+        }
+    ]
+}
