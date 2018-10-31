@@ -10,53 +10,60 @@
 
 namespace F72X\Sunat;
 
-use F72X\Tools\XmlService;
+use InvalidArgumentException;
 use F72X\Tools\XmlDSig;
 use F72X\Tools\PdfGenerator;
 use F72X\Repository;
-use F72X\Sunat\Document\SunatDocument;
+use F72X\Sunat\Catalogo;
+use F72X\Tools\XmlService;
 use F72X\Sunat\Document\Factura;
 use F72X\Sunat\Document\Boleta;
+use F72X\Sunat\Document\NotaCredito;
+use F72X\Sunat\Document\NotaDebito;
 use F72X\Exception\InvalidInputException;
 
 class DocumentGenerator {
 
     /**
-     * Generar Factura
+     * Crear Boleta o Factua
      * 
-     * Produce los documentos electronicos listos para ser enviados a SUNAT.
+     * Procesa la data proporcionada para el tipo de documento indicado
      * 
+     * @param string $shortCode FAC|BOL
      * @param array $data
-     * @param string $currencyType
+     * @param string $currencyCode
      */
-    public static function generateFactura(array $data, $currencyType = 'PEN') {
+    public static function createInvoice($shortCode, array $data) {
+        // Validate type
+        if (!in_array($shortCode, ['FAC', 'BOL'])) {
+            throw new InvalidArgumentException("El tipo $shortCode, es invalido use FAC|BOL");
+        }
+        $docType = Catalogo::getDocumentType($shortCode);
         // Validate input
-        self::validateData($data, Catalogo::CAT1_FACTURA);
+        self::validateData($data, $docType);
         // Core invoice
-        $Invoice = new InvoiceDocument($data, Catalogo::CAT1_FACTURA, $currencyType);
+        $Invoice = new DataMap($data, $docType);
         // Documento XML para la factura
-        $XmlDoc = new Factura($Invoice);
-        self::processSunatDoc($XmlDoc);
-        return $XmlDoc;
+        if ($docType == Catalogo::DOCTYPE_BOLETA) {
+            return new Boleta($Invoice);
+        }
+        return new Factura($Invoice);
     }
 
-    /**
-     * Generar Boleta
-     * 
-     * Produce los documentos electronicos listos para ser enviados a SUNAT.
-     * 
-     * @param array $data
-     * @param string $currencyType
-     */
-    public static function generateBoleta(array $data, $currencyType = 'PEN') {
+    public static function createCreditNote(array $data) {
         // Validate input
-        self::validateData($data, Catalogo::CAT1_BOLETA);
+        self::validateData($data, Catalogo::DOCTYPE_NOTA_CREDITO);
         // Core invoice
-        $Invoice = new InvoiceDocument($data, Catalogo::CAT1_BOLETA, $currencyType);
-        // Documento XML para la factura
-        $XmlDoc = new Boleta($Invoice);
-        self::processSunatDoc($XmlDoc);
-        return $XmlDoc;
+        $dataMap = new DataMap($data, Catalogo::DOCTYPE_NOTA_CREDITO);
+        return new NotaCredito($dataMap);
+    }
+
+    public static function createDebitNote(array $data) {
+        // Validate input
+        self::validateData($data, Catalogo::DOCTYPE_NOTA_DEBITO);
+        // Core invoice
+        $dataMap = new DataMap($data, Catalogo::DOCTYPE_NOTA_DEBITO);
+        return new NotaDebito($dataMap);
     }
 
     private static function validateData(array $data, $type) {
@@ -67,49 +74,99 @@ class DocumentGenerator {
         }
     }
 
-    private static function processSunatDoc(SunatDocument $XmlDoc) {
+    /**
+     * 
+     * @param Factura|Boleta|NotaCredito|NotaDebito $XmlDoc
+     */
+    public static function generateFiles($XmlDoc) {
+        // Save Input
+        self::saveBillInput($XmlDoc);
         // Save Document
-        self::saveInvoice($XmlDoc);
+        self::saveBill($XmlDoc);
         // Sign Document
-        self::singInvoice($XmlDoc);
+        self::singBill($XmlDoc);
         // Compress Document
-        self::zipInvoice($XmlDoc);
-        // Generate 
+        self::zipBill($XmlDoc);
+        // Generate PDF
         self::generatePdf($XmlDoc);
     }
 
-    private static function singInvoice(SunatDocument $Document) {
-        $billName = $Document->getBillName();
+    private static function saveBillInput($XmlDoc) {
+        $billName = $XmlDoc->getBillName();
+        Repository::saveBillInput($billName, json_encode($XmlDoc->getDataMap()->getRawData(), JSON_PRETTY_PRINT));
+    }
+
+    private static function singBill($XmlDoc) {
+        $billName = $XmlDoc->getBillName();
         XmlDSig::sign($billName);
     }
 
-    private static function zipInvoice(SunatDocument $Document) {
-        $billName = $Document->getBillName();
+    private static function zipBill($XmlDoc) {
+        $billName = $XmlDoc->getBillName();
         Repository::zipBill($billName);
     }
 
-    private static function generatePdf(SunatDocument $Document) {
-        $billName = $Document->getBillName();
-        $Invoice = $Document->getInvoiceDocument();
+    private static function generatePdf($XmlDoc) {
+        $billName = $XmlDoc->getBillName();
+        $Invoice = $XmlDoc->getDataMap();
         PdfGenerator::generateFactura($Invoice, $billName);
     }
 
-    private static function saveInvoice(SunatDocument $invoice) {
+    private static function saveBill($Bill) {
         $xmlService = new XmlService('1.0', 'ISO-8859-1');
-        $xmlService->namespaceMap = [
-            "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"                        => '',
-            "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"      => 'cac',
-            "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"          => 'cbc',
-            "urn:un:unece:uncefact:documentation:2"                                         => 'ccts',
-            "http://www.w3.org/2000/09/xmldsig#"                                            => 'ds',
-            "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"      => 'ext',
-            "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2"             => 'qdt',
-            "urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2"   => 'udt',
-            "http://www.w3.org/2001/XMLSchema-instance"                                     => 'xsi'
-        ];
-        $billName = $invoice->getBillName();
-        $billContent = $xmlService->write('Invoice', $invoice);
+        $documentType = $Bill->getDataMap()->getDocumentType();
+        // Set namespaces
+        $xmlService->namespaceMap = self::getNamespaceMap($documentType);
+        $billName = $Bill->getBillName();
+        // Xml Root
+        $xmlRoot = self::getXmlRoot($documentType);
+        $billContent = $xmlService->write($xmlRoot, $Bill);
         Repository::saveBill($billName, $billContent);
+    }
+
+    /**
+     * 
+     * @param string $documentType 01|03|07|08
+     * @return string Invoice|CreditNote|DebitNote
+     */
+    private static function getXmlRoot($documentType) {
+        switch ($documentType) {
+            case Catalogo::DOCTYPE_FACTURA      :
+            case Catalogo::DOCTYPE_BOLETA       : return 'Invoice';
+            case Catalogo::DOCTYPE_NOTA_CREDITO : return 'CreditNote';
+            case Catalogo::DOCTYPE_NOTA_DEBITO  : return 'DebitNote';
+        }
+    }
+ 
+    /**
+     * 
+     * @param string $documentType 01|03|07|08
+     * @return array
+     */
+    private static function getNamespaceMap($documentType) {
+        switch ($documentType) {
+            case Catalogo::DOCTYPE_FACTURA :
+            case Catalogo::DOCTYPE_BOLETA :
+                $topNamespace = 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2';
+                break;
+            case Catalogo::DOCTYPE_NOTA_CREDITO :
+                $topNamespace = 'urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2';
+                break;
+            case Catalogo::DOCTYPE_NOTA_DEBITO :
+                $topNamespace = 'urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2';
+                break;
+        }
+        return [
+            $topNamespace                                                                 => '',
+            'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2'    => 'cac',
+            'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2'        => 'cbc',
+            'urn:un:unece:uncefact:documentation:2'                                       => 'ccts',
+            'http://www.w3.org/2000/09/xmldsig#'                                          => 'ds',
+            'urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2'    => 'ext',
+            'urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2'           => 'qdt',
+            'urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2' => 'udt',
+            'http://www.w3.org/2001/XMLSchema-instance'                                   => 'xsi'
+        ];
     }
 
 }

@@ -1,18 +1,16 @@
 <?php
 
-$dt =  new DateTime();
-$dt->setDate(2017, 5, 14);
-$dt->setTime(13, 25, 51);
 return [
-    'operationType'     => '0101',              // Tipo de operación Catálogo #51
-    'invoiceSeries'     => 'F001',              // Serie de la factura
-    'invoiceNumber'     => 4355,                // Número correlativo de la factura
-    'customerDocType'   => '6',                 // Tipo de documento Catálogo #6
-    'customerDocNumber' => '20587896411',       // RUC
-    'customerRegName'   => 'SERVICABINAS S.A.', // Razón social
-    'customerAddress'   => '215 NY STREET',     // Dirección del cliente
-    'issueDate'         => $dt,                 // Fecha de emisión [opcional], si no se especifica se usara la fecha del sistema!
-    'purchaseOrder'     => 7852166,             // Numero de orden de commpra,
+    'currencyCode'      => 'PEN',                 // Tipo de moneda (ISO 4217)
+    'operationType'     => '0101',                // Tipo de operación Catálogo #51
+    'documentSeries'    => 'F001',                // Serie de la factura
+    'documentNumber'    => 4355,                  // Número correlativo de la factura
+    'customerDocType'   => '6',                   // Tipo de documento Catálogo #6
+    'customerDocNumber' => '20587896411',         // RUC
+    'customerRegName'   => 'SERVICABINAS S.A.',   // Razón social
+    'customerAddress'   => '215 NY STREET',       // Dirección del cliente
+    'issueDate'         => '2017-05-14T13:25:51', // Fecha de emisión - ISO 8601 date
+    'purchaseOrder'     => 7852166,               // Numero de orden de commpra,
     'allowancesCharges' => [
         [
             'isCharge'         => false,
@@ -23,7 +21,7 @@ return [
     'items' => [
         [
             'productCode'        => 'GLG199',    // Código
-            'sunatProductCode'   => '52161515',  // Código de producto SUNAT
+            'unspsc'             => '52161515',  // Código de producto SUNAT
             'unitCode'           => 'NIU',       // Código de unidad
             'quantity'           => 2000,        // Cantidad
             'description'        => 'Grabadora LG Externo Modelo: GE20LU10', // Descripción detallada
@@ -42,7 +40,7 @@ return [
         ],
         [
             'productCode'        => 'MVS546',
-            'sunatProductCode'   => '43211902',
+            'unspsc'             => '43211902',
             'unitCode'           => 'NIU',
             'quantity'           => 300,
             'description'        => 'Monitor LCD ViewSonic VG2028WM 20',
@@ -61,7 +59,7 @@ return [
         ],
         [
             'productCode'        => 'MPC35',
-            'sunatProductCode'   => '43202010',
+            'unspsc'             => '43202010',
             'unitCode'           => 'NIU',
             'quantity'           => 250,
             'description'        => 'Memoria DDR-3 B1333 Kingston',
@@ -73,7 +71,7 @@ return [
         ],
         [
             'productCode'        => 'TMS22',
-            'sunatProductCode'   => '43211706',
+            'unspsc'             => '43211706',
             'unitCode'           => 'NIU',
             'quantity'           => 500,
             'description'        => 'Teclado Microsoft SideWinder X6',
@@ -85,7 +83,7 @@ return [
         ]
 //        [
 //            'productCode'        => 'WCG01',
-//            'sunatProductCode'   => '45121520',
+//            'unspsc'             => '45121520',
 //            'unitCode'           => 'NIU',
 //            'quantity'           => 1,
 //            'description'        => 'Web cam Genius iSlim 310',

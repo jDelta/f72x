@@ -11,7 +11,7 @@
 namespace F72X\Tools;
 
 use F72X\Sunat\Catalogo;
-use F72X\Sunat\Document\SunatDocument;
+use F72X\Sunat\Document\SunatInvoice;
 use F72X\UblComponent\TaxTotal;
 use F72X\UblComponent\TaxSubTotal;
 use F72X\UblComponent\TaxCategory;
@@ -23,23 +23,23 @@ class UblHelper {
 
     /**
      * 
-     * @param SunatDocument|InvoiceLine $target
+     * @param SunatInvoice|InvoiceLine $target
      * @param array $allowancesCharges
      * @param float $baseAmount
-     * @param string $currencyType
+     * @param string $currencyCode
      */
-    public static function addAllowancesCharges($target, array $allowancesCharges, $baseAmount, $currencyType) {
+    public static function addAllowancesCharges($target, array $allowancesCharges, $baseAmount, $currencyCode) {
         foreach ($allowancesCharges as $item) {
             $k = $item['multiplierFactor'];
             $amount = $baseAmount * $k;
             $chargeIndicator = $item['isCharge'] ? 'true' : 'false';
-            self::addAllowanceCharge($target, $currencyType, $chargeIndicator, $item['reasonCode'], $item['multiplierFactor'], $amount, $baseAmount);
+            self::addAllowanceCharge($target, $currencyCode, $chargeIndicator, $item['reasonCode'], $item['multiplierFactor'], $amount, $baseAmount);
         }
     }
 
     /**
      * 
-     * @param SunatDocument|InvoiceLine $target
+     * @param SunatInvoice|InvoiceLine $target
      * @param string $currencyID
      * @param string $ChargeIndicator
      * @param string $AllowanceChargeReasonCode

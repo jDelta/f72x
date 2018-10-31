@@ -2,11 +2,11 @@
 
 namespace Tests;
 
-
+use F72X\Repository;
 use F72X\Sunat\Operations;
 use F72X\Sunat\Catalogo;
 use F72X\Sunat\DocumentGenerator;
-use F72X\Sunat\InvoiceDocument;
+use F72X\Sunat\DataMap;
 use F72X\Sunat\InvoiceItems;
 
 use PHPUnit\Framework\TestCase;
@@ -15,32 +15,43 @@ final class InvoiceGenerationTest extends TestCase {
 
     public function __construct() {
         Util::initF72X();
+        $this->removeBillDocs();
         $this->generateDetailMatrix('boleta_caso1');
         $this->generateDetailMatrix('factura_caso1');
     }
-
+    public function removeBillDocs() {
+        Repository::removeBillDocs('20100454523-01-F001-00004355', false);
+        Repository::removeBillDocs('20100454523-03-B001-00003652', false);
+        Repository::removeBillDocs('20100454523-07-FC01-00000211', false);
+    }
     public function testGenerateFactura() {
         $data = self::getCaseData('factura_caso1');
-        DocumentGenerator::generateFactura($data);
+        $xmlInvice = DocumentGenerator::createInvoice('FACTURA',$data);
+        DocumentGenerator::generateFiles($xmlInvice);
     }
-
     public function testGeneratBoleta() {
         $data = self::getCaseData('boleta_caso1');
-        DocumentGenerator::generateBoleta($data);
+        $xmlInvice = DocumentGenerator::createInvoice('BOLETA',$data);
+        DocumentGenerator::generateFiles($xmlInvice);
+    }
+    public function testGenerateCreditNote() {
+        $data = self::getCaseData('notacredito_caso1');
+        $xmlDoc = DocumentGenerator::createCreditNote($data);
+        DocumentGenerator::generateFiles($xmlDoc);
     }
 
-    public function testInvoiceDocumentRightCalcsForFactura() {
+    public function testDataMapRightCalcsForFactura() {
         $in = self::getCaseData('factura_caso1');
-        $Invoice = new InvoiceDocument($in, 'B');
+        $Invoice = new DataMap($in, 'B');
         $out = [
                 'operationType'     => $Invoice->getOperationType(),
-                'invoiceSeries'     => $Invoice->getInvoiceSeries(),
-                'invoiceNumber'     => (int)$Invoice->getInvoiceNumber(),
+                'documentSeries'     => $Invoice->getDocumentSeries(),
+                'documentNumber'     => (int)$Invoice->getDocumentNumber(),
                 'customerDocType'   => $Invoice->getCustomerDocType(),
                 'customerDocNumber' => $Invoice->getCustomerDocNumber(),
                 'customerRegName'   => $Invoice->getCustomerRegName(),
                 'customerAddress'     => $Invoice->getCustomerAddress(),
-                'issueDate'         => $Invoice->getIssueDate(),
+                'issueDate'         => $Invoice->getIssueDate()->format('Y-m-d\TH:i:s'),
                 'purchaseOrder'     => $Invoice->getPurchaseOrder(),
                 'allowancesCharges' => $Invoice->getAllowancesAndCharges(),
                 'items'             => $Invoice->getRawItems(),
@@ -52,18 +63,18 @@ final class InvoiceGenerationTest extends TestCase {
         self::assertEquals($in, $out);
     }
 
-    public function testInvoiceDocumentRightCalcsForBoleta() {
+    public function testDataMapRightCalcsForBoleta() {
         $in = self::getCaseData('boleta_caso1');
-        $Invoice = new InvoiceDocument($in, 'B');
+        $Invoice = new DataMap($in, 'B');
         $out = [
                 'operationType'       => $Invoice->getOperationType(),
-                'invoiceSeries'       => $Invoice->getInvoiceSeries(),
-                'invoiceNumber'       => (int)$Invoice->getInvoiceNumber(),
+                'documentSeries'       => $Invoice->getDocumentSeries(),
+                'documentNumber'       => (int)$Invoice->getDocumentNumber(),
                 'customerDocType'     => $Invoice->getCustomerDocType(),
                 'customerDocNumber'   => $Invoice->getCustomerDocNumber(),
                 'customerRegName'     => $Invoice->getCustomerRegName(),
                 'customerAddress'     => $Invoice->getCustomerAddress(),
-                'issueDate'           => $Invoice->getIssueDate(),
+                'issueDate'           => $Invoice->getIssueDate()->format('Y-m-d\TH:i:s'),
                 'allowancesCharges'   => $Invoice->getAllowancesAndCharges(),
                 'items'               => $Invoice->getRawItems(),
                 'totalTaxes'          => (float)Operations::formatAmount($Invoice->getTotalTaxes()),

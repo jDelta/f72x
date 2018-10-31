@@ -378,7 +378,7 @@
 <error numero="2247">El dato ingresado en sac:EndDocumentNumberID debe ser numerico</error>
 <error numero="2248">El XML no contiene el tag sac:EndDocumentNumberID</error>
 <error numero="2249">Los rangos deben ser mayores a cero</error>
-<error numero="2250">En el rango de comprobantes, el EndDocumentNumberID debe ser mayor o igual al StartInvoiceNumberID</error>
+<error numero="2250">En el rango de comprobantes, el EndDocumentNumberID debe ser mayor o igual al StartDocumentNumberID</error>
 <error numero="2251">El dato ingresado en TotalAmount debe ser numerico mayor o igual a cero</error>
 <error numero="2252">El XML no contiene el tag TotalAmount</error>
 <error numero="2253">El dato ingresado en TotalAmount debe ser numerico mayor a cero</error>

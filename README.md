@@ -32,6 +32,7 @@ $prodMode = false;
  * Repositorio digital:
  * Consta de los diguientes subdirectorios:
  *     - bill      : Facturas y Boletas en xml
+ *     - billinput : Data utilizada para generar el documento electrónico
  *     - signedbill: Facturas firmadas
  *     - zippedbill: Facturas comprimidas listas para ser enviadas a sunat
  *     - crd       : Constancias de recepción
@@ -79,8 +80,8 @@ $dt->setTime(13, 25, 51);
 // data de la factura
 $dataFactura = [
     'operationType'     => '0101',              // Tipo de operación Catálogo #51
-    'invoiceSeries'     => 'F001',              // Serie de la factura
-    'invoiceNumber'     => 4355,                // Número correlativo de la factura
+    'documentSeries'     => 'F001',              // Serie de la factura
+    'documentNumber'     => 4355,                // Número correlativo de la factura
     'customerDocType'   => '6',                 // Tipo de documento Catálogo #6
     'customerDocNumber' => '20587896411',       // RUC
     'customerRegName'   => 'SERVICABINAS S.A.', // Razón social
@@ -98,7 +99,8 @@ $dataFactura = [
     'items' => [
         [
             'productCode'        => 'GLG199',    // Código
-            'sunatProductCode'   => '52161515',  // Código de producto SUNAT
+            'unspsc'             => '52161515',  // Código de producto SUNAT
+                                                 // Catálogo #15 United Nations Standard Products and Services Code (UNSPSC)
             'unitCode'           => 'NIU',       // Código de unidad
             'quantity'           => 2000,        // Cantidad
             'description'        => 'Grabadora LG Externo Modelo: GE20LU10', // Descripción detallada
@@ -117,7 +119,7 @@ $dataFactura = [
         ],
         [
             'productCode'        => 'MVS546',
-            'sunatProductCode'   => '43211902',
+            'unspsc '            => '43211902',
             'unitCode'           => 'NIU',
             'quantity'           => 300,
             'description'        => 'Monitor LCD ViewSonic VG2028WM 20',
@@ -136,7 +138,7 @@ $dataFactura = [
         ],
         [
             'productCode'        => 'MPC35',
-            'sunatProductCode'   => '43202010',
+            'unspsc'             => '43202010',
             'unitCode'           => 'NIU',
             'quantity'           => 250,
             'description'        => 'Memoria DDR-3 B1333 Kingston',
@@ -148,7 +150,7 @@ $dataFactura = [
         ],
         [
             'productCode'        => 'TMS22',
-            'sunatProductCode'   => '43211706',
+            'unspsc'             => '43211706',
             'unitCode'           => 'NIU',
             'quantity'           => 500,
             'description'        => 'Teclado Microsoft SideWinder X6',

@@ -12,29 +12,24 @@ namespace F72X\Sunat;
 
 use DateTime;
 use F72X\Company;
+use F72X\Sunat\Catalogo;
 /**
- * InvoiceDocument
+ * DataMap
  * 
  * Esta clase es una representación interna de una factura o boleta, la cual se
  * encarga de aplicar toda la logica de negocio en cuanto a cálculos de tributos
  * y totales
  * 
  */
-class InvoiceDocument {
-
-    const BOLETA_PREFIX = 'B';
-    const BOLETA_NAME = 'BOLETA';
-    const FACTURA_PREFIX = 'F';
-    const FACTURA_NAME = 'FACTURA';
+class DataMap {
 
     private $_rawData;
-    private $invoiceType;
-    private $currencyType;
+    private $documentType;
+    private $currencyCode;
     private $invoiceId;
-    private $invoiceIdPrefix;
-    private $invoiceName;
-    private $invoiceSeries;
-    private $invoiceNumber;
+    private $documentName;
+    private $documentSeries;
+    private $documentNumber;
 
     /** @var DateTime */
     private $issueDate;
@@ -53,52 +48,71 @@ class InvoiceDocument {
     private $_rawItems;
     private $allowancesAndCharges = [];
 
+    /** NOTES FIELDS */
+    private $noteType;
+    private $noteDescription;
+    private $noteAffectedDocType;
+    private $noteAffectedDocId;
     /**
      * 
      * @param array $data
-     * @param string $type Catalogo::CAT1_BOLETA|Catalogo::CAT1_FACTURA
-     * @param string $currencyType
+     * @param string $type 01|03|07|08
      */
-    public function __construct(array $data, $type, $currencyType = 'PEN') {
+    public function __construct(array $data, $type) {
         // Items
         $items = new InvoiceItems();
-        $items->populate($data['items'], $currencyType);
+        $items->populate($data['items'], $data['currencyCode']);
 
-        $this->_rawData = $data;
+        $this->_rawData  = $data;
         $this->_rawItems = $data['items'];
-        $this->addDefaults($data);
-        $this->currencyType = $currencyType;
-        $this->invoiceSeries = $data['invoiceSeries'];
-        $this->invoiceNumber = str_pad($data['invoiceNumber'], 8, '0', STR_PAD_LEFT);
-        // requires invoiceSeries and invoiceNumber
-        $this->setTypeProperties($type);
-        $this->issueDate = $data['issueDate'];
-        $this->purchaseOrder = $data['purchaseOrder'];
-        $this->operationType = $data['operationType'];
-        $this->customerDocType = $data['customerDocType'];
-        $this->customerDocNumber = $data['customerDocNumber'];
-        $this->customerRegName = mb_strtoupper($data['customerRegName']);
-        $this->customerAddress = mb_strtoupper($data['customerAddress']);
-        $this->_items = $items;
+        $this->setDefaults($data);
+        $this->currencyCode         = $data['currencyCode'];
+        $this->documentType         = $type;
+        $this->documentSeries       = $data['documentSeries'];
+        $this->documentNumber       = str_pad($data['documentNumber'], 8, '0', STR_PAD_LEFT);
+        $this->documentName         = Catalogo::getDocumentName($type);
+        $this->invoiceId            = $this->documentSeries . '-' . $this->documentNumber;
+        $this->issueDate            = new DateTime($data['issueDate']);
+        $this->customerDocType      = $data['customerDocType'];
+        $this->customerDocNumber    = $data['customerDocNumber'];
+        $this->customerRegName      = mb_strtoupper($data['customerRegName']);
+        $this->customerAddress      = mb_strtoupper($data['customerAddress']);
+        $this->_items               = $items;
         $this->allowancesAndCharges = $data['allowancesCharges'];
+        $this->setSpecificFields($data, $type);
     }
 
-    private function addDefaults(array &$data) {
+    private function setSpecificFields(array $data, $type) {
+        if (in_array($type, [Catalogo::DOCTYPE_FACTURA, Catalogo::DOCTYPE_BOLETA])) {
+            $this->operationType        = $data['operationType'];
+            $this->purchaseOrder        = $data['purchaseOrder'];
+        }else{
+            
+            $this->noteType            = $data['type'];
+            $this->noteDescription     = $data['description'];
+            $this->noteAffectedDocType = $data['affectedDocType'];
+            $this->noteAffectedDocId   = $data['affectedDocId'];
+        }
+    }
+
+    private function setDefaults(array &$data) {
         $data['allowancesCharges'] = isset($data['allowancesCharges']) ? $data['allowancesCharges'] : [];
-        $data['issueDate'] = isset($data['issueDate']) ? $data['issueDate'] : new DateTime();
         $data['purchaseOrder'] = isset($data['purchaseOrder']) ? $data['purchaseOrder'] : null;
     }
+    public function getNoteType() {
+        return $this->noteType;
+    }
 
-    private function setTypeProperties($type) {
-        $this->invoiceType = $type;
-        if ($type === Catalogo::CAT1_BOLETA) {
-            $this->invoiceIdPrefix = self::BOLETA_PREFIX;
-            $this->invoiceName = self::BOLETA_NAME;
-        } else {
-            $this->invoiceIdPrefix = self::FACTURA_PREFIX;
-            $this->invoiceName = self::FACTURA_NAME;
-        }
-        $this->invoiceId = $this->invoiceSeries . '-' . $this->invoiceNumber;
+    public function getNoteDescription() {
+        return $this->noteDescription;
+    }
+
+    public function getNoteAffectedDocType() {
+        return $this->noteAffectedDocType;
+    }
+
+    public function getNoteAffectedDocId() {
+        return $this->noteAffectedDocId;
     }
 
     public function getInvoiceId() {
@@ -113,37 +127,33 @@ class InvoiceDocument {
      * Boleta o Factura @CAT1
      * @return string
      */
-    public function getInvoiceType() {
-        return $this->invoiceType;
+    public function getDocumentType() {
+        return $this->documentType;
     }
 
-    public function getCurrencyType() {
-        return $this->currencyType;
+    public function getCurrencyCode() {
+        return $this->currencyCode;
     }
 
-    public function getInvoiceIdPrefix() {
-        return $this->invoiceIdPrefix;
+    public function getDocumentName() {
+        return $this->documentName;
     }
 
-    public function getInvoiceName() {
-        return $this->invoiceName;
+    public function getDocumentSeries() {
+        return $this->documentSeries;
     }
 
-    public function getInvoiceSeries() {
-        return $this->invoiceSeries;
-    }
-
-    public function setInvoiceSeries($invoiceSeries) {
-        $this->invoiceSeries = $invoiceSeries;
+    public function setDocumentSeries($documentSeries) {
+        $this->documentSeries = $documentSeries;
         return $this;
     }
 
-    public function getInvoiceNumber() {
-        return $this->invoiceNumber;
+    public function getDocumentNumber() {
+        return $this->documentNumber;
     }
 
-    public function setInvoiceNumber($invoiceNumber) {
-        $this->invoiceNumber = $invoiceNumber;
+    public function setDocumentNumber($documentNumber) {
+        $this->documentNumber = $documentNumber;
         return $this;
     }
 
@@ -400,6 +410,6 @@ class InvoiceDocument {
         return Operations::applyAllowancesAndCharges($amount, $this->allowancesAndCharges);
     }
     public function getBillName() {
-        return Company::getRUC() . '-' . $this->invoiceType . '-' . $this->invoiceId;
+        return Company::getRUC() . '-' . $this->documentType . '-' . $this->invoiceId;
     }
 }

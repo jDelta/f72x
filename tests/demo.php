@@ -19,6 +19,7 @@ $prodMode = false;
  * Repositorio digital:
  * Consta de los diguientes subdirectorios:
  *     - bill      : Facturas y Boletas en xml
+ *     - billinput : Data utilizada para generar el documento electrónico
  *     - signedbill: Facturas firmadas
  *     - zippedbill: Facturas comprimidas listas para ser enviadas a sunat
  *     - crd       : Constancias de recepción

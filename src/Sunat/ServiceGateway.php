@@ -10,8 +10,9 @@
 
 namespace F72X\Sunat;
 
+use Exception;
 use F72X\Repository;
-
+use F72X\Exception\SunatException;
 class ServiceGateway {
 
     /**
@@ -21,10 +22,14 @@ class ServiceGateway {
      */
     public static function sendBill($billName) {
         $contentFile = Repository::getZippedBillContent($billName);
+        try {
+            $soapService = SunatSoapClient::getService();
+            $soapService->__soapCall('sendBill', [['fileName' => "$billName.zip", 'contentFile' => $contentFile]]);
+            $serverResponse = $soapService->__getLastResponse();
+        } catch (Exception $exc) {
+            throw new SunatException($exc->getMessage(), $exc->getCode());
+        }
 
-        $soapService = SunatSoapClient::getService();
-        $soapService->__soapCall('sendBill', [['fileName' => "$billName.zip", 'contentFile' => $contentFile]]);
-        $serverResponse = $soapService->__getLastResponse();
         // Save Constancia de recepción
         self::saveCdr($serverResponse, $billName);
         // Get Response info

@@ -88,7 +88,7 @@ class InvoiceItems extends XMatrix {
             $itemPayableAmount    = $itemBillableValue + $igvAmount;
             
             $this->set(self::COL_PRODUCT_CODE,        $idx, $item['productCode']);
-            $this->set(self::COL_UNPSC,               $idx, $item['sunatProductCode']);
+            $this->set(self::COL_UNPSC,               $idx, $item['unspsc']);
             $this->set(self::COL_UNIT_CODE,           $idx, $item['unitCode']);
             $this->set(self::COL_QUANTITY,            $idx, $quantity);
             $this->set(self::COL_DESCRIPTION,         $idx, $item['description']);

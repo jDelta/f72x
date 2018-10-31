@@ -1,0 +1,111 @@
+<?php
+
+/**
+ * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
+ * UBL 2.1
+ * Version 1.1
+ * 
+ * Copyright 2018, Jaime Cruz
+ */
+
+namespace F72X\Sunat\Document;
+
+use F72X\Company;
+use F72X\Tools\TemplateMgr;
+use F72X\Sunat\DataMap;
+use F72X\UblComponent\SchemaNS;
+use F72X\UblComponent\CreditNote;
+use Sabre\Xml\Writer;
+
+class NotaCredito extends CreditNote {
+
+    use BillMixin, NoteMixin;
+
+    protected $UBLVersionID = '2.1';
+    protected $CustomizationID = '2.0';
+    protected $NoteGeneratorSofwareCode;
+
+    public function __construct(DataMap $Invoice) {
+        $this->dataMap = $Invoice;
+        $currencyCode = $Invoice->getCurrencyCode();
+        // ID
+        $this->setID($Invoice->getInvoiceId());
+        // Fecha de emisión
+        $this->setIssueDate($Invoice->getIssueDate());
+        // Tipo de moneda
+        $this->setDocumentCurrencyCode($currencyCode);
+        // Motivo de emisión
+        $this->addDiscrepancyResponse();
+        // Motivo de emisión
+        $this->addBillingReference();
+        // Información de la empresa
+        $this->addInvoiceAccountingSupplierParty();
+        // Información del cliente
+        $this->addInvoiceAccountingCustomerParty();
+        // Detalle
+        $this->addDocumentItems('CreditNoteLine');
+        // Impuestos
+        $this->addDocumentTaxes();
+        // Totales
+        $this->addInvoiceLegalMonetaryTotal();
+    }
+    public function xmlSerialize(Writer $writer) {
+        $companyRUC = Company::getRUC();
+        $companyName = Company::getCompanyName();
+        // SchemaNS::EXT . 'UBLExtensions'
+        $UBLExtensions = TemplateMgr::getTpl('UBLExtensions.xml');
+        $Signature     = TemplateMgr::getTpl('Signature.xml', [
+                    'ruc'         => $companyRUC,
+                    'companyName' => $companyName
+        ]);
+        $this->writeLineJump($writer);
+        $writer->writeRaw($UBLExtensions);
+
+        $writer->write([
+            SchemaNS::CBC . 'UBLVersionID'         => $this->UBLVersionID,
+            SchemaNS::CBC . 'CustomizationID'      => $this->CustomizationID,
+            SchemaNS::CBC . 'ID'                   => $this->ID,
+            SchemaNS::CBC . 'IssueDate'            => $this->IssueDate->format('Y-m-d'),
+            SchemaNS::CBC . 'IssueTime'            => $this->IssueDate->format('H:i:s'),
+            SchemaNS::CBC . 'DocumentCurrencyCode' => $this->DocumentCurrencyCode,
+            SchemaNS::CAC . 'DiscrepancyResponse'  => $this->DiscrepancyResponse,
+            SchemaNS::CAC . 'BillingReference'     => $this->BillingReference
+        ]);
+
+        // Despatch Document Reference
+        if ($this->DespatchDocumentReference) {
+            $writer->write([
+                SchemaNS::CAC . 'DespatchDocumentReference' => $this->DespatchDocumentReference
+            ]);
+        }
+        // cac:Signature
+        $writer->writeRaw($Signature);
+        $writer->write([
+            SchemaNS::CAC . 'AccountingSupplierParty'   => $this->AccountingSupplierParty,
+            SchemaNS::CAC . 'AccountingCustomerParty'   => $this->AccountingCustomerParty
+        ]);
+        $writer->write([
+            SchemaNS::CAC . 'TaxTotal' => $this->TaxTotal
+        ]);
+        $writer->write([
+            SchemaNS::CAC . 'LegalMonetaryTotal' => $this->LegalMonetaryTotal
+        ]);
+
+        // Detalle
+        foreach ($this->CreditNoteLines as $Line) {
+            $writer->write([
+                SchemaNS::CAC . 'CreditNoteLine' => $Line
+            ]);
+        }
+    }
+
+    public function getNoteGeneratorSofwareCode() {
+        return $this->NoteGeneratorSofwareCode;
+    }
+
+    public function setNoteGeneratorSofwareCode($NoteGeneratorSofwareCode) {
+        $this->NoteGeneratorSofwareCode = $NoteGeneratorSofwareCode;
+        return $this;
+    }
+
+}

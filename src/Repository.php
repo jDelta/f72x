@@ -20,6 +20,25 @@ class Repository {
         self::saveFile("bill/$billName.xml", $billContent);
     }
 
+    /**
+     * 
+     * @param string $billName
+     * @param boolean $throwEx set to *false*, to avoid an exception if the file doesn't exist
+     */
+    public static function removeBillDocs($billName, $throwEx = true) {
+        $rp = self::getRepositoryPath();
+        self::removeFile("$rp/bill/$billName.xml", $throwEx);
+        self::removeFile("$rp/billinput/$billName.json", $throwEx);
+        self::removeFile("$rp/signedbill/S-$billName.xml", $throwEx);
+        self::removeFile("$rp/zippedbill/$billName.zip", $throwEx);
+        self::removeFile("$rp/printable/$billName.pdf", $throwEx);
+        self::removeFile("$rp/cdr/R$billName.zip", $throwEx);
+    }
+
+    public static function saveBillInput($billName, $billContent) {
+        self::saveFile("billinput/$billName.json", $billContent);
+    }
+
     public static function saveSignedBill($billName, $billContent) {
         self::saveFile("signedbill/S-$billName.xml", $billContent);
     }
@@ -60,6 +79,11 @@ class Repository {
         return "$rp/bill/$billName.xml";
     }
 
+    public static function getBillInputPath($billName) {
+        $rp = self::getRepositoryPath();
+        return "$rp/billinput/$billName.json";
+    }
+
     public static function getSignedBillPath($billName) {
         $rp = self::getRepositoryPath();
         return "$rp/signedbill/S-$billName.xml";
@@ -81,7 +105,17 @@ class Repository {
 
     private static function saveFile($filePath, $fileContent) {
         $rp = self::getRepositoryPath();
-        file_put_contents("$rp/$filePath", $fileContent);
+        self::writeFile("$rp/$filePath", $fileContent);
+    }
+
+    public static function removeFile($filePath, $throwEx = true) {
+        if (!file_exists($filePath)) {
+            if ($throwEx) {
+                throw new FileException("El archivo: $filePath no existe.");
+            }
+            return;
+        }
+        unlink($filePath);
     }
 
     public static function getCdrInfo($billName) {
@@ -150,6 +184,25 @@ class Repository {
             exit();
         }
         throw new FileException("El archivo: $filePath no existe.");
+    }
+
+    public static function billInputStream($billName) {
+        $filePath = self::getBillInputPath($billName);
+        if (file_exists($filePath)) {
+            header('Content-Type: application/json');
+            header("Content-Disposition: attachment;filename=$billName.json");
+            header('Cache-Control:max-age=0');
+            echo file_get_contents($filePath);
+            exit();
+        }
+        throw new FileException("El archivo: $filePath no existe.");
+    }
+
+    public static function writeFile($filePath, $fileContent, $overwrite = false) {
+        if (file_exists($filePath) && !$overwrite) {
+            throw new FileException("El archivo: $filePath ya existe.");
+        }
+        file_put_contents($filePath, $fileContent);
     }
 
 }

@@ -15,7 +15,7 @@ use F72X\Tools\TemplateMgr;
 use F72X\UblComponent\SchemaNS;
 use Sabre\Xml\Writer;
 
-class Factura extends SunatDocument {
+class Factura extends SunatInvoice {
 
     /**
      * The xmlSerialize method is called during xml writing.

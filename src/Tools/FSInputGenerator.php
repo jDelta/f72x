@@ -11,24 +11,24 @@
 namespace F72X\Tools;
 
 use F72X\Company;
-use F72X\Sunat\InvoiceDocument;
+use F72X\Sunat\DataMap;
 use F72X\Sunat\Operations;
 use F72X\Sunat\Catalogo;
 use F72X\Sunat\SunatVars;
 
 class FSInputGenerator {
 
-    public static function generateFactura(array $data, $companyRUC, $currencyType = 'PEN') {
-        $Invoice = new InvoiceDocument($data, Catalogo::CAT1_FACTURA, $currencyType);
+    public static function generateFactura(array $data, $companyRUC, $currencyCode = 'PEN') {
+        $Invoice = new DataMap($data, 'FACTURA', $currencyCode);
         self::generateFSTextInput($Invoice, $companyRUC);
     }
 
-    public static function generateBoleta(array $data, $companyRUC, $currencyType = 'PEN') {
-        $Invoice = new InvoiceDocument($data, Catalogo::CAT1_BOLETA, $currencyType);
+    public static function generateBoleta(array $data, $companyRUC, $currencyCode = 'PEN') {
+        $Invoice = new DataMap($data, 'BOLETA', $currencyCode);
         self::generateFSTextInput($Invoice, $companyRUC);
     }
 
-    private static function generateFSTextInput(InvoiceDocument $Invoice, $companyRUC) {
+    private static function generateFSTextInput(DataMap $Invoice, $companyRUC) {
         $issueDate = $Invoice->getIssueDate();
         $Items     = $Invoice->getItems();
         $json = [
@@ -41,7 +41,7 @@ class FSInputGenerator {
                 'tipDocUsuario'     => $Invoice->getCustomerDocType(),
                 'numDocUsuario'     => $Invoice->getCustomerDocNumber(),
                 'rznSocialUsuario'  => $Invoice->getCustomerRegName(),
-                'tipMoneda'         => $Invoice->getCurrencyType(),
+                'tipMoneda'         => $Invoice->getCurrencyCode(),
                 
                 'sumTotTributos'    => Operations::formatAmount($Invoice->getTotalTaxes()),
                 'sumTotValVenta'    => Operations::formatAmount($Invoice->getBillableValue()),
@@ -116,9 +116,9 @@ class FSInputGenerator {
             $detContent .= implode('|', $json['detalle'][$rowIndex]) . $ENTER;
         }
         $invoiceId   = $Invoice->getInvoiceId();
-        $invoiceType = $Invoice->getInvoiceType();
-        self::writeFSFile("$companyRUC-$invoiceType-$invoiceId.CAB", $cabContent);
-        self::writeFSFile("$companyRUC-$invoiceType-$invoiceId.DET", $detContent);
+        $documentType = $Invoice->getDocumentType();
+        self::writeFSFile("$companyRUC-$documentType-$invoiceId.CAB", $cabContent);
+        self::writeFSFile("$companyRUC-$documentType-$invoiceId.DET", $detContent);
         //CABECERA VARIABLE
         if (!empty($json['variablesGlobales'])) {
             $glovalVars = $json['variablesGlobales'];
@@ -126,7 +126,7 @@ class FSInputGenerator {
             foreach ($glovalVars as $row) {
                 $varGlobalContent .= implode('|', $row) . $ENTER;
             }
-            self::writeFSFile("$companyRUC-$invoiceType-$invoiceId.ACV", $varGlobalContent);
+            self::writeFSFile("$companyRUC-$documentType-$invoiceId.ACV", $varGlobalContent);
         }
     }
 
@@ -136,9 +136,9 @@ class FSInputGenerator {
     }
 
 
-    private static function getVariablesGlobales(InvoiceDocument $Invoice) {
+    private static function getVariablesGlobales(DataMap $Invoice) {
         $data         = [];
-        $currencyType = $Invoice->getCurrencyType();
+        $currencyCode = $Invoice->getCurrencyCode();
         $ac           = $Invoice->getAllowancesAndCharges();
         $baseAmount   = $Invoice->getItems()->getTotalTaxableAmount();
         foreach ($ac as $item) {
@@ -149,9 +149,9 @@ class FSInputGenerator {
                 'tipVariableGlobal'      => $chargeIndicator,
                 'codTipoVariableGlobal'  => $item['reasonCode'],
                 'porVariableGlobal'      => $k,
-                'monMontoVariableGlobal' => $currencyType,
+                'monMontoVariableGlobal' => $currencyCode,
                 'mtoVariableGlobal'      => Operations::formatAmount($amount),
-                'monBaseImponibleVariableGlobal' => $currencyType,
+                'monBaseImponibleVariableGlobal' => $currencyCode,
                 'mtoBaseImpVariableGlobal'       => Operations::formatAmount($baseAmount)
             ];
             $data[] = $item;

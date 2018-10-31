@@ -10,6 +10,7 @@
 
 namespace F72X\Sunat;
 
+use InvalidArgumentException;
 use DOMDocument;
 use F72X\Company;
 use F72X\Exception\ConfigException;
@@ -29,11 +30,14 @@ class Catalogo {
     const CAT_NOTA_DEBITO_TYPE     = 10;
     const CAT_FACTURA_TYPE         = 51;
     /** @CAT1 Código tipo de documento */
-    const CAT1_FACTURA      = '01';
-    const CAT1_BOLETA       = '03';
-    const CAT1_NOTA_CREDITO = '07';
-    const CAT1_NOTA_DEBITO  = '08';
-
+    const DOCTYPE_FACTURA      = '01';
+    const DOCTYPE_BOLETA       = '03';
+    const DOCTYPE_NOTA_CREDITO = '07';
+    const DOCTYPE_NOTA_DEBITO  = '08';
+    const DOCTYPE_SC_FACTURA      = 'FAC';
+    const DOCTYPE_SC_BOLETA       = 'BOL';
+    const DOCTYPE_SC_NOTA_CREDITO = 'NCR';
+    const DOCTYPE_SC_NOTA_DEBITO  = 'NDE';
     /** @CAT5 Tipo de impuesto*/
     const CAT5_IGV   = '1000';
     const CAT5_IVAP  = '1016';
@@ -56,6 +60,37 @@ class Catalogo {
 
     private static $_CAT = [];
     private static $_LIST = [];
+
+    /**
+     * 
+     * @param string $documentType 01|03|07|08
+     * @return string FACTURA|BOLETA|NOTA DE CRÉDITO|NOTA DE DÉBITO
+     */
+    public static function getDocumentName($documentType) {
+        switch ($documentType) {
+            case self::DOCTYPE_FACTURA      : return 'FACTURA';
+            case self::DOCTYPE_BOLETA       : return 'BOLETA';
+            case self::DOCTYPE_NOTA_CREDITO : return 'NOTA DE CRÉDITO';
+            case self::DOCTYPE_NOTA_DEBITO  : return 'NOTA DE DÉBITO';
+        }
+        throw new InvalidArgumentException("Error: $documentType isn't valid document type");
+    }
+
+    /**
+     * 
+     * @param string $shortCode BOL|FAC|NCR|NDE
+     * @return string 01|03|07|08
+     */
+    public static function getDocumentType($shortCode) {
+        switch ($shortCode) {
+            case self::DOCTYPE_SC_FACTURA:      return self::DOCTYPE_FACTURA ;
+            case self::DOCTYPE_SC_BOLETA:       return self::DOCTYPE_BOLETA;
+            case self::DOCTYPE_SC_NOTA_CREDITO: return self::DOCTYPE_NOTA_CREDITO;
+            case self::DOCTYPE_SC_NOTA_DEBITO:  return self::DOCTYPE_NOTA_DEBITO;
+        }
+        throw new InvalidArgumentException("Error: $shortCode isn't valid short code");
+    }
+
     public static function itemExist($catNumber, $itemID) {
         $items = self::getCatItems($catNumber);
         return key_exists($itemID, $items);
@@ -104,12 +139,12 @@ class Catalogo {
         return 'cat_' . str_pad($catNumeber, 2, '0', STR_PAD_LEFT) . '.xml';
     }
 
-    public static function getCurrencyPlural($currencyType) {
+    public static function getCurrencyPlural($currencyCode) {
         $currencies = self::getCustomList('currencies');
-        if(isset($currencies[$currencyType])){
-            return $currencies[$currencyType];
+        if(isset($currencies[$currencyCode])){
+            return $currencies[$currencyCode];
         }
-        throw new ConfigException("El tipo de moneda $currencyType aún no ha sido configurado para su uso.");
+        throw new ConfigException("El código de moneda $currencyCode aún no ha sido configurado para su uso.");
     }
 
     public static function getUnitName($unitCode) {

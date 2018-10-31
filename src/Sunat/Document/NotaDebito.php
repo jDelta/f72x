@@ -15,7 +15,7 @@ use F72X\Tools\TemplateMgr;
 use F72X\UblComponent\SchemaNS;
 use Sabre\Xml\Writer;
 
-class Boleta extends SunatInvoice {
+class NotaDebito extends SunatInvoice {
 
     /**
      * The xmlSerialize method is called during xml writing.

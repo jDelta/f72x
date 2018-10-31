@@ -1,17 +1,15 @@
 <?php
 
-$dt = new DateTime();
-$dt->setDate(2017, 6, 24);
-$dt->setTime(13, 25, 51);
 return [
+    'currencyCode'      => 'PEN',                 // Tipo de moneda (ISO 4217)
     'operationType'     => '0101',                      // Tipo de operación Catálogo #51
-    'invoiceSeries'     => 'B001',                      // Serie de la factura
-    'invoiceNumber'     => 3652,                        // Número correlativo de la factura
+    'documentSeries'    => 'B001',                      // Serie de la factura
+    'documentNumber'    => 3652,                        // Número correlativo de la factura
     'customerDocType'   => '1',                         // Tipo de documento Catálogo #6
     'customerDocNumber' => '46237547',                  // DNI
     'customerRegName'   => 'LUANA KARINA PAZOS ATOCHE', // Nombre de cliente
     'customerAddress'   => '485 UNIVERSAL STREET',      // Dirección del cliente
-    'issueDate'         => $dt,                         // Opcional, si no se especifica se usara la fecha del sistema!
+    'issueDate'         => '2017-05-14T13:25:51',       // Fecha de emisión - ISO 8601 date
     'allowancesCharges' => [
         [
             'isCharge'         => false,
@@ -22,7 +20,7 @@ return [
     'items' => [
         [
             'productCode'        => 'REF564',    // Código
-            'sunatProductCode'   => '52141501',  // Código de producto SUNAT
+            'unspsc'             => '52141501',  // Código de producto SUNAT
             'unitCode'           => 'NIU',       // Código de unidad
             'quantity'           => 1,           // Cantidad
             'description'        => 'Refrigeradora marca “AXM” no frost de 200 ltrs.', // Descripción detallada
@@ -34,7 +32,7 @@ return [
         ],
         [
             'productCode'        => 'COC124',
-            'sunatProductCode'   => '95141606',
+            'unspsc'             => '95141606',
             'unitCode'           => 'NIU',
             'quantity'           => 1,
             'description'        => 'Cocina a gas GLP, marca “AXM” de 5 hornillas',
@@ -46,7 +44,7 @@ return [
         ]
 //        [
 //            'productCode'        => 'NOB012',
-//            'sunatProductCode'   => '24121803',
+//            'unspsc'             => '24121803',
 //            'unitCode'           => 'NIU',
 //            'quantity'           => 10,
 //            'description'        => 'Sixpack de gaseosa “Guerené” de 400 ml',

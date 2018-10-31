@@ -12,7 +12,7 @@ namespace F72X\UblComponent;
 
 use Sabre\Xml\Writer;
 
-class DespatchDocumentReference extends BaseComponent {
+class InvoiceDocumentReference extends BaseComponent {
 
     protected $ID;
     protected $DocumentTypeCode;
@@ -20,15 +20,7 @@ class DespatchDocumentReference extends BaseComponent {
     function xmlSerialize(Writer $writer) {
         $writer->write([
             SchemaNS::CBC . 'ID' => $this->ID,
-            [
-                'name' => SchemaNS::CBC . 'DocumentTypeCode',
-                'value' => $this->DocumentTypeCode,
-                'attributes' => [
-                    'listAgencyName' => 'PE:SUNAT',
-                    'listName' => 'SUNAT:Identificador de guía relacionada',
-                    'listURI' => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo12'
-                ]
-            ]
+            SchemaNS::CBC . 'DocumentTypeCode' => $this->DocumentTypeCode
         ]);
     }
 

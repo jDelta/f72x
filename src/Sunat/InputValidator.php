@@ -17,15 +17,22 @@ class InputValidator {
 
     private $data;
     private $type;
-    private static $validations = [
+    private static $invoiceValidations = [
+        'currencyCode' => [
+            'required' => true,
+            'inCat' => Catalogo::CAT_CURRENCY_TYPE
+        ],
         'operationType' => [
             'required' => true,
             'inCat' => Catalogo::CAT_FACTURA_TYPE
         ],
-        'invoiceSeries' => [
+        'documentSeries' => [
             'required' => true
         ],
-        'invoiceNumber' => [
+        'documentNumber' => [
+            'required' => true
+        ],
+        'issueDate' => [
             'required' => true
         ],
         'customerDocType' => [
@@ -43,6 +50,37 @@ class InputValidator {
             'type' => 'Array'
         ]
     ];
+
+    private static $creditNoteValidations = [
+        'currencyCode' => [
+            'required' => true,
+            'inCat' => Catalogo::CAT_CURRENCY_TYPE
+        ],
+        'documentSeries' => [
+            'required' => true
+        ],
+        'documentNumber' => [
+            'required' => true
+        ],
+        'issueDate' => [
+            'required' => true
+        ],
+        'customerDocType' => [
+            'required' => true,
+            'inCat' => Catalogo::CAT_IDENT_DOCUMENT_TYPE
+        ],
+        'customerDocNumber' => [
+            'required' => true
+        ],
+        'customerRegName' => [
+            'required' => true
+        ],
+        'items' => [
+            'required' => true,
+            'type' => 'Array'
+        ]
+    ];
+    
     private $errors = [];
 
     public function __construct(array $data, $type) {
@@ -60,8 +98,8 @@ class InputValidator {
     }
 
     private function validate() {
-
-        foreach (self::$validations as $field => $item) {
+        $validations = $this->getValidations();
+        foreach ($validations as $field => $item) {
             $defauls = [
                 'required' => false,
                 'type' => null,
@@ -75,6 +113,14 @@ class InputValidator {
         }
     }
 
+    private function getValidations() {
+        switch ($this->type) {
+            case Catalogo::DOCTYPE_FACTURA      :
+            case Catalogo::DOCTYPE_BOLETA       : return self::$invoiceValidations;
+            case Catalogo::DOCTYPE_NOTA_CREDITO : return self::$creditNoteValidations;
+            case Catalogo::DOCTYPE_NOTA_CREDITO : return self::$creditNoteValidations;
+        }
+    }
     private function validateItem($field, $validation) {
         $data = $this->data;
         $fieldExist = isset($data[$field]);
