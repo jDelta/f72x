@@ -10,34 +10,29 @@ Modulo de facturación electrónica SUNAT UBL 2.1
 ```ruby
 composer require jdelta/f72x
 ````
-
 # Uso:
-```php
-require __DIR__ . '/../vendor/autoload.php';
+```ruby
+require 'vendor/autoload.php';
 
 use F72X\F72X;
 use F72X\Sunat\DocumentGenerator;
 use F72X\Sunat\ServiceGateway;
-
-/**
- * =======================
- * 1. CONFIGURAR EL MÓDULO
- * =======================
- */
-
+```
+## 1. CONFIGURAR MODULO:
+```php
 // Modo producccion: true, para usar los servicios de producciòn de SUNAT.
 $prodMode = false;
 
 /**
  * Repositorio digital:
  * Consta de los diguientes subdirectorios:
- *     - bill      : Facturas y Boletas en xml
+ *     - bill      : Documentos electrónicos en XML
  *     - billinput : Data utilizada para generar el documento electrónico
- *     - signedbill: Facturas firmadas
- *     - zippedbill: Facturas comprimidas listas para ser enviadas a sunat
+ *     - signedbill: Documentos electrónicos firmados
+ *     - zippedbill: Documentos electrónicos comprimidos y listos para ser enviadas a SUNAT
  *     - crd       : Constancias de recepción
  */
-$repoPath = __DIR__ . '/edocs';
+$repoPath = __DIR__ . '/tests/edocs';
 
 /**
  * Directorio de configuración del emisor
@@ -45,12 +40,12 @@ $repoPath = __DIR__ . '/edocs';
  * Consta de los diguientes subdirectorios:
  *     - certs: Certificados
  *     - lists: Listas personalizadas
+ *     - tpls: Templates para formatos de impresión
  */
-$cfgPath   = __DIR__ . '/companyconfig';
+$cfgPath   = __DIR__ . '/tests/companyconfig';
 
 // Nombre del ertificado digital a ser usado para las firmas
 $certificate = '20100454523_2018_09_27.pem';
-// Datos del emisor
 F72X::init([
     'ruc'                   => '20100454523',
     'razonSocial'           => 'Soporte Tecnológicos EIRL',
@@ -63,120 +58,63 @@ F72X::init([
     'certificate'           => $certificate,
     'prodMode'              => $prodMode
 ]);
-
-echo "1. CONFIGURACIÓN: OK<br>";
-
-/**
- * ==================
- * 2. GENERAR FACTURA
- * ==================
- */
-
-// fecha
-$dt =  new DateTime();
-$dt->setDate(2017, 5, 14);
-$dt->setTime(13, 25, 51);
-
-// data de la factura
-$dataFactura = [
-    'operationType'     => '0101',              // Tipo de operación Catálogo #51
-    'documentSeries'     => 'F001',              // Serie de la factura
-    'documentNumber'     => 4355,                // Número correlativo de la factura
-    'customerDocType'   => '6',                 // Tipo de documento Catálogo #6
-    'customerDocNumber' => '20587896411',       // RUC
-    'customerRegName'   => 'SERVICABINAS S.A.', // Razón social
-    'customerAddress'   => '215 NY STREET',     // Dirección del cliente
-    'issueDate'         => $dt,                 // Fecha de emisión [opcional], si no se especifica se usara la fecha del sistema!
-    'purchaseOrder'     => 7852166,             // Numero de orden de commpra,
-    'allowancesCharges' => [
-        [
-            'isCharge'         => false, // true cuando se trata de un cargo
-            'reasonCode'       => '00',  // Código de descuento Cátalogo #53
-            'multiplierFactor' => 0.05   // Factor de multiplicación use 0.07 para representar 7%
-        ]
-    ],
-    'charges'           => [],
-    'items' => [
-        [
-            'productCode'        => 'GLG199',    // Código
-            'unspsc'             => '52161515',  // Código de producto SUNAT
-                                                 // Catálogo #15 United Nations Standard Products and Services Code (UNSPSC)
-            'unitCode'           => 'NIU',       // Código de unidad
-            'quantity'           => 2000,        // Cantidad
-            'description'        => 'Grabadora LG Externo Modelo: GE20LU10', // Descripción detallada
-            'priceType'          => '01',        // Catálogo #16 [01:Precio Unitario|02:Valor Referencial]
-            'taxType'            => '1000',      // Catálogo #5
-            'igvAffectationType' => '10',        // Catálogo #7
-            'unitPrice'          => 98.00,       // Precio Unitario/Valor refencial
-            'igvIncluded'        => true,        // true si Precio Unitario incluye IGV
-            'allowancesCharges'  => [
-                [
-                    'isCharge'         => false, // true cuando se trata de un cargo
-                    'reasonCode'       => '00',  // Código de descuento Cátalogo #53
-                    'multiplierFactor' => 0.1    // Factor de multiplicación use 0.07 para representar 7%
-                ]
-            ]
-        ],
-        [
-            'productCode'        => 'MVS546',
-            'unspsc '            => '43211902',
-            'unitCode'           => 'NIU',
-            'quantity'           => 300,
-            'description'        => 'Monitor LCD ViewSonic VG2028WM 20',
-            'priceType'          => '01',
-            'taxType'            => '1000',
-            'igvAffectationType' => '10',
-            'unitPrice'          => 620.00,
-            'igvIncluded'        => true,
-            'allowancesCharges'  => [
-                [
-                    'isCharge'         => false,
-                    'reasonCode'       => '00',
-                    'multiplierFactor' => 0.15
-                ]
-            ]
-        ],
-        [
-            'productCode'        => 'MPC35',
-            'unspsc'             => '43202010',
-            'unitCode'           => 'NIU',
-            'quantity'           => 250,
-            'description'        => 'Memoria DDR-3 B1333 Kingston',
-            'priceType'          => '01',
-            'taxType'            => '9997',
-            'igvAffectationType' => '20',
-            'unitPrice'          => 52.00,
-            'igvIncluded'        => false
-        ],
-        [
-            'productCode'        => 'TMS22',
-            'unspsc'             => '43211706',
-            'unitCode'           => 'NIU',
-            'quantity'           => 500,
-            'description'        => 'Teclado Microsoft SideWinder X6',
-            'priceType'          => '01',
-            'taxType'            => '1000',
-            'igvAffectationType' => '10',
-            'unitPrice'          => 196.00,
-            'igvIncluded'        => true
-        ]
-    ]
-];
-
-// generar
-$boletaSunat = DocumentGenerator::generateFactura($dataFactura);
-echo "2. GENERACIÓN DE FACTURA Y FIRMA: OK<br>";
-
-/**
- * ==================
- * 3. ENVIAR A SUNAT
- * ==================
- */
-$billName = $boletaSunat->getBillName();
+```
+## 2. GENERAR DOCUMENTOS
+### FACTURA
+```php
+// Data
+$data = require 'tests/cases/factura.php';
+// Procesar Data
+$XML = DocumentGenerator::createDocument('FAC', $data);
+// Generar Documentos
+DocumentGenerator::generateFiles($XML);
+// Enviar a SUNAT
+$billName = $xmlFAC->getBillName();
 $response = ServiceGateway::sendBill($billName);
-echo "3. ENVIO Y RECEPCION SUNAT: OK";
-echo '<pre>';
-echo "CDR:";
-print_r($response);
-echo '</pre>';
-````
+// Procesar Respuesta
+var_dump($response);
+```
+### BOLETA DE VENTA
+```php
+// Data
+$data = require 'tests/cases/factura.php';
+// Procesar Data
+$XML = DocumentGenerator::createDocument('BOL', $data);
+// Generar Documentos
+DocumentGenerator::generateFiles($XML);
+// Enviar a SUNAT
+$billName = $xmlFAC->getBillName();
+$response = ServiceGateway::sendBill($billName);
+// Procesar Respuesta
+var_dump($response);
+```
+
+### NOTA DE CRÉDITO
+```php
+// Data
+$data = require 'tests/cases/factura.php';
+// Procesar Data
+$XML = DocumentGenerator::createDocument('NCR', $data);
+// Generar Documentos
+DocumentGenerator::generateFiles($XML);
+// Enviar a SUNAT
+$billName = $xmlFAC->getBillName();
+$response = ServiceGateway::sendBill($billName);
+// Procesar Respuesta
+var_dump($response);
+```
+
+### NOTA DE DÉBITO
+```php
+// Data
+$data = require 'tests/cases/factura.php';
+// Procesar Data
+$XML = DocumentGenerator::createDocument('NDE', $data);
+// Generar Documentos
+DocumentGenerator::generateFiles($XML);
+// Enviar a SUNAT
+$billName = $xmlFAC->getBillName();
+$response = ServiceGateway::sendBill($billName);
+// Procesar Respuesta
+var_dump($response);
+```

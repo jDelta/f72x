@@ -1,7 +1,7 @@
 {
     "currencyCode": "PEN",
     "operationType": "0101",
-    "documentSeries": "B001",
+    "documentSeries": "001",
     "documentNumber": 3652,
     "customerDocType": "1",
     "customerDocNumber": "46237547",
@@ -45,5 +45,6 @@
     "totalFreeOperations": 0,
     "taxableAmount": 1407.29,
     "totalAllowances": 74.07,
-    "payableAmount": 1660.6
+    "payableAmount": 1660.6,
+    "documentType": "03"
 }

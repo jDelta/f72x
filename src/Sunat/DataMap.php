@@ -13,6 +13,7 @@ namespace F72X\Sunat;
 use DateTime;
 use F72X\Company;
 use F72X\Sunat\Catalogo;
+use F72X\Sunat\DocumentGenerator;
 /**
  * DataMap
  * 
@@ -26,7 +27,7 @@ class DataMap {
     private $_rawData;
     private $documentType;
     private $currencyCode;
-    private $invoiceId;
+    private $documentId;
     private $documentName;
     private $documentSeries;
     private $documentNumber;
@@ -68,10 +69,10 @@ class DataMap {
         $this->setDefaults($data);
         $this->currencyCode         = $data['currencyCode'];
         $this->documentType         = $type;
-        $this->documentSeries       = $data['documentSeries'];
+        $this->documentSeries       = DocumentGenerator::buildDocumentSeries($type, $data['affectedDocType'], $data['documentSeries']);
         $this->documentNumber       = str_pad($data['documentNumber'], 8, '0', STR_PAD_LEFT);
         $this->documentName         = Catalogo::getDocumentName($type);
-        $this->invoiceId            = $this->documentSeries . '-' . $this->documentNumber;
+        $this->documentId           = $this->documentSeries . '-' . $this->documentNumber;
         $this->issueDate            = new DateTime($data['issueDate']);
         $this->customerDocType      = $data['customerDocType'];
         $this->customerDocNumber    = $data['customerDocNumber'];
@@ -84,11 +85,10 @@ class DataMap {
 
     private function setSpecificFields(array $data, $type) {
         if (in_array($type, [Catalogo::DOCTYPE_FACTURA, Catalogo::DOCTYPE_BOLETA])) {
-            $this->operationType        = $data['operationType'];
-            $this->purchaseOrder        = $data['purchaseOrder'];
-        }else{
-            
-            $this->noteType            = $data['type'];
+            $this->operationType = $data['operationType'];
+            $this->purchaseOrder = $data['purchaseOrder'];
+        } else {
+            $this->noteType            = $data['noteType'];
             $this->noteDescription     = $data['description'];
             $this->noteAffectedDocType = $data['affectedDocType'];
             $this->noteAffectedDocId   = $data['affectedDocId'];
@@ -98,6 +98,7 @@ class DataMap {
     private function setDefaults(array &$data) {
         $data['allowancesCharges'] = isset($data['allowancesCharges']) ? $data['allowancesCharges'] : [];
         $data['purchaseOrder'] = isset($data['purchaseOrder']) ? $data['purchaseOrder'] : null;
+        $data['affectedDocType'] = isset($data['affectedDocType']) ? $data['affectedDocType'] : null;
     }
     public function getNoteType() {
         return $this->noteType;
@@ -115,8 +116,8 @@ class DataMap {
         return $this->noteAffectedDocId;
     }
 
-    public function getInvoiceId() {
-        return $this->invoiceId;
+    public function getDocumentId() {
+        return $this->documentId;
     }
 
     public function getRawData() {
@@ -409,7 +410,9 @@ class DataMap {
     private function applyAllowancesAndCharges($amount) {
         return Operations::applyAllowancesAndCharges($amount, $this->allowancesAndCharges);
     }
+
     public function getBillName() {
-        return Company::getRUC() . '-' . $this->documentType . '-' . $this->invoiceId;
+        return Company::getRUC() . '-' . $this->documentType . '-' . $this->documentId;
     }
+
 }

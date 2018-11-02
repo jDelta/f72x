@@ -76,7 +76,7 @@ trait BillMixin {
             $orderRef = new OrderReference();
             $orderRef->setID($orderNumer);
             // Añadir al documento
-            $this->setOrderReference($orderRef);
+            parent::setOrderReference($orderRef);
         }
     }
 
@@ -115,7 +115,7 @@ trait BillMixin {
                 ->setCurrencyID($currencyID)
                 ->setTaxAmount($totalTaxes);
         // Anadir al documento
-        $this->setTaxTotal($TaxTotal);
+        parent::setTaxTotal($TaxTotal);
     }
 
     /**
@@ -234,14 +234,14 @@ trait BillMixin {
      */
     private function addDocumentLine($DocumentLine, $lineType) {
         switch ($lineType) {
-            case 'InvoiceLine':
-                $this->addInvoiceLine($DocumentLine);
+            case 'InvoiceLine' :
+                parent::addInvoiceLine($DocumentLine);
                 break;
             case 'CreditNoteLine' :
-                $this->addCreditNoteLine($DocumentLine);
+                parent::addCreditNoteLine($DocumentLine);
                 break;
             case 'DebitNoteLine' :
-                $this->addDebitNoteLine($DocumentLine);
+                parent::addDebitNoteLine($DocumentLine);
                 break;
         }
     }
@@ -253,7 +253,7 @@ trait BillMixin {
      */
     private function setDocumentLineQuantity($DocumentLine, $lineType, $quantity) {
         switch ($lineType) {
-            case 'InvoiceLine':
+            case 'InvoiceLine' :
                 $DocumentLine->setInvoicedQuantity($quantity);
                 break;
             case 'CreditNoteLine' :
@@ -280,7 +280,7 @@ trait BillMixin {
                 ->setAllowanceTotalAmount($totalAllowances)
                 ->setPayableAmount($payableAmount);
 
-        $this->setLegalMonetaryTotal($LegalMonetaryTotal);
+        parent::setLegalMonetaryTotal($LegalMonetaryTotal);
     }
 
     private function addInvoiceAccountingSupplierParty() {
@@ -312,7 +312,7 @@ trait BillMixin {
                         ->setPartyLegalEntity($PartyLegalEntity
                                 ->setRegistrationName($regName)));
         // Add to Document
-        $this->setAccountingSupplierParty($AccountingSupplierParty);
+        parent::setAccountingSupplierParty($AccountingSupplierParty);
     }
 
     private function addInvoiceAccountingCustomerParty() {
@@ -341,7 +341,7 @@ trait BillMixin {
                         ->setPartyLegalEntity($PartyLegalEntity
                                 ->setRegistrationName($regName)));
         // Add to Document
-        $this->setAccountingCustomerParty($AccountingCustomerParty);
+        parent::setAccountingCustomerParty($AccountingCustomerParty);
     }
 
     /**

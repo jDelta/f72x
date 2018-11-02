@@ -14,12 +14,12 @@ final class FSInputGenerationTest extends TestCase {
         self::assertTrue(true);
     }
     public function XtestGenerarBoleta() {
-        $data = Util::getCaseData('boleta_caso1');
+        $data = Util::getCaseData('boleta');
         FSInputGenerator::generateBoleta($data, '20100454523');
     }
 
     public function XtestGenerarFactura() {
-        $data = Util::getCaseData('factura_caso1');
+        $data = Util::getCaseData('factura');
         FSInputGenerator::generateFactura($data, '20100454523');
     }
 

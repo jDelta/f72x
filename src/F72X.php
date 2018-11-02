@@ -63,9 +63,15 @@ class F72X {
     }
 
     public static function getModuleDir() {
-        return __DIR__.'/..';
+        return __DIR__ . '/..';
     }
+
     public static function getTempDir() {
-        return self::getModuleDir().'/temp';
+        return self::getModuleDir() . '/temp';
     }
+
+    public static function getSrcDir() {
+        return __DIR__;
+    }
+
 }

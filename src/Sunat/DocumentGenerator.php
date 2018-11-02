@@ -25,45 +25,50 @@ use F72X\Exception\InvalidInputException;
 class DocumentGenerator {
 
     /**
-     * Crear Boleta o Factua
+     * Crear documento electrónico
+     * 
+     * Crea Factura, Boleta, Nota de crédito y Nota de débito.
      * 
      * Procesa la data proporcionada para el tipo de documento indicado
      * 
-     * @param string $shortCode FAC|BOL
+     * @param string $shortCode FAC|BOL|NCR|NDE
      * @param array $data
      * @param string $currencyCode
      */
-    public static function createInvoice($shortCode, array $data) {
+    public static function createDocument($shortCode, array $data) {
         // Validate type
-        if (!in_array($shortCode, ['FAC', 'BOL'])) {
-            throw new InvalidArgumentException("El tipo $shortCode, es invalido use FAC|BOL");
+        if (!in_array($shortCode, ['FAC', 'BOL', 'NCR', 'NDE'])) {
+            throw new InvalidArgumentException("F72X: El tipo '$shortCode', es invalido use FAC|BOL|NCR|NDE");
         }
+        // Set Document Type Code
         $docType = Catalogo::getDocumentType($shortCode);
+        $data['documentType'] = $docType;
         // Validate input
-        self::validateData($data, $docType);
-        // Core invoice
-        $Invoice = new DataMap($data, $docType);
-        // Documento XML para la factura
-        if ($docType == Catalogo::DOCTYPE_BOLETA) {
-            return new Boleta($Invoice);
+        self::validateData($data, $shortCode);
+        // Data map
+        $dataMap = new DataMap($data, $docType);
+        // Generate XML
+        if ($docType == Catalogo::DOCTYPE_FACTURA) {
+            return new Factura($dataMap);
         }
-        return new Factura($Invoice);
-    }
-
-    public static function createCreditNote(array $data) {
-        // Validate input
-        self::validateData($data, Catalogo::DOCTYPE_NOTA_CREDITO);
-        // Core invoice
-        $dataMap = new DataMap($data, Catalogo::DOCTYPE_NOTA_CREDITO);
-        return new NotaCredito($dataMap);
-    }
-
-    public static function createDebitNote(array $data) {
-        // Validate input
-        self::validateData($data, Catalogo::DOCTYPE_NOTA_DEBITO);
-        // Core invoice
-        $dataMap = new DataMap($data, Catalogo::DOCTYPE_NOTA_DEBITO);
+        if ($docType == Catalogo::DOCTYPE_BOLETA) {
+            return new Boleta($dataMap);
+        }
+        if ($docType == Catalogo::DOCTYPE_NOTA_CREDITO) {
+            return new NotaCredito($dataMap);
+        }
         return new NotaDebito($dataMap);
+    }
+
+    /**
+     * 
+     * @param string $documentType 01|03|07|08
+     * @param string $affectedDocumentType 01|03
+     * @param string $baseSeries ###|C##|D##
+     * @return string F###|B###|FC##|FD#|#BC##|BD##
+     */
+    public static function buildDocumentSeries($documentType, $affectedDocumentType, $baseSeries) {
+        return Catalogo::getDocumentSeriesPrefix($documentType, $affectedDocumentType) . $baseSeries;
     }
 
     private static function validateData(array $data, $type) {

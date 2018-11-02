@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'currencyCode'      => 'PEN',                 // Tipo de moneda (ISO 4217)
+    'currencyCode'      => 'PEN',                       // Tipo de moneda (ISO 4217)
     'operationType'     => '0101',                      // Tipo de operación Catálogo #51
-    'documentSeries'    => 'B001',                      // Serie de la factura
+    'documentSeries'    => '001',                       // Serie de la factura
     'documentNumber'    => 3652,                        // Número correlativo de la factura
     'customerDocType'   => '1',                         // Tipo de documento Catálogo #6
     'customerDocNumber' => '46237547',                  // DNI

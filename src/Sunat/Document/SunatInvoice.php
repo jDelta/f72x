@@ -20,18 +20,18 @@ abstract class SunatInvoice extends Invoice {
     const UBL_VERSION_ID = '2.1';
     const CUSTUMIZATION_ID = '2.0';
 
-    public function __construct(DataMap $Invoice) {
-        $this->dataMap = $Invoice;
-        $currencyCode = $Invoice->getCurrencyCode();
-        $Items = $Invoice->getItems();
+    public function __construct(DataMap $DataMap) {
+        $this->dataMap = $DataMap;
+        $currencyCode = $DataMap->getCurrencyCode();
+        $Items = $DataMap->getItems();
         // Invoice Type
-        $this->setInvoiceTypeCode($Invoice->getDocumentType());
+        $this->setInvoiceTypeCode($DataMap->getDocumentType());
         // ID
-        $this->setID($Invoice->getInvoiceId());
+        $this->setID($DataMap->getDocumentId());
         // Tipo de operación
-        $this->setProfileID($Invoice->getOperationType());
+        $this->setProfileID($DataMap->getOperationType());
         // Fecha de emisión
-        $this->setIssueDate($Invoice->getIssueDate());
+        $this->setIssueDate($DataMap->getIssueDate());
         // Tipo de moneda
         $this->setDocumentCurrencyCode($currencyCode);
         // Orden de compra
@@ -41,13 +41,13 @@ abstract class SunatInvoice extends Invoice {
         // Información del cliente
         $this->addInvoiceAccountingCustomerParty();
         // Total items
-        $this->setLineCountNumeric($Invoice->getTotalItems());
+        $this->setLineCountNumeric($DataMap->getTotalItems());
         // Detalle
         $this->addDocumentItems('InvoiceLine');
         // Impuestos
         $this->addDocumentTaxes();
         // Descuentos globales
-        $ac = $Invoice->getAllowancesAndCharges();
+        $ac = $DataMap->getAllowancesAndCharges();
         $baseAmount = $Items->getTotalTaxableAmount();
         UblHelper::addAllowancesCharges($this, $ac, $baseAmount, $currencyCode);
         // Totales

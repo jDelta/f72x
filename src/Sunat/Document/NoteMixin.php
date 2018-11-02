@@ -33,7 +33,7 @@ trait NoteMixin {
                 ->setDescription($description);
 
         // Add Node
-        $this->setDiscrepancyResponse($DiscrepancyResponse);
+        parent::setDiscrepancyResponse($DiscrepancyResponse);
     }
 
     public function addBillingReference() {
@@ -52,14 +52,15 @@ trait NoteMixin {
                         ->setDocumentTypeCode($affDocType));
 
         // Add Node
-        $this->setBillingReference($BillingReference);
+        parent::setBillingReference($BillingReference);
     }
+
     private function addRequestedMonetaryTotal() {
-        $dataMap            = $this->dataMap;
-        $currencyID         = $this->getDocumentCurrencyCode(); // Tipo de moneda
-        $totalAllowances    = $dataMap->getTotalAllowances();   // Total descuentos
-        $payableAmount      = $dataMap->getPayableAmount();     // Total a pagar
-        $billableAmount     = $dataMap->getBillableValue();
+        $dataMap         = $this->dataMap;
+        $currencyID      = $this->getDocumentCurrencyCode(); // Tipo de moneda
+        $totalAllowances = $dataMap->getTotalAllowances();   // Total descuentos
+        $payableAmount   = $dataMap->getPayableAmount();     // Total a pagar
+        $billableAmount  = $dataMap->getBillableValue();
         // RequestedMonetaryTotal
         $RequestedMonetaryTotal = new RequestedMonetaryTotal();
         $RequestedMonetaryTotal
@@ -69,6 +70,7 @@ trait NoteMixin {
                 ->setAllowanceTotalAmount($totalAllowances)
                 ->setPayableAmount($payableAmount);
 
-        $this->setRequestedMonetaryTotal($RequestedMonetaryTotal);
+        parent::setRequestedMonetaryTotal($RequestedMonetaryTotal);
     }
+
 }

@@ -3,7 +3,7 @@
 return [
     'currencyCode'      => 'PEN',                 // Tipo de moneda (ISO 4217)
     'operationType'     => '0101',                // Tipo de operación Catálogo #51
-    'documentSeries'    => 'F001',                // Serie de la factura
+    'documentSeries'    => '001',                 // Serie de la factura
     'documentNumber'    => 4355,                  // Número correlativo de la factura
     'customerDocType'   => '6',                   // Tipo de documento Catálogo #6
     'customerDocNumber' => '20587896411',         // RUC

@@ -8,7 +8,6 @@ use F72X\Sunat\Catalogo;
 use F72X\Sunat\DocumentGenerator;
 use F72X\Sunat\DataMap;
 use F72X\Sunat\InvoiceItems;
-
 use PHPUnit\Framework\TestCase;
 
 final class InvoiceGenerationTest extends TestCase {
@@ -16,63 +15,69 @@ final class InvoiceGenerationTest extends TestCase {
     public function __construct() {
         Util::initF72X();
         $this->removeBillDocs();
-        $this->generateDetailMatrix('boleta_caso1');
-        $this->generateDetailMatrix('factura_caso1');
+        $this->generateDetailMatrix('boleta');
+        $this->generateDetailMatrix('factura');
     }
+
     public function removeBillDocs() {
         Repository::removeBillDocs('20100454523-01-F001-00004355', false);
         Repository::removeBillDocs('20100454523-03-B001-00003652', false);
         Repository::removeBillDocs('20100454523-07-FC01-00000211', false);
         Repository::removeBillDocs('20100454523-08-FD01-00000211', false);
     }
+
     public function testGenerateFactura() {
-        $data = self::getCaseData('factura_caso1');
-        $xmlInvice = DocumentGenerator::createInvoice('FAC',$data);
+        $data = self::getCaseData('factura');
+        $xmlInvice = DocumentGenerator::createDocument('FAC', $data);
         DocumentGenerator::generateFiles($xmlInvice);
     }
+
     public function testGeneratBoleta() {
-        $data = self::getCaseData('boleta_caso1');
-        $xmlInvice = DocumentGenerator::createInvoice('BOL',$data);
+        $data = self::getCaseData('boleta');
+        $xmlInvice = DocumentGenerator::createDocument('BOL', $data);
         DocumentGenerator::generateFiles($xmlInvice);
     }
+
     public function testGenerateCreditNote() {
-        $data = self::getCaseData('notacredito_caso1');
-        $xmlDoc = DocumentGenerator::createCreditNote($data);
+        $data = self::getCaseData('notacredito');
+        $xmlDoc = DocumentGenerator::createDocument('NCR', $data);
         DocumentGenerator::generateFiles($xmlDoc);
     }
 
     public function testGenerateDebitNote() {
-        $data = self::getCaseData('notadebito_caso1');
-        $xmlDoc = DocumentGenerator::createDebitNote($data);
+        $data = self::getCaseData('notadebito');
+        $xmlDoc = DocumentGenerator::createDocument('NDE',$data);
         DocumentGenerator::generateFiles($xmlDoc);
     }
 
     public function testDataMapRightCalcsForFactura() {
-        $in = self::getCaseData('factura_caso1');
+        $in = self::getCaseData('factura');
         $Invoice = new DataMap($in, Catalogo::DOCTYPE_FACTURA);
         $out = [
-                'currencyCode'      => $Invoice->getCurrencyCode(),
-                'operationType'     => $Invoice->getOperationType(),
-                'documentSeries'    => $Invoice->getDocumentSeries(),
-                'documentNumber'    => (int)$Invoice->getDocumentNumber(),
-                'customerDocType'   => $Invoice->getCustomerDocType(),
-                'customerDocNumber' => $Invoice->getCustomerDocNumber(),
-                'customerRegName'   => $Invoice->getCustomerRegName(),
-                'customerAddress'     => $Invoice->getCustomerAddress(),
-                'issueDate'         => $Invoice->getIssueDate()->format('Y-m-d\TH:i:s'),
-                'purchaseOrder'     => $Invoice->getPurchaseOrder(),
-                'allowancesCharges' => $Invoice->getAllowancesAndCharges(),
-                'items'             => $Invoice->getRawItems(),
-                'totalTaxes'        => (float)Operations::formatAmount($Invoice->getTotalTaxes()),
-                'taxableAmount'     => (float)Operations::formatAmount($Invoice->getTaxableAmount()),
-                'totalAllowances'   => (float)Operations::formatAmount($Invoice->getTotalAllowances()),
-                'payableAmount'     => (float)Operations::formatAmount($Invoice->getPayableAmount())
+            'currencyCode'      => $Invoice->getCurrencyCode(),
+            'operationType'     => $Invoice->getOperationType(),
+            'documentSeries'    => $Invoice->getDocumentSeries(),
+            'documentNumber'    => (int)$Invoice->getDocumentNumber(),
+            'customerDocType'   => $Invoice->getCustomerDocType(),
+            'customerDocNumber' => $Invoice->getCustomerDocNumber(),
+            'customerRegName'   => $Invoice->getCustomerRegName(),
+            'customerAddress'     => $Invoice->getCustomerAddress(),
+            'issueDate'         => $Invoice->getIssueDate()->format('Y-m-d\TH:i:s'),
+            'purchaseOrder'     => $Invoice->getPurchaseOrder(),
+            'allowancesCharges' => $Invoice->getAllowancesAndCharges(),
+            'items'             => $Invoice->getRawItems(),
+            'totalTaxes'        => (float)Operations::formatAmount($Invoice->getTotalTaxes()),
+            'taxableAmount'     => (float)Operations::formatAmount($Invoice->getTaxableAmount()),
+            'totalAllowances'   => (float)Operations::formatAmount($Invoice->getTotalAllowances()),
+            'payableAmount'     => (float)Operations::formatAmount($Invoice->getPayableAmount())
         ];
+        unset($in['documentSeries']);
+        unset($out['documentSeries']);
         self::assertEquals($in, $out);
     }
 
     public function testDataMapRightCalcsForBoleta() {
-        $in = self::getCaseData('boleta_caso1');
+        $in = self::getCaseData('boleta');
         $Invoice = new DataMap($in, Catalogo::DOCTYPE_BOLETA);
         $out = [
                 'currencyCode'        => $Invoice->getCurrencyCode(),
@@ -92,6 +97,8 @@ final class InvoiceGenerationTest extends TestCase {
                 'totalAllowances'     => (float)Operations::formatAmount($Invoice->getTotalAllowances()),
                 'payableAmount'       => (float)Operations::formatAmount($Invoice->getPayableAmount())
         ];
+        unset($in['documentSeries']);
+        unset($out['documentSeries']);
         self::assertEquals($in, $out);
     }
 
@@ -101,11 +108,11 @@ final class InvoiceGenerationTest extends TestCase {
         $Items->populate($data['items'], 'PEN');
         // Calculate totals
         $rows = $Items->countRows();
-        $Items->set(InvoiceItems::COL_IGV,   $rows, $Items->sum(InvoiceItems::COL_IGV));
+        $Items->set(InvoiceItems::COL_IGV,                 $rows, $Items->sum(InvoiceItems::COL_IGV));
         $Items->set(InvoiceItems::COL_ITEM_BILLABLE_VALUE, $rows, $Items->sum(InvoiceItems::COL_ITEM_BILLABLE_VALUE));
         $Items->set(InvoiceItems::COL_ITEM_PAYABLE_AMOUNT, $rows, $Items->sum(InvoiceItems::COL_ITEM_PAYABLE_AMOUNT));
         $Items->set(InvoiceItems::COL_ITEM_TAXABLE_AMOUNT, $rows, $Items->sum(InvoiceItems::COL_ITEM_TAXABLE_AMOUNT));
-        
+
         $html = $Items->getHtml();
         file_put_contents(__DIR__ . "/cases/$caseName.html", $html);
     }
@@ -113,7 +120,7 @@ final class InvoiceGenerationTest extends TestCase {
     public function testGetCatItem() {
         $output = Catalogo::getCatItem(16, '01');
         $expected = [
-            'id'    => '01',
+            'id' => '01',
             'value' => 'Precio unitario (incluye el IGV)'
         ];
         self::assertEquals($expected, $output);
@@ -122,4 +129,5 @@ final class InvoiceGenerationTest extends TestCase {
     public static function getCaseData($caseName) {
         return require "cases/$caseName.php";
     }
+
 }

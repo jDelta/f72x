@@ -1,7 +1,7 @@
 {
     "currencyCode": "PEN",
-    "type": "07",
-    "documentSeries": "FC01",
+    "noteType": "07",
+    "documentSeries": "C01",
     "documentNumber": 211,
     "affectedDocType": "01",
     "affectedDocId": "F001-4355",
@@ -24,5 +24,6 @@
             "unitPrice": 98,
             "igvIncluded": true
         }
-    ]
+    ],
+    "documentType": "07"
 }

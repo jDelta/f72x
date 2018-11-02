@@ -34,15 +34,30 @@ final class CatalogoTest extends TestCase {
 
     public function testGetCatItem() {
         $expected = [
-            'id' => '01',
+            'id'    => '01',
             'value' => 'Precio unitario (incluye el IGV)'
         ];
         $actual = Catalogo::getCatItem(16, '01');
         self::assertEquals($expected, $actual);
     }
+
     public function testGeneratePhpArrays() {
-        $path = __DIR__;
-        Catalogo::catItemsToPhpArray(5, __DIR__.'/cat5.txt');
-        Catalogo::catItemsToPhpArray(7, __DIR__.'/cat7.txt');
+        $path = __DIR__ . '/../src/Sunat/catalogo';
+        for ($i = 1; $i <= 3; $i++) {
+             Catalogo::catItemsToPhpArray($i, "$path/CAT_0$i.php");
+        }
+        for ($i = 5; $i <= 9; $i++) {
+             Catalogo::catItemsToPhpArray($i, "$path/CAT_0$i.php");
+        }
+        for ($i = 10; $i <= 11; $i++) {
+             Catalogo::catItemsToPhpArray($i, "$path/CAT_$i.php");
+        }
+        for ($i = 13; $i <= 27; $i++) {
+             Catalogo::catItemsToPhpArray($i, "$path/CAT_$i.php");
+        }
+        for ($i = 51; $i <= 59; $i++) {
+             Catalogo::catItemsToPhpArray($i, "$path/CAT_$i.php");
+        }
     }
+
 }

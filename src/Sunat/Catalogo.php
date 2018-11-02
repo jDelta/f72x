@@ -34,6 +34,7 @@ class Catalogo {
     const DOCTYPE_BOLETA       = '03';
     const DOCTYPE_NOTA_CREDITO = '07';
     const DOCTYPE_NOTA_DEBITO  = '08';
+    const DOCTYPE_VOUCHER      = '12';
     const DOCTYPE_SC_FACTURA      = 'FAC';
     const DOCTYPE_SC_BOLETA       = 'BOL';
     const DOCTYPE_SC_NOTA_CREDITO = 'NCR';
@@ -64,16 +65,41 @@ class Catalogo {
     /**
      * 
      * @param string $documentType 01|03|07|08
+     * @param string $affectedDocumentType 01|03
+     * @return string F|B
+     */
+    public static function getDocumentSeriesPrefix($documentType, $affectedDocumentType = null) {
+        if ($documentType == self::DOCTYPE_FACTURA) {
+            return 'F';
+        }
+        if ($documentType == self::DOCTYPE_BOLETA) {
+            return 'B';
+        }
+        if ($documentType == self::DOCTYPE_NOTA_CREDITO) {
+            return self::getDocumentSeriesPrefix($affectedDocumentType);
+        }
+        if ($documentType == self::DOCTYPE_NOTA_DEBITO) {
+            return self::getDocumentSeriesPrefix($affectedDocumentType);
+        }
+        if ($documentType == self::DOCTYPE_VOUCHER) {
+            throw new InvalidArgumentException("Error: Cash register ticket isn't supported yet.");
+        }
+        throw new InvalidArgumentException("Error: $documentType isn't a valid document type");
+    }
+
+    /**
+     * 
+     * @param string $documentType 01|03|07|08
      * @return string FACTURA|BOLETA|NOTA DE CRÉDITO|NOTA DE DÉBITO
      */
     public static function getDocumentName($documentType) {
         switch ($documentType) {
             case self::DOCTYPE_FACTURA      : return 'FACTURA';
-            case self::DOCTYPE_BOLETA       : return 'BOLETA';
+            case self::DOCTYPE_BOLETA       : return 'BOLETA DE VENTA';
             case self::DOCTYPE_NOTA_CREDITO : return 'NOTA DE CRÉDITO';
             case self::DOCTYPE_NOTA_DEBITO  : return 'NOTA DE DÉBITO';
         }
-        throw new InvalidArgumentException("Error: $documentType isn't valid document type");
+        throw new InvalidArgumentException("Error: $documentType isn't a valid document type");
     }
 
     /**
@@ -106,15 +132,22 @@ class Catalogo {
         return null;
     }
 
-    public static function getCatItems($catNumber) {
+    public static function getCatItems($catNumber, $useXmlFiles = false) {
         // returns from cache
         if (isset(self::$_CAT['CAT_' . $catNumber])) {
             return self::$_CAT['CAT_' . $catNumber];
         }
+        // Load from file
+        $items = $useXmlFiles ? self::getCatItemsFromXmlFile($catNumber) : self::getCatItemsFromPhpFile($catNumber);
+        self::$_CAT['CAT_' . $catNumber] = $items;
+        return $items;
+    }
+
+    private static function getCatItemsFromXmlFile($catNumber) {
         // Load the XML
-        $xmlName = self::getXmlName($catNumber);
+        $xmlName = self::getCatFileName($catNumber);
         $doc = new DOMDocument();
-        $doc->load(SunatVars::DIR_CATS . "/$xmlName");
+        $doc->load(SunatVars::DIR_CATS . "/$xmlName.xml");
 
         $reader = new Reader();
         $reader->xml($doc->saveXML());
@@ -130,18 +163,22 @@ class Catalogo {
             unset($item['attributes']);
             $itemsO[$item['id']] = $item;
         }
-        // Cache
-        self::$_CAT['CAT_' . $catNumber] = $itemsO;
-        return self::$_CAT['CAT_' . $catNumber];
+        return $itemsO;
     }
 
-    private static function getXmlName($catNumeber) {
-        return 'cat_' . str_pad($catNumeber, 2, '0', STR_PAD_LEFT) . '.xml';
+    private static function getCatItemsFromPhpFile($catNumber) {
+        // Load the XML
+        $fileName = strtoupper(self::getCatFileName($catNumber));
+        return require SunatVars::DIR_CATS . "/$fileName.php";
+    }
+
+    private static function getCatFileName($catNumeber) {
+        return 'cat_' . str_pad($catNumeber, 2, '0', STR_PAD_LEFT);
     }
 
     public static function getCurrencyPlural($currencyCode) {
         $currencies = self::getCustomList('currencies');
-        if(isset($currencies[$currencyCode])){
+        if (isset($currencies[$currencyCode])) {
             return $currencies[$currencyCode];
         }
         throw new ConfigException("El código de moneda $currencyCode aún no ha sido configurado para su uso.");
@@ -176,14 +213,37 @@ class Catalogo {
     }
 
     public static function catItemsToPhpArray($catNumber, $resultPath) {
-        $items = Catalogo::getCatItems($catNumber);
+        $items = Catalogo::getCatItems($catNumber, true);
         $lines = [];
         $ENTER = chr(13) . chr(10);
         foreach ($items as $item) {
-            $lines[] = "    ['id' => '" . $item['id'] . "', 'value' => '" . $item['value'] . "']";
+            $line = [];
+            $k = 0;
+            foreach ($item as $key => $val) {
+                if (!$k) {
+                    $id = $item['id'];
+                    $line[] = "'id' => '$id'";
+                }
+                if ($key != 'id') {
+                    $line[] = "'$key' => '$val'";
+                }
+                $k++;
+            }
+            $lineS = implode(', ', $line);
+            $id = $item['id'];
+            $lines[] = "    '$id' => [$lineS]";
         }
         $joinedLines = implode(',' . $ENTER, $lines);
-        $result = "[" . $ENTER . $joinedLines . $ENTER . "]";
+        $result = <<<FILE
+<?php
+
+//Catálogo N° $catNumber:
+
+return [
+$joinedLines
+];
+
+FILE;
         file_put_contents($resultPath, $result);
     }
 

@@ -10,6 +10,7 @@
 
 namespace F72X\Sunat;
 
+use F72X\F72X;
 use F72X\Sunat\Catalogo;
 use F72X\Tools\Validations;
 
@@ -17,70 +18,6 @@ class InputValidator {
 
     private $data;
     private $type;
-    private static $invoiceValidations = [
-        'currencyCode' => [
-            'required' => true,
-            'inCat' => Catalogo::CAT_CURRENCY_TYPE
-        ],
-        'operationType' => [
-            'required' => true,
-            'inCat' => Catalogo::CAT_FACTURA_TYPE
-        ],
-        'documentSeries' => [
-            'required' => true
-        ],
-        'documentNumber' => [
-            'required' => true
-        ],
-        'issueDate' => [
-            'required' => true
-        ],
-        'customerDocType' => [
-            'required' => true,
-            'inCat' => Catalogo::CAT_IDENT_DOCUMENT_TYPE
-        ],
-        'customerDocNumber' => [
-            'required' => true
-        ],
-        'customerRegName' => [
-            'required' => true
-        ],
-        'items' => [
-            'required' => true,
-            'type' => 'Array'
-        ]
-    ];
-
-    private static $creditNoteValidations = [
-        'currencyCode' => [
-            'required' => true,
-            'inCat' => Catalogo::CAT_CURRENCY_TYPE
-        ],
-        'documentSeries' => [
-            'required' => true
-        ],
-        'documentNumber' => [
-            'required' => true
-        ],
-        'issueDate' => [
-            'required' => true
-        ],
-        'customerDocType' => [
-            'required' => true,
-            'inCat' => Catalogo::CAT_IDENT_DOCUMENT_TYPE
-        ],
-        'customerDocNumber' => [
-            'required' => true
-        ],
-        'customerRegName' => [
-            'required' => true
-        ],
-        'items' => [
-            'required' => true,
-            'type' => 'Array'
-        ]
-    ];
-    
     private $errors = [];
 
     public function __construct(array $data, $type) {
@@ -106,21 +43,15 @@ class InputValidator {
                 'incat' => null
             ];
             $validation = array_merge($defauls, $item);
-            if ($field == 'customerDocNumber') {
-                $validation['type'] = $this->getDocTypeValidator();
-            }
             $this->validateItem($field, $validation);
         }
     }
 
     private function getValidations() {
-        switch ($this->type) {
-            case Catalogo::DOCTYPE_FACTURA      :
-            case Catalogo::DOCTYPE_BOLETA       : return self::$invoiceValidations;
-            case Catalogo::DOCTYPE_NOTA_CREDITO : return self::$creditNoteValidations;
-            case Catalogo::DOCTYPE_NOTA_DEBITO  : return self::$creditNoteValidations;
-        }
+        $validationFile = F72X::getSrcDir() . '/validations/' . $this->type . '.php';
+        return require $validationFile;
     }
+
     private function validateItem($field, $validation) {
         $data = $this->data;
         $fieldExist = isset($data[$field]);
@@ -131,18 +62,18 @@ class InputValidator {
         $type = $validation['type'];
         // Required
         if ($required && !$fieldExist) {
-            $this->errors[] = "$field es requerido.";
+            $this->errors[$field][] = "Requerido";
         }
         if (!$fieldExist) {
             return;
         }
         // Data type
         if ($type && !Validations::{'is' . $type}($fieldValue)) {
-            $this->errors[] = $this->getTypeErrorValidationMessage($field, $fieldValue, $type);
+            $this->errors[$field][] = $this->getTypeErrorValidationMessage($field, $fieldValue, $type);
         }
         // In catalog
         if ($catNumber && !Catalogo::itemExist($catNumber, $fieldValue)) {
-            $this->errors[] = "El valor $fieldValue en el campo $field no existe en el Cátalogo N° $catNumber.";
+            $this->errors[$field][] = "El valor $fieldValue no existe en el Cátalogo N° $catNumber.";
         }
     }
 
@@ -150,7 +81,7 @@ class InputValidator {
         switch ($type) {
             case 'Array':
                 return $field == 'items' ?
-                    'El campo items debe ser de tipo array.' : "Se espera que el campo $field sea un array.";
+                        'El campo items debe ser de tipo array.' : "Se espera que el campo $field sea un array.";
             case 'Dni':
                 return "$value no es un DNI valido.";
             case 'Ruc':
@@ -158,21 +89,6 @@ class InputValidator {
             default:
                 break;
         }
-    }
-
-    private function getDocTypeValidator() {
-        $data = $this->data;
-        $docType = isset($data['customerDocType']) ? $data['customerDocType'] : null;
-        return is_null($docType) ? null : $this->getDocType($docType);
-    }
-
-    private function getDocType($docType) {
-        // @IMP cases: 0, 7, A, B, C, D, E
-        $cases = [
-            '1' => 'Dni',
-            '6' => 'Ruc'
-        ];
-        return isset($cases[$docType]) ? $cases[$docType] : null;
     }
 
 }

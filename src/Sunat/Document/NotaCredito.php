@@ -24,13 +24,13 @@ class NotaCredito extends CreditNote {
     protected $UBLVersionID = '2.1';
     protected $CustomizationID = '2.0';
 
-    public function __construct(DataMap $Invoice) {
-        $this->dataMap = $Invoice;
-        $currencyCode = $Invoice->getCurrencyCode();
+    public function __construct(DataMap $DataMap) {
+        $this->dataMap = $DataMap;
+        $currencyCode = $DataMap->getCurrencyCode();
         // ID
-        $this->setID($Invoice->getInvoiceId());
+        $this->setID($DataMap->getDocumentId());
         // Fecha de emisión
-        $this->setIssueDate($Invoice->getIssueDate());
+        $this->setIssueDate($DataMap->getIssueDate());
         // Tipo de moneda
         $this->setDocumentCurrencyCode($currencyCode);
         // Motivo de emisión

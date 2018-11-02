@@ -115,7 +115,7 @@ class FSInputGenerator {
         for ($rowIndex = 0; $rowIndex < $ln; $rowIndex++) {
             $detContent .= implode('|', $json['detalle'][$rowIndex]) . $ENTER;
         }
-        $invoiceId   = $Invoice->getInvoiceId();
+        $invoiceId   = $Invoice->getDocumentId();
         $documentType = $Invoice->getDocumentType();
         self::writeFSFile("$companyRUC-$documentType-$invoiceId.CAB", $cabContent);
         self::writeFSFile("$companyRUC-$documentType-$invoiceId.DET", $detContent);
