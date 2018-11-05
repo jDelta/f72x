@@ -36,7 +36,7 @@ class DataMap {
     private $issueDate;
 
     /** @var DateTime */
-    protected $DueDate;
+    private $DueDate;
     private $operationType;
     private $customerDocType;
     private $customerDocNumber;
