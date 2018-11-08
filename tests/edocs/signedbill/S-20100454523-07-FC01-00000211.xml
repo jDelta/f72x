@@ -6,7 +6,7 @@
             <ds:Signature Id="SignIMM">
   <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
     <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-  <ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>NbyyVQRI3AaQ7kGDjRfdat5k4XU=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>wthuP1PpwpCrkP2ReZHzgZCLmFS1+jTA1piOpzFDzErfZHmE6q7CKtCXSPQ8H/wm7HUMn1ueM/g5g2SjeSrzr0r+VVCcpD67ogGuuLJOIjLLvjOgMJAcE2Q7dFco0sUxcqgDXx7FXCSFl5AABDOUKNZv6W5xTekF2+vpV3smY7OZcQ6n8LuMNL0ZcX/ZOENcRtJB+cV0nVPjkkbJiK+k40zUc2Q4sKjFAiXZ3awj/7jFleNhar+r2ozpGVsiDBhgxLEQ8qzNshtkXsBf2tKKCZviuyQJ0lBB4jlqeLt7EaY/Oqt7mYy6p2k/NZKD4HMUJQN1NqQmpms1aI050IgRPQ==</ds:SignatureValue>
+  <ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>QyYpo1d8rh14Hp3e6YQUg6gZ0mY=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>DPMpgOsvHrbaFZpvWz6i12QBrcAqp00FMmG/DCEcUgTFUDwmUgu9X4KpNHhZfA8WwMBQ6jr23y5oKTmQT3g6VceGE5cq5naAUZq2u9l3kEx2wnaqChMLmDi0cywM7Hq5reFr9jmKx+ATyUJvoNdidjXljHHxm1yHOqhIQaIu/Oms67iAF9jeAtk4IeN646o4cp9FpxMV1LLRc18ta6NK7uqKjM2M09Euwu/ZZqrkpVJdCAJfsepFnOLhmAzgDDjr7eJmqHQ6BPosF0a6ZzRXEBNSMFl9Vz6nDrz7m3HOUY1DEiwPj543nwnUhp4eF3XYzpU25GsztmNm1Qn34cC4Iw==</ds:SignatureValue>
 <ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIE8TCCA9mgAwIBAgICDIEwDQYJKoZIhvcNAQEFBQAwggENMRswGQYKCZImiZPyLGQBGRYLTExBTUEuUEUgU0ExCzAJBgNVBAYTAlBFMQ0wCwYDVQQIDARMSU1BMQ0wCwYDVQQHDARMSU1BMRgwFgYDVQQKDA9UVSBFTVBSRVNBIFMuQS4xRTBDBgNVBAsMPEROSSA5OTk5OTk5IFJVQyAyMDEwMDQ1NDUyMyAtIENFUlRJRklDQURPIFBBUkEgREVNT1NUUkFDScOTTjFEMEIGA1UEAww7Tk9NQlJFIFJFUFJFU0VOVEFOVEUgTEVHQUwgLSBDRVJUSUZJQ0FETyBQQVJBIERFTU9TVFJBQ0nDk04xHDAaBgkqhkiG9w0BCQEWDWRlbW9AbGxhbWEucGUwHhcNMTgwOTI4MDMzMjIzWhcNMjAwOTI3MDMzMjIzWjCCAQ0xGzAZBgoJkiaJk/IsZAEZFgtMTEFNQS5QRSBTQTELMAkGA1UEBhMCUEUxDTALBgNVBAgMBExJTUExDTALBgNVBAcMBExJTUExGDAWBgNVBAoMD1RVIEVNUFJFU0EgUy5BLjFFMEMGA1UECww8RE5JIDk5OTk5OTkgUlVDIDIwMTAwNDU0NTIzIC0gQ0VSVElGSUNBRE8gUEFSQSBERU1PU1RSQUNJw5NOMUQwQgYDVQQDDDtOT01CUkUgUkVQUkVTRU5UQU5URSBMRUdBTCAtIENFUlRJRklDQURPIFBBUkEgREVNT1NUUkFDScOTTjEcMBoGCSqGSIb3DQEJARYNZGVtb0BsbGFtYS5wZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMVkOxBUnc1QmC8q6QlPtqZYTb/NySkTITSFbHdit0gqcfcbZHm09qFTiF3d3ysp0/Ozal4axBrWCiD5yUd+mVfFOoto9st3gKJYCp0c3eVRk/Pft2UF+50VsjXUxJY0eZMyu9cyAKPPHkzEq/cDnXLQIJLB9ReSgtcYfjNGyezG4hYdQdFGZFF/yvaqXzCF3YwU7ebiFiqnD/YVpWKbBRveQKNQ786g5iVQw1dsx096m9pdlsI1+XJ2BUTwOIBZau+PPu9YgfVyLH75KDuigWiHYFS+tQUVQogAvRcqCoXSXL8DlGgN/VD3o5/j+1SnvfljB7hB8PANXPURUhwSnDECAwEAAaNXMFUwHQYDVR0OBBYEFKV8SrpGMOsyCCsa4SkNyTEKWwf4MB8GA1UdIwQYMBaAFKV8SrpGMOsyCCsa4SkNyTEKWwf4MBMGA1UdJQQMMAoGCCsGAQUFBwMBMA0GCSqGSIb3DQEBBQUAA4IBAQAnPcAY9GWoBTWOI3yxSri7BWWPXHdCbAP3gwdlUfoCb1CwZ7vx4c92c+Adm9Pf7kviCQg9EMQgJdQgnc98ioI7SCXZODZem6YRqpmx2b+p4jyLnJ9DghQvX7+ecG8n0oOn8VGFukO08JTCTN/toBsPdCUzfloGUvy6mqF35xFVz+NCTVnnFYHJufblXHoq0VbX7hd7yOpAK3G/FdOhqoNAtkv/0r3tcDhmEMjexlNsIev1QU20DyJWuI9v4Z9DWZAaHqIUAehAeC2f/VrCbHj8GO1Qkl7K6ttLVpjeONCdasRWhUw/COuW61ra25bk2F12WJAmBeER2SevbbFboDP6</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></ext:ExtensionContent>
         </ext:UBLExtension>
     </ext:UBLExtensions>
@@ -51,6 +51,14 @@
             <cac:PartyName>
                 <cbc:Name><![CDATA[Tu Soporte]]></cbc:Name>
             </cac:PartyName>
+            <cac:PartyTaxScheme>
+                <cbc:RegistrationName><![CDATA[]]></cbc:RegistrationName>
+                <cbc:CompanyID schemeID="" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06"/>
+                <cac:RegistrationAddress>
+                    <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
+                </cac:RegistrationAddress>
+                <cac:TaxScheme/>
+            </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName><![CDATA[Soporte Tecnológicos EIRL]]></cbc:RegistrationName>
             </cac:PartyLegalEntity>

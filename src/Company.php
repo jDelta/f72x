@@ -22,9 +22,10 @@ class Company {
      * Get Configuration Value
      * 
      * @param string $key
+     * @param boolean $nullExc
      * @return string
      */
-    public static function get($key) {
+    public static function get($key, $nullExc = true) {
         $value = null;
         if (empty(self::$_CONFIG)) {
             throw new ConfigException('Olvidaste configurar el Modulo F72X usa \F72X\F72::init($config)');
@@ -32,8 +33,8 @@ class Company {
         if (isset(self::$_CONFIG[$key])) {
             $value = self::$_CONFIG[$key];
         }
-        if (is_null($value)) {
-            throw new ConfigException(sprintf('La propiedad %s no puede ser null, por favor revise su cofiguración', $key));
+        if (is_null($value) && $nullExc) {
+            throw new ConfigException(sprintf('La propiedad %s no ha sido definida, por favor revise su cofiguración', $key));
         }
         return $value;
     }
@@ -67,7 +68,7 @@ class Company {
      * @return string
      */
     public static function getBusinessName() {
-        return self::get('nombreComercial');
+        return self::get('nombreComercial', false);
     }
 
     /**
@@ -78,6 +79,28 @@ class Company {
         return self::get('codigoDomicilioFiscal');
     }
 
+    /**
+     * 
+     * @return string
+     */
+    public static function getAddress() {
+        return self::get('address');
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public static function getCity() {
+        return self::get('city');
+    }
+    /**
+     * 
+     * @return string
+     */
+    public static function getContactInfo() {
+        return self::get('contactInfo');
+    }
     /**
      * 
      * @return string
@@ -99,7 +122,7 @@ class Company {
      * @return string
      */
     public static function getCertPath() {
-        return self::get('cconfigPath') . '/certs/' . self::get('certificate');
+        return self::get('cconfigPath') . '/certs/' . self::get('certificate') . '.pem';
     }
 
     /**
@@ -109,20 +132,21 @@ class Company {
     public static function getRepositoryPath() {
         return self::get('repoPath');
     }
+
     /**
      * 
      * @return string
      */
     public static function getListsPath() {
-        return self::get('cconfigPath').'/lists';
+        return self::get('cconfigPath') . '/lists';
     }
 
     /**
      * 
      * @return string
      */
-    public static function getTplsPath() {
-        return self::get('cconfigPath').'/tpls';
+    public static function getPdfTemplatesPath() {
+        return self::get('cconfigPath') . '/tpls';
     }
 
 }

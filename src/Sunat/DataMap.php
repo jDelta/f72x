@@ -51,7 +51,6 @@ class DataMap {
 
     /** NOTES FIELDS */
     private $noteType;
-    private $noteDescription;
     private $noteAffectedDocType;
     private $noteAffectedDocId;
     /**
@@ -80,6 +79,7 @@ class DataMap {
         $this->customerAddress      = mb_strtoupper($data['customerAddress']);
         $this->_items               = $items;
         $this->allowancesAndCharges = $data['allowancesCharges'];
+        $this->note                 = $data['note'];
         $this->setSpecificFields($data, $type);
     }
 
@@ -89,7 +89,6 @@ class DataMap {
             $this->purchaseOrder = $data['purchaseOrder'];
         } else {
             $this->noteType            = $data['noteType'];
-            $this->noteDescription     = $data['description'];
             $this->noteAffectedDocType = $data['affectedDocType'];
             $this->noteAffectedDocId   = $data['affectedDocId'];
         }
@@ -99,15 +98,18 @@ class DataMap {
         $data['allowancesCharges'] = isset($data['allowancesCharges']) ? $data['allowancesCharges'] : [];
         $data['purchaseOrder'] = isset($data['purchaseOrder']) ? $data['purchaseOrder'] : null;
         $data['affectedDocType'] = isset($data['affectedDocType']) ? $data['affectedDocType'] : null;
+        $data['note'] = isset($data['note']) ? $data['note'] : '';
     }
     public function getNoteType() {
         return $this->noteType;
     }
 
     public function getNoteDescription() {
-        return $this->noteDescription;
+        return $this->note;
     }
-
+    public function getNote() {
+        return $this->note;
+    }
     public function getNoteAffectedDocType() {
         return $this->noteAffectedDocType;
     }

@@ -13,7 +13,8 @@ return [
     'customerRegName'   => 'SERVICABINAS S.A.',   // Razón social|Nombre del cliente
     'customerAddress'   => '215 NY STREET',       // Dirección del cliente
     'issueDate'         => '2017-06-25T20:25:41', // Fecha de emisión - ISO 8601 date
-    'description'       => 'Ampliación de garantía de memoria DDR-3B1333Kingston',
+    'note'              => 'Ampliación de garantía de memoria DDR-3B1333Kingston',
+                                                  // Motivo de emisión de la Nota de Dédito
     'items' => [
         [
             'productCode'        => 'GLG199',    // Código

@@ -10,7 +10,7 @@ use F72X\Sunat\DataMap;
 use F72X\Sunat\InvoiceItems;
 use PHPUnit\Framework\TestCase;
 
-final class InvoiceGenerationTest extends TestCase {
+final class DocumentGenerationTest extends TestCase {
 
     public function __construct() {
         Util::initF72X();

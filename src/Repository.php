@@ -174,11 +174,13 @@ class Repository {
         throw new FileException("El archivo: $filePath no existe.");
     }
 
-    public static function pdfStream($billName) {
+    public static function pdfStream($billName, $browserView = false) {
         $filePath = self::getPdfPath($billName);
         if (file_exists($filePath)) {
             header('Content-Type: application/pdf');
-            header("Content-Disposition: attachment;filename=$billName.pdf");
+            if(!$browserView){
+                header("Content-Disposition: attachment;filename=$billName.pdf");
+            }
             header('Cache-Control:max-age=0');
             echo file_get_contents($filePath);
             exit();

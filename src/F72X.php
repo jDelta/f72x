@@ -16,15 +16,8 @@ class F72X {
 
     private static $production = false;
     private static $requiredConfigFields = [
-        'ruc',
-        'razonSocial',
-        'nombreComercial',
-        'codigoDomicilioFiscal',
-        'usuarioSol',
-        'claveSol',
         'cconfigPath',
         'repoPath',
-        'certificate',
         'prodMode'
     ];
 
@@ -68,6 +61,14 @@ class F72X {
 
     public static function getTempDir() {
         return self::getModuleDir() . '/temp';
+    }
+
+    public static function getDefaultPdfTemplatesPath() {
+        return self::getModuleDir() . '/cdefaults/tpls';
+    }
+
+    public static function getDefaultListsPath() {
+        return self::getModuleDir() . '/cdefaults/lists';
     }
 
     public static function getSrcDir() {

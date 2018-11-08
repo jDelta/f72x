@@ -19,6 +19,8 @@ use F72X\Tools\UblHelper;
 use F72X\UblComponent\OrderReference;
 use F72X\UblComponent\Party;
 use F72X\UblComponent\PartyIdentification;
+use F72X\UblComponent\PartyTaxScheme;
+use F72X\UblComponent\RegistrationAddress;
 use F72X\UblComponent\PartyName;
 use F72X\UblComponent\AccountingSupplierParty;
 use F72X\UblComponent\AccountingCustomerParty;
@@ -288,12 +290,15 @@ trait BillMixin {
         $partyName  = Company::getBusinessName();
         $regName    = Company::getCompanyName();
         $docNumber  = Company::getRUC();
+        $addressRegCode = Company::getRegAddressCode(); // Código de domicilio fiscal o anexo
         $docType    = Catalogo::IDENTIFICATION_DOC_RUC;
 
         // XML nodes
         $AccountingSupplierParty    = new AccountingSupplierParty();
         $Party                      = new Party();
         $PartyIdentification        = new PartyIdentification();
+        $PartyTaxScheme             = new PartyTaxScheme();
+        $RegistrationAddress        = new RegistrationAddress();
         $PartyIdentification
                 ->setElementAttributes('ID', [
                     'schemeAgencyName'  => 'PE:SUNAT',
@@ -309,6 +314,9 @@ trait BillMixin {
                                 ->setID($docNumber))
                         ->setPartyName($PartyName
                                 ->setName($partyName))
+                        ->setPartyTaxScheme($PartyTaxScheme
+                                ->setRegistrationAddress($RegistrationAddress
+                                        ->setAddressTypeCode($addressRegCode)))
                         ->setPartyLegalEntity($PartyLegalEntity
                                 ->setRegistrationName($regName)));
         // Add to Document

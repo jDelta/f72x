@@ -111,10 +111,10 @@ class DocumentGenerator {
         Repository::zipBill($billName);
     }
 
-    private static function generatePdf($XmlDoc) {
+    public static function generatePdf($XmlDoc) {
         $billName = $XmlDoc->getBillName();
         $Invoice = $XmlDoc->getDataMap();
-        PdfGenerator::generateFactura($Invoice, $billName);
+        PdfGenerator::generatePdf($Invoice, $billName);
     }
 
     private static function saveBill($Bill) {

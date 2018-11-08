@@ -12,6 +12,7 @@ namespace F72X\Sunat;
 
 use InvalidArgumentException;
 use DOMDocument;
+use F72X\F72X;
 use F72X\Company;
 use F72X\Exception\ConfigException;
 use Sabre\Xml\Reader;
@@ -200,16 +201,23 @@ class Catalogo {
         if (isset(self::$_LIST['LIST_' . $listName])) {
             return self::$_LIST['LIST_' . $listName];
         }
-        $path = Company::getListsPath();
-        $fileName = "$path/$listName.php";
+        // Company customization
+        $customListsPath = Company::getListsPath();
+        $fileName = "$customListsPath/$listName.php";
         if(file_exists($fileName)){
-            $path = Company::getListsPath();
+            $customListsPath = Company::getListsPath();
             $list = require $fileName;
             // Cache
             self::$_CAT['LIST_' . $listName] = $list;
             return $list;
         }
-        throw new ConfigException("No se encontró el archivo $listName.php dentro de su directorio de listas personalizadas.");
+        // Defaults
+        $defaultListsPath = F72X::getDefaultListsPath();
+        $fileName2 = "$defaultListsPath/$listName.php";
+        $list = require $fileName2;
+        // Cache
+        self::$_CAT['LIST_' . $listName] = $list;
+        return $list;
     }
 
     public static function catItemsToPhpArray($catNumber, $resultPath) {

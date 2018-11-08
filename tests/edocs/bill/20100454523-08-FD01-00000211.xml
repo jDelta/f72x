@@ -47,6 +47,14 @@
             <cac:PartyName>
                 <cbc:Name><![CDATA[Tu Soporte]]></cbc:Name>
             </cac:PartyName>
+            <cac:PartyTaxScheme>
+                <cbc:RegistrationName><![CDATA[]]></cbc:RegistrationName>
+                <cbc:CompanyID schemeID="" schemeName="SUNAT:Identificador de Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06"/>
+                <cac:RegistrationAddress>
+                    <cbc:AddressTypeCode>0000</cbc:AddressTypeCode>
+                </cac:RegistrationAddress>
+                <cac:TaxScheme/>
+            </cac:PartyTaxScheme>
             <cac:PartyLegalEntity>
                 <cbc:RegistrationName><![CDATA[Soporte Tecnológicos EIRL]]></cbc:RegistrationName>
             </cac:PartyLegalEntity>

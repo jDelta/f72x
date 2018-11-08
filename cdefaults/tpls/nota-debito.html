@@ -1,0 +1,234 @@
+<html>
+    <head>
+        <style>
+            @page {
+                size: A4 portrait; 
+                margin: 1.5cm 1cm;
+            }
+            /**
+            * DIMENSIONS
+            */
+            /*QR code width*/
+            .dim-qr {
+                width: 64px;
+            }
+            .dim-full {
+                width: 100%;
+            }
+            .dim-total-col {
+                width: 70px;
+            }
+            .company-location-info {
+                font-size: 7pt;
+                margin: 5px 0;
+                vertical-align: top;
+            }
+            body {
+                font-family: "Segoe UI", "Open Sans", sans-serif, serif;
+                font-size: 8.5pt;
+                line-height: 1.1;
+                font-weight: 400;
+                font-style: normal;
+                margin: 0;
+                padding: 0;
+            }
+            * {
+                border-collapse: collapse;
+            }
+            .logo {
+                vertical-align: top;
+                height: 100px;
+            }
+            .head-section {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .head-section td {
+                vertical-align: top;
+            }
+            .detail-table {
+                border: solid 1px;
+                border-collapse: collapse;
+                text-transform: uppercase;
+                margin: 10px 0;
+            }
+            .detail-table th {
+                font-weight: normal;
+                padding:3px 4px;
+                vertical-align: middle;
+                border: solid 1px;
+            }
+            .detail-table thead tr {
+                background: #e2e2e2;
+            }
+            .detail-table tr td {
+                color:#333333;
+                height:23px;
+                padding: 2px 3px;
+                vertical-align: middle;
+            }
+            .detail-table td, .detail-table th {
+                border-right: solid 1px;
+            }
+            .totals-table {
+                width: 100%;
+            }
+            .invoice-id-area {
+                position: absolute;
+                top: 0;
+                right: 0;
+                padding: 15px;
+                border: 1px solid;
+                text-align: center;
+                font-size: 10pt;
+                font-weight: 700;
+                line-height: 2;
+            }
+            .align-l {
+                text-align: left;
+            }
+            .align-c {
+                text-align: center;
+            }
+            .align-r {
+                text-align: right;
+            }
+            .float-r {
+                float: right;
+            }
+            .one-line {
+                white-space: nowrap;
+                overflow: hidden;
+                width: 450px;
+                /** background: yellow;**/
+            }
+            .row {
+                width: 100%;
+                content: "";
+                display: table;
+                clear: both;
+            }
+            .col {
+                float:left;width:100%;
+            }
+            .words-amount {
+                font-weight: bold;
+            }
+            .qr {
+                float: left;
+                margin: 10px 10px 10px 50px;
+            }
+            .cpe-foot-note {
+                vertical-align: top;
+                float: left;
+                margin: 15px 0px;
+            }
+            .repo-link {
+                text-decoration: none;
+            }
+            .footer{
+                margin: 60px 0 0 0;
+            }
+        </style>
+    </head>
+    <body>
+        <img class="logo" src="data:image/png;base64,{{logo}}" />
+        <div class="company-location-info">
+            {{companyAddress}} - {{companyCity}}<br>
+            {{companyContactInfo|raw}}
+        </div>
+        <div class="invoice-id-area">
+            R.U.C. {{companyRuc}}<br>
+            NOTA DE DÉBITO ELECTRÓNICA<br>
+            N° {{documentSeries}}-{{documentNumber}}
+        </div>
+        <table class="head-section">
+            <tbody>
+                <tr>
+                    <td width="50">SEÑOR(ES)</td>
+                    <td><div class="one-line">: {{customerRegName}}</div></td>
+                    <td width="60">FEC. EMISIÓN</td>
+                    <td width="70">: {{issueDate}}</td>
+                </tr>
+                <tr>
+                    <td>R.U.C.</td>
+                    <td>: {{customerDocNumber}}</td>
+                    <td>MONEDA</td>
+                    <td>: {{currency}}</td>
+                </tr>
+                <tr>
+                    <td>DIRECCIÓN</td>
+                    <td><div class="one-line">: {{customerAddress}}</div></td>
+                    <td colspan="2"></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="detail-table dim-full">
+            <thead>
+                <tr>
+                    <th width="30" class="align-c">ITEM</th>
+                    <th width="30" class="align-c">CANT.</th>
+                    <th width="30" class="align-c">UND.</th>
+                    <th class="align-l">DESCRIPCIÓN</th>
+                    <th width="60" class="align-c">PRECIO UNIT.</th>
+                    <th width="60" class="align-c">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td class="align-c">{{loop.index}}</td>
+                    <td class="align-c">{{item.quantity}}</td>
+                    <td class="align-c">{{item.unitName}}</td>
+                    <td>{{item.description}}</td>
+                    <td class="align-r">{{item.unitBillableValue|number_format(2)}}</td>
+                    <td class="align-r">{{item.itemPayableAmount|number_format(2)}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="words-amount">SON: {{payableInWords}}</div>
+        <table class="dim-full">
+            <tr>
+                <td width="35">&nbsp;</td>
+                <td>
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th class="dim-total-col align-c">OP. GRABADAS</th>
+                                <th class="dim-total-col align-c">OP. GRATUITAS</th>
+                                <th class="dim-total-col align-c">OP. INAFECTAS</th>
+                                <th class="dim-total-col align-c">OP. EXONERADAS</th>
+                                <th class="dim-total-col align-c">DESCUENTOS</th>
+                                <th class="dim-total-col align-c">I.G.V. ({{igvPercent|number_format(2)}}%)</th>
+                                <th class="dim-total-col align-c">IMPORTE TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="align-r">{%if taxableOperations %}{{taxableOperations|number_format(2)}}{%endif%}</td>
+                                <td class="align-r">{%if freeOperations %}{{freeOperations|number_format(2)}}{%endif%}</td>
+                                <td class="align-r">{%if unaffectedOperations %}{{unaffectedOperations|number_format(2)}}{%endif%}</td>
+                                <td class="align-r">{%if exemptedOperations %}{{exemptedOperations|number_format(2)}}{%endif%}</td>
+                                <td class="align-r">{%if totalAllowances %}{{totalAllowances|number_format(2)}}{%endif%}</td>
+                                <td class="align-r">{%if igvAmount %}{{igvAmount|number_format(2)}}{%endif%}</td>
+                                <td class="align-r">{%if payableAmount %}{{payableAmount|number_format(2)}}{%endif%}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="footer dim-full">
+            <tr>
+                <td width="35">&nbsp;</td>
+                <td width="64"><img class="dim-qr" src="data:image/png;base64,{{qr}}" /></td>
+                <td>
+                    Representación impresa - Coprobante de Pago Electrónico<br><br>
+                    Siempre podrá consultar sus comprobantes electrónicos en:<br>
+                    <a class="repo-link" href="https://consultar.comprobante.pe" target="_blank">https://consultar.comprobante.pe</a>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -10,7 +10,7 @@
     "customerRegName": "SERVICABINAS S.A.",
     "customerAddress": "215 NY STREET",
     "issueDate": "2017-06-25T20:25:41",
-    "description": "Unidades defectuosas, no leen CD que contengan archivos MP3",
+    "note": "Unidades defectuosas, no leen CD que contengan archivos MP3",
     "items": [
         {
             "productCode": "GLG199",
