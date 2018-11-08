@@ -3,3 +3,9 @@
 /vendor/
 /docs/
 /tests/testdox.txt
+/tests/edocs/bill/
+/tests/edocs/billinput/
+/tests/edocs/cdr/
+/tests/edocs/printable/
+/tests/edocs/signedbill/
+/tests/edocs/zippedbill/
