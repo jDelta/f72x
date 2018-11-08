@@ -12,7 +12,7 @@ namespace F72X\Sunat;
 
 class SunatVars {
     const SUNAT_CDR_SERVICE_URL  = 'https://e-factura.sunat.gob.pe/ol-it-wsconscpegem/billConsultService?wsdl';
-    const SUNAT_SERVICE_URL_PROD = 'https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService';
+    const SUNAT_SERVICE_URL_PROD = 'https://comprobante.pe/xwsdl/billlService.php'; // Customized the provided for SUNAT doesn't work
     const SUNAT_SERVICE_URL_BETA = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService';
     const SUNAT_SOL_USER_BETA    = 'MODDATOS';
     const SUNAT_SOL_KEY_BETA     = 'moddatos';
