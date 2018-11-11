@@ -3,9 +3,7 @@
 /vendor/
 /docs/
 /tests/testdox.txt
-/tests/edocs/bill/
-/tests/edocs/billinput/
-/tests/edocs/cdr/
-/tests/edocs/printable/
-/tests/edocs/signedbill/
-/tests/edocs/zippedbill/
+#Generated Docs
+tests/edocs/**/20*
+tests/edocs/**/R20*
+tests/edocs/**/S-20*

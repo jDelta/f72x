@@ -121,15 +121,14 @@ class Repository {
     public static function getCdrInfo($billName) {
         $rp = self::getRepositoryPath();
         $zip = new ZipArchive();
-        $info = null;
         if ($zip->open("$rp/cdr/R$billName.zip") === true) {
             $xmlString = $zip->getFromName("R-$billName.xml");
             $info = self::getMapCdr($xmlString);
             $zip->close();
+            return $info;
         } else {
             throw new FileException("No se encontró el archivo R$billName.zip");
         }
-        return $info;
     }
 
     private static function getMapCdr($xmlString) {
@@ -178,7 +177,7 @@ class Repository {
         $filePath = self::getPdfPath($billName);
         if (file_exists($filePath)) {
             header('Content-Type: application/pdf');
-            if(!$browserView){
+            if (!$browserView) {
                 header("Content-Disposition: attachment;filename=$billName.pdf");
             }
             header('Cache-Control:max-age=0');
