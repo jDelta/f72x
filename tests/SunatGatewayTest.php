@@ -5,7 +5,7 @@ namespace Tests;
 use F72X\Sunat\ServiceGateway;
 use PHPUnit\Framework\TestCase;
 
-final class SendToSunatTest extends TestCase {
+final class SunatGatewayTest extends TestCase {
 
     public function __construct() {
         Util::initF72X();
@@ -61,4 +61,30 @@ final class SendToSunatTest extends TestCase {
         ];
         self::assertEquals($expected, $actual);
     }
+    
+    public static function testSendSummary() {
+        $ticket = ServiceGateway::sendSummary('20100454523-RC-20171118-00001');
+        echo $ticket;
+    }
+    public static function testGetStatus() {
+        $response = ServiceGateway::getStatus('20100454523-RC-20171118-00001');
+        echo json_encode($response);
+    }
+    public function testGetTicket() {
+        $xmlString = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <soap-env:Header/>
+    <soap-env:Body>
+        <br:sendSummaryResponse xmlns:br="http://service.sunat.gob.pe">
+            <ticket>1542230447563</ticket>
+        </br:sendSummaryResponse>
+    </soap-env:Body>
+</soap-env:Envelope>
+XML;
+        $xmlObj = simplexml_load_string($xmlString);
+        $ticket = (string)$xmlObj->xpath("//ticket")[0];
+        self::assertEquals('1542230447563', $ticket);
+    }
+
 }

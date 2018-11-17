@@ -22,17 +22,18 @@ class Repository {
 
     /**
      * 
-     * @param string $billName
+     * @param string $documentName
      * @param boolean $throwEx set to *false*, to avoid an exception if the file doesn't exist
      */
-    public static function removeBillDocs($billName, $throwEx = true) {
+    public static function removeBillDocs($documentName, $throwEx = true) {
         $rp = self::getRepositoryPath();
-        self::removeFile("$rp/bill/$billName.xml", $throwEx);
-        self::removeFile("$rp/billinput/$billName.json", $throwEx);
-        self::removeFile("$rp/signedbill/S-$billName.xml", $throwEx);
-        self::removeFile("$rp/zippedbill/$billName.zip", $throwEx);
-        self::removeFile("$rp/printable/$billName.pdf", $throwEx);
-        self::removeFile("$rp/cdr/R$billName.zip", $throwEx);
+        self::removeFile("$rp/bill/$documentName.xml", $throwEx);
+        self::removeFile("$rp/billinput/$documentName.json", $throwEx);
+        self::removeFile("$rp/signedbill/S-$documentName.xml", $throwEx);
+        self::removeFile("$rp/zippedbill/$documentName.zip", $throwEx);
+        self::removeFile("$rp/printable/$documentName.pdf", $throwEx);
+        self::removeFile("$rp/ticket/$documentName.zip", $throwEx);
+        self::removeFile("$rp/cdr/R$documentName.zip", $throwEx);
     }
 
     public static function saveBillInput($billName, $billContent) {
@@ -43,8 +44,12 @@ class Repository {
         self::saveFile("signedbill/S-$billName.xml", $billContent);
     }
 
+    public static function saveTicket($documentName, $ticket) {
+        self::saveFile("ticket/$documentName.json", json_encode(['ticket' => $ticket]), true);
+    }
+
     public static function saveCdr($billName, $billContent) {
-        self::saveFile("cdr/R$billName.zip", $billContent);
+        self::saveFile("cdr/R$billName.zip", $billContent, true);
     }
 
     public static function savePDF($billName, $fileContent) {
@@ -94,8 +99,17 @@ class Repository {
         return "$rp/zippedbill/$billName.zip";
     }
 
+    public static function getDocumentTicketPath($documentName) {
+        $rp = self::getRepositoryPath();
+        return "$rp/ticket/$documentName.json";
+    }
+
     public static function getZippedBillContent($billName) {
         return file_get_contents(self::getZippedBillPath($billName));
+    }
+
+    public static function getDocumentTicketContent($documentName) {
+        return file_get_contents(self::getDocumentTicketPath($documentName));
     }
 
     public static function getPdfPath($billName) {
@@ -103,9 +117,9 @@ class Repository {
         return "$rp/printable/$billName.pdf";
     }
 
-    private static function saveFile($filePath, $fileContent) {
+    private static function saveFile($filePath, $fileContent, $overwrite = false) {
         $rp = self::getRepositoryPath();
-        self::writeFile("$rp/$filePath", $fileContent);
+        self::writeFile("$rp/$filePath", $fileContent, $overwrite);
     }
 
     public static function removeFile($filePath, $throwEx = true) {
@@ -116,6 +130,11 @@ class Repository {
             return;
         }
         unlink($filePath);
+    }
+
+    public static function getTicketInfo($documentName) {
+        $ticketContent = self::getDocumentTicketContent($documentName);
+        return json_decode($ticketContent, true);
     }
 
     public static function getCdrInfo($billName) {
@@ -138,7 +157,7 @@ class Repository {
         $respNode = $origin['DocumentResponse'];
         return [
             'id' => $origin['ID'],
-            'invoiceId' => $respNode['DocumentReference']['ID'],
+            'documentId' => $respNode['DocumentReference']['ID'],
             'receiverId' => $respNode['RecipientParty']['PartyIdentification']['ID'],
             'issueDate' => $origin['IssueDate'],
             'issueTime' => $origin['IssueTime'],

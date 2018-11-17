@@ -11,15 +11,18 @@
 namespace F72X\Sunat;
 
 use InvalidArgumentException;
+use F72X\F72X;
 use F72X\Tools\XmlDSig;
 use F72X\Tools\PdfGenerator;
 use F72X\Repository;
 use F72X\Sunat\Catalogo;
 use F72X\Tools\XmlService;
+use F72X\Tools\TplRenderer;
 use F72X\Sunat\Document\Factura;
 use F72X\Sunat\Document\Boleta;
 use F72X\Sunat\Document\NotaCredito;
 use F72X\Sunat\Document\NotaDebito;
+use F72X\Sunat\Document\ResumenDiario;
 use F72X\Exception\InvalidInputException;
 
 class DocumentGenerator {
@@ -96,6 +99,24 @@ class DocumentGenerator {
         self::generatePdf($XmlDoc);
     }
 
+    /**
+     * 
+     * @param string $summaryType RC|RA
+     * @param array $data
+     * @return ResumenDiario
+     */
+    public static function createResumenDiario($summaryType, $data) {
+        return new ResumenDiario($summaryType, $data);
+    }  
+    public static function generateResumenFiles(ResumenDiario $eDocument) {
+        $docFileName = $eDocument->getDocumentFileName();
+        $tpRenderer = TplRenderer::getRenderer(F72X::getSrcDir().'/templates');
+        $xmlContent = $tpRenderer->render('SummaryDocuments.xml', $eDocument->getDataForXml());
+        Repository::saveBillInput($docFileName, json_encode($eDocument->getRawData(), JSON_PRETTY_PRINT));
+        Repository::saveBill($docFileName, $xmlContent);
+        XmlDSig::sign($docFileName);
+        Repository::zipBill($docFileName);
+    }
     private static function saveBillInput($XmlDoc) {
         $billName = $XmlDoc->getBillName();
         Repository::saveBillInput($billName, json_encode($XmlDoc->getDataMap()->getRawData(), JSON_PRETTY_PRINT));

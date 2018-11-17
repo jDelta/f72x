@@ -24,6 +24,7 @@ final class DocumentGenerationTest extends TestCase {
         Repository::removeBillDocs('20100454523-03-B001-00003652', false);
         Repository::removeBillDocs('20100454523-07-FC01-00000211', false);
         Repository::removeBillDocs('20100454523-08-FD01-00000211', false);
+        Repository::removeBillDocs('20100454523-RC-20171118-00001', false);
     }
 
     public function testGenerateFactura() {
@@ -49,7 +50,11 @@ final class DocumentGenerationTest extends TestCase {
         $xmlDoc = DocumentGenerator::createDocument('NDE',$data);
         DocumentGenerator::generateFiles($xmlDoc);
     }
-
+    public function testResumenDiario() {
+        $data = self::getCaseData('resumen-diario');
+        $eDocument = DocumentGenerator::createResumenDiario('RC',$data);
+        DocumentGenerator::generateResumenFiles($eDocument);
+    }
     public function testDataMapRightCalcsForFactura() {
         $in = self::getCaseData('factura');
         $Invoice = new DataMap($in, Catalogo::DOCTYPE_FACTURA);
@@ -61,7 +66,7 @@ final class DocumentGenerationTest extends TestCase {
             'customerDocType'   => $Invoice->getCustomerDocType(),
             'customerDocNumber' => $Invoice->getCustomerDocNumber(),
             'customerRegName'   => $Invoice->getCustomerRegName(),
-            'customerAddress'     => $Invoice->getCustomerAddress(),
+            'customerAddress'   => $Invoice->getCustomerAddress(),
             'issueDate'         => $Invoice->getIssueDate()->format('Y-m-d\TH:i:s'),
             'purchaseOrder'     => $Invoice->getPurchaseOrder(),
             'allowancesCharges' => $Invoice->getAllowancesAndCharges(),
