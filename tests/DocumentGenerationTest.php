@@ -20,11 +20,11 @@ final class DocumentGenerationTest extends TestCase {
     }
 
     public function removeBillDocs() {
-        Repository::removeBillDocs('20100454523-01-F001-00004355', false);
-        Repository::removeBillDocs('20100454523-03-B001-00003652', false);
-        Repository::removeBillDocs('20100454523-07-FC01-00000211', false);
-        Repository::removeBillDocs('20100454523-08-FD01-00000211', false);
-        Repository::removeBillDocs('20100454523-RC-20171118-00001', false);
+        Repository::removeFiles('20100454523-01-F001-00004355', false);
+        Repository::removeFiles('20100454523-03-B001-00003652', false);
+        Repository::removeFiles('20100454523-07-FC01-00000211', false);
+        Repository::removeFiles('20100454523-08-FD01-00000211', false);
+        Repository::removeFiles('20100454523-RC-20171118-00001', false);
     }
 
     public function testGenerateFactura() {

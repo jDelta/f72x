@@ -93,7 +93,7 @@ class Catalogo {
      * @param string $documentType 01|03|07|08
      * @return string FACTURA|BOLETA|NOTA DE CRÉDITO|NOTA DE DÉBITO
      */
-    public static function getDocumentName($documentType) {
+    public static function getOfficialDocumentName($documentType) {
         switch ($documentType) {
             case self::DOCTYPE_FACTURA      : return 'FACTURA';
             case self::DOCTYPE_BOLETA       : return 'BOLETA DE VENTA';

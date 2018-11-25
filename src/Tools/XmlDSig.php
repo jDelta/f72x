@@ -18,18 +18,18 @@ class XmlDSig {
 
     /**
      * 
-     * @param string $billName
+     * @param string $documentName
      */
-    public static function sign($billName) {
+    public static function sign($documentName) {
         $cert = Company::getCertPath();
         // Load the XML to be signed
-        $xmlPath = Repository::getBillPath($billName);
+        $xmlPath = Repository::getXmlPath($documentName);
 
         $signer = new SignedXml();
         $signer->setCertificateFromFile($cert);
 
         $signedXml = $signer->signFromFile($xmlPath);
-        Repository::saveSignedBill($billName, $signedXml);
+        Repository::saveSignedXml($documentName, $signedXml);
     }
 
 }

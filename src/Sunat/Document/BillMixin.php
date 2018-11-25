@@ -356,8 +356,8 @@ trait BillMixin {
      *    
      * @return string Nombre del comprobante de acuerdo con las especificaciones de la SUNAT
      */
-    public function getBillName() {
-        return $this->dataMap->getBillName();
+    public function getDocumentName() {
+        return $this->dataMap->getDocumentName();
     }
 
 }

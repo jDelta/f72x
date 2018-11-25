@@ -26,7 +26,7 @@ use Codelint\QRCode\QRCode;
 
 class PdfGenerator {
 
-    public static function generatePdf(DataMap $Invoice, $billName) {
+    public static function generatePdf(DataMap $Invoice, $documentName) {
         $dompdf = new Dompdf();
         $docType = self::getTplFor($Invoice->getDocumentType());
         $html = self::getRenderedHtml($Invoice,$docType);
@@ -34,7 +34,7 @@ class PdfGenerator {
         $dompdf->loadHtml($html);
         $dompdf->render();
         $pdf = $dompdf->output();
-        Repository::savePDF($billName, $pdf);
+        Repository::savePDF($documentName, $pdf);
     }
 
     private static function getTplFor($docType) {
@@ -67,7 +67,7 @@ class PdfGenerator {
             'companyContactInfo'   => Company::getContactInfo(),
             'documentSeries'       => $inv->getDocumentSeries(),
             'documentNumber'       => $inv->getDocumentNumber(),
-            'documentName'         => $inv->getDocumentName(),
+            'officialDocumentName' => $inv->getOfficialDocumentName(),
             'currency'             => $currency,
             'customerRegName'      => $inv->getCustomerRegName(),
             'customerDocNumber'    => $inv->getCustomerDocNumber(),
@@ -116,10 +116,10 @@ class PdfGenerator {
     }
 
     private static function getQrString(DataMap $inv) {
-        $billName = $inv->getBillName();
+        $documentName = $inv->getDocumentName();
         $qr = new QRCode();
         $qrContent = self::getQrContent($inv);
-        $qrTempPath = F72X::getTempDir() . "/QR-$billName.png";
+        $qrTempPath = F72X::getTempDir() . "/QR-$documentName.png";
         $qr->png($qrContent, $qrTempPath, 'Q', 8, 2);
         $qrs = base64_encode(file_get_contents($qrTempPath));
         unlink($qrTempPath);

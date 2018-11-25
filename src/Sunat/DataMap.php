@@ -28,7 +28,7 @@ class DataMap {
     private $documentType;
     private $currencyCode;
     private $documentId;
-    private $documentName;
+    private $officialDocumentName;
     private $documentSeries;
     private $documentNumber;
 
@@ -70,7 +70,7 @@ class DataMap {
         $this->documentType         = $type;
         $this->documentSeries       = DocumentGenerator::buildDocumentSeries($type, $data['affectedDocType'], $data['documentSeries']);
         $this->documentNumber       = str_pad($data['documentNumber'], 8, '0', STR_PAD_LEFT);
-        $this->documentName         = Catalogo::getDocumentName($type);
+        $this->officialDocumentName = Catalogo::getOfficialDocumentName($type);
         $this->documentId           = $this->documentSeries . '-' . $this->documentNumber;
         $this->issueDate            = new DateTime($data['issueDate']);
         $this->customerDocType      = $data['customerDocType'];
@@ -138,8 +138,8 @@ class DataMap {
         return $this->currencyCode;
     }
 
-    public function getDocumentName() {
-        return $this->documentName;
+    public function getOfficialDocumentName() {
+        return $this->officialDocumentName;
     }
 
     public function getDocumentSeries() {
@@ -413,7 +413,7 @@ class DataMap {
         return Operations::applyAllowancesAndCharges($amount, $this->allowancesAndCharges);
     }
 
-    public function getBillName() {
+    public function getDocumentName() {
         return Company::getRUC() . '-' . $this->documentType . '-' . $this->documentId;
     }
 

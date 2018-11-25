@@ -16,7 +16,7 @@ final class RepositoryTest extends TestCase {
     }
 
     public function removeBillDocs() {
-        Repository::removeBillDocs('20100454523-01-F001-00004355');
-        Repository::removeBillDocs('20100454523-03-B001-00004355');
+        Repository::removeFiles('20100454523-01-F001-00004355');
+        Repository::removeFiles('20100454523-03-B001-00004355');
     }
 }

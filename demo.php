@@ -27,30 +27,30 @@ F72X::init([
 $dataFAC = require 'tests/cases/factura.php';
 $xmlFAC = DocumentGenerator::createDocument('FAC', $dataFAC);
 DocumentGenerator::generateFiles($xmlFAC);
-$billName = $xmlFAC->getBillName();
-$resFAC = ServiceGateway::sendBill($billName);
+$documentName = $xmlFAC->getDocumentName();
+$resFAC = ServiceGateway::sendBill($documentName);
 var_dump($resFAC);
 
 // BOLETA DE VENTA
 $dataBOL = require 'tests/cases/boleta.php';
 $xmlBOL = DocumentGenerator::createDocument('BOL', $dataBOL);
 DocumentGenerator::generateFiles($xmlBOL);
-$billName = $xmlBOL->getBillName();
-$resBOL = ServiceGateway::sendBill($billName);
+$documentName = $xmlBOL->getDocumentName();
+$resBOL = ServiceGateway::sendBill($documentName);
 var_dump($resBOL);
 
 // NOTA DE CRÉDITO
 $dataNCR = require 'tests/cases/notacredito.php';
 $xmlNCR = DocumentGenerator::createDocument('NCR', $dataNCR);
 DocumentGenerator::generateFiles($xmlNCR);
-$billName = $xmlNCR->getBillName();
-$resNCR = ServiceGateway::sendBill($billName);
+$documentName = $xmlNCR->getDocumentName();
+$resNCR = ServiceGateway::sendBill($documentName);
 var_dump($resNCR);
 
 // NOTA DE DÉBITO
 $dataNDE = require 'tests/cases/notadebito.php';
 $xmlNDE = DocumentGenerator::createDocument('NDE', $dataNDE);
 DocumentGenerator::generateFiles($xmlNDE);
-$billName = $xmlNDE->getBillName();
-$resNDE = ServiceGateway::sendBill($billName);
+$documentName = $xmlNDE->getDocumentName();
+$resNDE = ServiceGateway::sendBill($documentName);
 var_dump($resNDE);

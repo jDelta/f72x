@@ -12,7 +12,7 @@ return [
     '07' => ['id' => '07', 'value' => 'Devolución por ítem'],
     '08' => ['id' => '08', 'value' => 'Bonificación'],
     '09' => ['id' => '09', 'value' => 'Disminución en el valor'],
-    '10' => ['id' => '10', 'value' => 'Otros Conceptos'],
+    '10' => ['id' => '10', 'value' => 'Otros Conceptos '],
     '11' => ['id' => '11', 'value' => 'Ajustes de operaciones de exportación'],
     '12' => ['id' => '12', 'value' => 'Ajustes afectos al IVAP']
 ];

@@ -8,13 +8,13 @@ use PHPUnit\Framework\TestCase;
 
 final class CatalogoTest extends TestCase {
     public function testMethodGetdocumentname() {
-        self::assertEquals('NOTA DE DÉBITO', Catalogo::getDocumentName(Catalogo::DOCTYPE_NOTA_DEBITO));
+        self::assertEquals('NOTA DE DÉBITO', Catalogo::getOfficialDocumentName(Catalogo::DOCTYPE_NOTA_DEBITO));
     }
     /**
      * @expectedException InvalidArgumentException
      */
     public function testMethodGetdocumentnameProducesAnExceptionOnInvalidType() {
-        Catalogo::getDocumentName('x');
+        Catalogo::getOfficialDocumentName('x');
     }
 
     public function testGetCatItems() {

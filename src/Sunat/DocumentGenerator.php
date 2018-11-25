@@ -88,13 +88,13 @@ class DocumentGenerator {
      */
     public static function generateFiles($XmlDoc) {
         // Save Input
-        self::saveBillInput($XmlDoc);
+        self::saveDocumentInput($XmlDoc);
         // Save Document
-        self::saveBill($XmlDoc);
+        self::saveDocument($XmlDoc);
         // Sign Document
-        self::singBill($XmlDoc);
+        self::signDocument($XmlDoc);
         // Compress Document
-        self::zipBill($XmlDoc);
+        self::zipDocument($XmlDoc);
         // Generate PDF
         self::generatePdf($XmlDoc);
     }
@@ -112,42 +112,42 @@ class DocumentGenerator {
         $docFileName = $eDocument->getDocumentFileName();
         $tpRenderer = TplRenderer::getRenderer(F72X::getSrcDir().'/templates');
         $xmlContent = $tpRenderer->render('SummaryDocuments.xml', $eDocument->getDataForXml());
-        Repository::saveBillInput($docFileName, json_encode($eDocument->getRawData(), JSON_PRETTY_PRINT));
-        Repository::saveBill($docFileName, $xmlContent);
+        Repository::saveDocumentInput($docFileName, json_encode($eDocument->getRawData(), JSON_PRETTY_PRINT));
+        Repository::saveDocument($docFileName, $xmlContent);
         XmlDSig::sign($docFileName);
-        Repository::zipBill($docFileName);
+        Repository::zipDocument($docFileName);
     }
-    private static function saveBillInput($XmlDoc) {
-        $billName = $XmlDoc->getBillName();
-        Repository::saveBillInput($billName, json_encode($XmlDoc->getDataMap()->getRawData(), JSON_PRETTY_PRINT));
-    }
-
-    private static function singBill($XmlDoc) {
-        $billName = $XmlDoc->getBillName();
-        XmlDSig::sign($billName);
+    private static function saveDocumentInput($XmlDoc) {
+        $documentName = $XmlDoc->getDocumentName();
+        Repository::saveDocumentInput($documentName, json_encode($XmlDoc->getDataMap()->getRawData(), JSON_PRETTY_PRINT));
     }
 
-    private static function zipBill($XmlDoc) {
-        $billName = $XmlDoc->getBillName();
-        Repository::zipBill($billName);
+    private static function signDocument($XmlDoc) {
+        $documentName = $XmlDoc->getDocumentName();
+        XmlDSig::sign($documentName);
+    }
+
+    private static function zipDocument($XmlDoc) {
+        $documentName = $XmlDoc->getDocumentName();
+        Repository::zipDocument($documentName);
     }
 
     public static function generatePdf($XmlDoc) {
-        $billName = $XmlDoc->getBillName();
+        $documentName = $XmlDoc->getDocumentName();
         $Invoice = $XmlDoc->getDataMap();
-        PdfGenerator::generatePdf($Invoice, $billName);
+        PdfGenerator::generatePdf($Invoice, $documentName);
     }
 
-    private static function saveBill($Bill) {
+    private static function saveDocument($Bill) {
         $xmlService = new XmlService('1.0', 'ISO-8859-1');
         $documentType = $Bill->getDataMap()->getDocumentType();
         // Set namespaces
         $xmlService->namespaceMap = self::getNamespaceMap($documentType);
-        $billName = $Bill->getBillName();
+        $documentName = $Bill->getDocumentName();
         // Xml Root
         $xmlRoot = self::getXmlRoot($documentType);
         $billContent = $xmlService->write($xmlRoot, $Bill);
-        Repository::saveBill($billName, $billContent);
+        Repository::saveDocument($documentName, $billContent);
     }
 
     /**

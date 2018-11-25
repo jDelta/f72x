@@ -17,9 +17,9 @@ final class PdfGeneratorTest extends TestCase {
     public function testGen() {
         $data = Util::getCaseData('factura');
         $Invoice = new DataMap($data, Catalogo::DOCTYPE_FACTURA);
-        $billName = $Invoice->getBillName();
-        Repository::removeFile(Repository::getPdfPath($billName), false);
-        PdfGenerator::generatePdf($Invoice, $billName);
+        $documentName = $Invoice->getDocumentName();
+        Repository::removeFile(Repository::getPdfPath($documentName), false);
+        PdfGenerator::generatePdf($Invoice, $documentName);
     }
 
 }

@@ -72,8 +72,8 @@ $XML = DocumentGenerator::createDocument('FAC', $data);
 // Generar Documentos
 DocumentGenerator::generateFiles($XML);
 // Enviar a SUNAT
-$billName = $xmlFAC->getBillName();
-$response = ServiceGateway::sendBill($billName);
+$documentName = $xmlFAC->getDocumentName();
+$response = ServiceGateway::sendBill($documentName);
 // Procesar Respuesta
 var_dump($response);
 ```
@@ -86,8 +86,8 @@ $XML = DocumentGenerator::createDocument('BOL', $data);
 // Generar Documentos
 DocumentGenerator::generateFiles($XML);
 // Enviar a SUNAT
-$billName = $xmlFAC->getBillName();
-$response = ServiceGateway::sendBill($billName);
+$documentName = $xmlFAC->getDocumentName();
+$response = ServiceGateway::sendBill($documentName);
 // Procesar Respuesta
 var_dump($response);
 ```
@@ -101,8 +101,8 @@ $XML = DocumentGenerator::createDocument('NCR', $data);
 // Generar Documentos
 DocumentGenerator::generateFiles($XML);
 // Enviar a SUNAT
-$billName = $xmlFAC->getBillName();
-$response = ServiceGateway::sendBill($billName);
+$documentName = $xmlFAC->getDocumentName();
+$response = ServiceGateway::sendBill($documentName);
 // Procesar Respuesta
 var_dump($response);
 ```
@@ -116,8 +116,8 @@ $XML = DocumentGenerator::createDocument('NDE', $data);
 // Generar Documentos
 DocumentGenerator::generateFiles($XML);
 // Enviar a SUNAT
-$billName = $xmlFAC->getBillName();
-$response = ServiceGateway::sendBill($billName);
+$documentName = $xmlFAC->getDocumentName();
+$response = ServiceGateway::sendBill($documentName);
 // Procesar Respuesta
 var_dump($response);
 ```

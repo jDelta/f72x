@@ -18,23 +18,23 @@ class ServiceGateway {
 
     /**
      * 
-     * @param string $billName El nombre del documento electrónico.
+     * @param string $documentName El nombre del documento electrónico.
      * @return array
      */
-    public static function sendBill($billName) {
-        $contentFile = Repository::getZippedBillContent($billName);
+    public static function sendBill($documentName) {
+        $contentFile = Repository::getZipContent($documentName);
         try {
             $soapService = SunatSoapClient::getService();
-            $soapService->__soapCall('sendBill', [['fileName' => "$billName.zip", 'contentFile' => $contentFile]]);
+            $soapService->__soapCall('sendBill', [['fileName' => "$documentName.zip", 'contentFile' => $contentFile]]);
             $serverResponse = $soapService->__getLastResponse();
         } catch (Exception $exc) {
             throw new SunatException($exc->getMessage(), $exc->getCode());
         }
 
         // Save Constancia de recepción
-        self::saveCdr($serverResponse, $billName);
+        self::saveCdr($serverResponse, $documentName);
         // Get Response info
-        return Repository::getCdrInfo($billName);
+        return Repository::getCdrInfo($documentName);
     }
 
     /**
@@ -43,7 +43,7 @@ class ServiceGateway {
      * @return array
      */
     public static function sendSummary($documentName) {
-        $contentFile = Repository::getZippedBillContent($documentName);
+        $contentFile = Repository::getZipContent($documentName);
         try {
             $soapService = SunatSoapClient::getService();
             $soapService->__soapCall('sendSummary', [['fileName' => "$documentName.zip", 'contentFile' => $contentFile]]);
@@ -70,12 +70,12 @@ class ServiceGateway {
         return self::saveStatusResponse($serverResponse, $documentName);
     }
 
-    private static function saveCdr($response, $billName) {
+    private static function saveCdr($response, $documentName) {
         $xml = simplexml_load_string($response);
         $appResp = $xml->xpath("//applicationResponse")[0];
         // CDR
         $cdr = base64_decode($appResp);
-        Repository::saveCdr($billName, $cdr);
+        Repository::saveCdr($documentName, $cdr);
     }
 
     private static function saveStatusResponse($response, $documentName) {
