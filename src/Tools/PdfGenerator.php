@@ -22,7 +22,6 @@ use Twig_Loader_Filesystem;
 use Twig_Extensions_Extension_Intl;
 use Twig_Extension_Escaper;
 use Dompdf\Dompdf;
-use Codelint\QRCode\QRCode;
 
 class PdfGenerator {
 
@@ -74,8 +73,8 @@ class PdfGenerator {
             'customerAddress'      => $inv->getCustomerAddress(),
             'issueDate'            => $inv->getIssueDate()->format('d-m-Y'),
             'igvPercent'           => SunatVars::IGV_PERCENT,
-            'logo'                 => self::getLogoString(),
-            'qr'                   => self::getQrString($inv), // QR Code
+            'logo'                 => LogoMgr::getLogoString(),
+            'qr'                   => QrGenerator::getQrString($inv), // QR Code
             'taxableOperations'    => $inv->getTotalTaxableOperations(),    // Total operaciones gravadas
             'freeOperations'       => $inv->getTotalFreeOperations(),       // Total operaciones gratuitas
             'unaffectedOperations' => $inv->getTotalUnaffectedOperations(), // Total operaciones inafectas
@@ -84,7 +83,7 @@ class PdfGenerator {
             'igvAmount'            => $inv->getIGV(),                       // Total a pagar
             'payableAmount'        => $payableAmount,                       // Total a pagar
             'payableInWords'       => $payableInWords,                      // Monto en palabras
-            'items'                => self::getDocumentDataItems($inv)       // Items
+            'items'                => self::getDocumentDataItems($inv)      // Items
                 
         ];
     }
@@ -104,39 +103,6 @@ class PdfGenerator {
             ];
         }
         return $items2;
-    }
-
-    private static function getLogoString() {
-        $customLogoPath = Company::getPdfTemplatesPath() . '/company-logo.png';
-        if (file_exists($customLogoPath)) {
-            return base64_encode(file_get_contents($customLogoPath));
-        }
-        $defaultLogoPath = F72X::getDefaultPdfTemplatesPath() . '/company-logo.png';
-        return base64_encode(file_get_contents($defaultLogoPath));
-    }
-
-    private static function getQrString(DataMap $inv) {
-        $documentName = $inv->getDocumentName();
-        $qr = new QRCode();
-        $qrContent = self::getQrContent($inv);
-        $qrTempPath = F72X::getTempDir() . "/QR-$documentName.png";
-        $qr->png($qrContent, $qrTempPath, 'Q', 8, 2);
-        $qrs = base64_encode(file_get_contents($qrTempPath));
-        unlink($qrTempPath);
-        return $qrs;
-    }
-
-    private static function getQrContent(DataMap $inv) {
-        $ruc               = Company::getRUC();
-        $invoiveType       = $inv->getDocumentType();
-        $documentSeries     = $inv->getDocumentSeries();
-        $seriesNumber      = $inv->getDocumentNumber();
-        $igv               = Operations::formatAmount($inv->getIGV());
-        $payableAmount     = Operations::formatAmount($inv->getPayableAmount());
-        $issueDate         = $inv->getIssueDate()->format('Y-m-d');
-        $customerDocType   = $inv->getCustomerDocType();
-        $customerDocNumber = $inv->getCustomerDocNumber();
-        return "$ruc|$invoiveType|$documentSeries|$seriesNumber|$igv|$payableAmount|$issueDate|$customerDocType|$customerDocNumber";
     }
 
     private static function getRenderer() {

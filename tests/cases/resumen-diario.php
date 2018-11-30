@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'currencyCode'   => 'PEN',        // Tipo de moneda (ISO 4217)
     'documentNumber' => 1,
+    'currencyCode'   => 'PEN',        // Tipo de moneda (ISO 4217)
     'issueDate'      => '2017-11-18', // Fecha de generación del resumen diario - ISO 8601 date
     'referenceDate'  => '2017-11-18', // Fecha de emisión de los comprobantes - ISO 8601 date
     'items' => [

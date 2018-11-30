@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'currencyCode'      => 'PEN',                 // Tipo de moneda (ISO 4217)
-    'operationType'     => '0101',                // Tipo de operación Catálogo #51
     'documentSeries'    => '001',                 // Serie de la factura
     'documentNumber'    => 4355,                  // Número correlativo de la factura
+    'currencyCode'      => 'PEN',                 // Tipo de moneda (ISO 4217)
+    'operationType'     => '0101',                // Tipo de operación Catálogo #51
     'customerDocType'   => '6',                   // Tipo de documento Catálogo #6
     'customerDocNumber' => '20587896411',         // RUC
     'customerRegName'   => 'SERVICABINAS S.A.',   // Razón social
@@ -80,19 +80,19 @@ return [
             'igvAffectationType' => '10',
             'unitPrice'          => 196.00,
             'igvIncluded'        => true
+        ],
+        [
+            'productCode'        => 'WCG01',
+            'unspsc'             => '45121520',
+            'unitCode'           => 'NIU',
+            'quantity'           => 1,
+            'description'        => 'Web cam Genius iSlim 310',
+            'priceType'          => '02',
+            'taxType'            => '9996',
+            'igvAffectationType' => '31',
+            'unitPrice'          => 30.00,
+            'igvIncluded'        => false
         ]
-//        [
-//            'productCode'        => 'WCG01',
-//            'unspsc'             => '45121520',
-//            'unitCode'           => 'NIU',
-//            'quantity'           => 1,
-//            'description'        => 'Web cam Genius iSlim 310',
-//            'priceType'          => '02',
-//            'taxType'            => '9996',
-//            'igvAffectationType' => '31',
-//            'unitPrice'          => 30.00,
-//            'igvIncluded'        => false
-//        ]
     ],
     // Campos calculados solo con fines de validación
     'taxableAmount'   => 348199.15,

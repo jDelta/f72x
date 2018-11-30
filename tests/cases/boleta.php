@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'currencyCode'      => 'PEN',                       // Tipo de moneda (ISO 4217)
-    'operationType'     => '0101',                      // Tipo de operación Catálogo #51
     'documentSeries'    => '001',                       // Serie de la factura
     'documentNumber'    => 3652,                        // Número correlativo de la factura
+    'currencyCode'      => 'PEN',                       // Tipo de moneda (ISO 4217)
+    'operationType'     => '0101',                      // Tipo de operación Catálogo #51
     'customerDocType'   => '1',                         // Tipo de documento Catálogo #6
     'customerDocNumber' => '46237547',                  // DNI
     'customerRegName'   => 'LUANA KARINA PAZOS ATOCHE', // Nombre de cliente

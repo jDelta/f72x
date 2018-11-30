@@ -16,15 +16,23 @@ use F72X\Sunat\Operations;
 use F72X\Sunat\Catalogo;
 use F72X\Sunat\SunatVars;
 
+/**
+ * Genera archivos de texto para el Facuturador SUNAT
+ */
 class FSInputGenerator {
 
-    public static function generateFactura(array $data, $companyRUC, $currencyCode = 'PEN') {
-        $Invoice = new DataMap($data, 'FACTURA', $currencyCode);
+    /**
+     * Ruta a directorio DATA del Facturador
+     */
+    const FS_DATA_DIR = 'F:\SUNAT/SFS_v1.2/sunat_archivos/sfs/DATA';
+
+    public static function generateFactura(array $data, $companyRUC) {
+        $Invoice = new DataMap($data, '01');
         self::generateFSTextInput($Invoice, $companyRUC);
     }
 
-    public static function generateBoleta(array $data, $companyRUC, $currencyCode = 'PEN') {
-        $Invoice = new DataMap($data, 'BOLETA', $currencyCode);
+    public static function generateBoleta(array $data, $companyRUC) {
+        $Invoice = new DataMap($data, 'BOLETA');
         self::generateFSTextInput($Invoice, $companyRUC);
     }
 
@@ -67,10 +75,10 @@ class FSInputGenerator {
                 $porIgvItem = '0.00';
             }
             if ($Items->getPriceTypeCode($rowIndex) === Catalogo::CAT16_REF_VALUE) {
-                $mtoPrecioVentaUnitario      = '0.00';
+                $mtoPrecioVentaUnitario = '0.00';
                 $mtoValorReferencialUnitario = Operations::formatAmount($Items->getUnitValue($rowIndex));
             } else {
-                $mtoPrecioVentaUnitario      = Operations::formatAmount($Items->getUnitTaxedValue($rowIndex));
+                $mtoPrecioVentaUnitario = Operations::formatAmount($Items->getUnitTaxedValue($rowIndex));
                 $mtoValorReferencialUnitario = '0.00';
             }
             $item = [
@@ -115,7 +123,7 @@ class FSInputGenerator {
         for ($rowIndex = 0; $rowIndex < $ln; $rowIndex++) {
             $detContent .= implode('|', $json['detalle'][$rowIndex]) . $ENTER;
         }
-        $invoiceId   = $Invoice->getDocumentId();
+        $invoiceId = $Invoice->getDocumentId();
         $documentType = $Invoice->getDocumentType();
         self::writeFSFile("$companyRUC-$documentType-$invoiceId.CAB", $cabContent);
         self::writeFSFile("$companyRUC-$documentType-$invoiceId.DET", $detContent);
@@ -131,16 +139,14 @@ class FSInputGenerator {
     }
 
     private static function writeFSFile($filename, $content) {
-        $facturadorSUNATDataDir = 'F:\SUNAT/SFS_v1.2/sunat_archivos/sfs/DATA';
-        file_put_contents("$facturadorSUNATDataDir/$filename", $content);
+        file_put_contents(self::FS_DATA_DIR . '/' . $filename, $content);
     }
 
-
     private static function getVariablesGlobales(DataMap $Invoice) {
-        $data         = [];
+        $data = [];
         $currencyCode = $Invoice->getCurrencyCode();
-        $ac           = $Invoice->getAllowancesAndCharges();
-        $baseAmount   = $Invoice->getItems()->getTotalTaxableAmount();
+        $ac = $Invoice->getAllowancesAndCharges();
+        $baseAmount = $Invoice->getItems()->getTotalTaxableAmount();
         foreach ($ac as $item) {
             $k = $item['multiplierFactor'];
             $amount = $baseAmount * $k;

@@ -18,7 +18,7 @@ final class FSInputGenerationTest extends TestCase {
         FSInputGenerator::generateBoleta($data, '20100454523');
     }
 
-    public function XtestGenerarFactura() {
+    public function testGenerarFactura() {
         $data = Util::getCaseData('factura');
         FSInputGenerator::generateFactura($data, '20100454523');
     }

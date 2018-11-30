@@ -102,26 +102,12 @@
                 width: 450px;
                 /** background: yellow;**/
             }
-            .row {
-                width: 100%;
-                content: "";
-                display: table;
-                clear: both;
-            }
-            .col {
-                float:left;width:100%;
-            }
             .words-amount {
                 font-weight: bold;
             }
             .qr {
                 float: left;
                 margin: 10px 10px 10px 50px;
-            }
-            .cpe-foot-note {
-                vertical-align: top;
-                float: left;
-                margin: 15px 0px;
             }
             .repo-link {
                 text-decoration: none;
@@ -133,79 +119,79 @@
     </head>
     <body>
         <img class="logo" src="data:image/png;base64,{{logo}}" />
-        <div class="company-location-info">
+            <div class="company-location-info">
             {{companyAddress}} - {{companyCity}}<br>
             {{companyContactInfo|raw}}
-        </div>
-        <div class="invoice-id-area">
+            </div>
+            <div class="invoice-id-area">
             R.U.C. {{companyRuc}}<br>
-            BOLETA DE VENTA ELECTRÓNICA<br>
+                BOLETA DE VENTA ELECTRÓNICA<br>
             N° {{documentSeries}}-{{documentNumber}}
-        </div>
-        <table class="head-section">
-            <tbody>
-                <tr>
-                    <td width="50">SEÑOR(ES)</td>
+            </div>
+            <table class="head-section">
+                <tbody>
+                    <tr>
+                        <td width="50">SEÑOR(ES)</td>
                     <td><div class="one-line">: {{customerRegName}}</div></td>
-                    <td width="60">FEC. EMISIÓN</td>
+                        <td width="60">FEC. EMISIÓN</td>
                     <td width="70">: {{issueDate}}</td>
-                </tr>
-                <tr>
-                    <td>R.U.C.</td>
+                    </tr>
+                    <tr>
+                        <td>R.U.C.</td>
                     <td>: {{customerDocNumber}}</td>
-                    <td>MONEDA</td>
+                        <td>MONEDA</td>
                     <td>: {{currency}}</td>
-                </tr>
-                <tr>
-                    <td>DIRECCIÓN</td>
+                    </tr>
+                    <tr>
+                        <td>DIRECCIÓN</td>
                     <td><div class="one-line">: {{customerAddress}}</div></td>
-                    <td colspan="2"></td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="detail-table dim-full">
-            <thead>
-                <tr>
-                    <th width="30" class="align-c">ITEM</th>
-                    <th width="30" class="align-c">CANT.</th>
-                    <th width="30" class="align-c">UND.</th>
-                    <th class="align-l">DESCRIPCIÓN</th>
-                    <th width="60" class="align-c">PRECIO UNIT.</th>
-                    <th width="60" class="align-c">TOTAL</th>
-                </tr>
-            </thead>
-            <tbody>
+                        <td colspan="2"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="detail-table dim-full">
+                <thead>
+                    <tr>
+                        <th width="30" class="align-c">ITEM</th>
+                        <th width="30" class="align-c">CANT.</th>
+                        <th width="30" class="align-c">UND.</th>
+                        <th class="align-l">DESCRIPCIÓN</th>
+                        <th width="60" class="align-c">PRECIO UNIT.</th>
+                        <th width="60" class="align-c">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {% for item in items %}
-                <tr>
+                    <tr>
                     <td class="align-c">{{loop.index}}</td>
                     <td class="align-c">{{item.quantity}}</td>
                     <td class="align-c">{{item.unitName}}</td>
                     <td>{{item.description}}</td>
                     <td class="align-r">{{item.unitBillableValue|number_format(2)}}</td>
                     <td class="align-r">{{item.itemPayableAmount|number_format(2)}}</td>
-                </tr>
+                    </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         <div class="words-amount">SON: {{payableInWords}}</div>
-        <table class="dim-full">
-            <tr>
-                <td width="35">&nbsp;</td>
-                <td>
-                    <table class="detail-table">
-                        <thead>
-                            <tr>
-                                <th class="dim-total-col align-c">OP. GRABADAS</th>
-                                <th class="dim-total-col align-c">OP. GRATUITAS</th>
-                                <th class="dim-total-col align-c">OP. INAFECTAS</th>
-                                <th class="dim-total-col align-c">OP. EXONERADAS</th>
-                                <th class="dim-total-col align-c">DESCUENTOS</th>
+            <table class="dim-full">
+                <tr>
+                    <td width="35">&nbsp;</td>
+                    <td>
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th class="dim-total-col align-c">OP. GRABADAS</th>
+                                    <th class="dim-total-col align-c">OP. GRATUITAS</th>
+                                    <th class="dim-total-col align-c">OP. INAFECTAS</th>
+                                    <th class="dim-total-col align-c">OP. EXONERADAS</th>
+                                    <th class="dim-total-col align-c">DESCUENTOS</th>
                                 <th class="dim-total-col align-c">I.G.V. ({{igvPercent|number_format(2)}}%)</th>
-                                <th class="dim-total-col align-c">IMPORTE TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+                                    <th class="dim-total-col align-c">IMPORTE TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
                                 <td class="align-r">{%if taxableOperations %}{{taxableOperations|number_format(2)}}{% endif %}</td>
                                 <td class="align-r">{%if freeOperations %}{{freeOperations|number_format(2)}}{% endif %}</td>
                                 <td class="align-r">{%if unaffectedOperations %}{{unaffectedOperations|number_format(2)}}{% endif %}</td>
@@ -213,22 +199,22 @@
                                 <td class="align-r">{%if totalAllowances %}{{totalAllowances|number_format(2)}}{% endif %}</td>
                                 <td class="align-r">{%if igvAmount %}{{igvAmount|number_format(2)}}{% endif %}</td>
                                 <td class="align-r">{%if payableAmount %}{{payableAmount|number_format(2)}}{% endif %}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <table class="footer dim-full">
-            <tr>
-                <td width="35">&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table class="footer dim-full">
+                <tr>
+                    <td width="35">&nbsp;</td>
                 <td width="64"><img class="dim-qr" src="data:image/png;base64,{{qr}}" /></td>
-                <td>
-                    Representación impresa - Comprobante de Pago Electrónico<br><br>
-                    Siempre podrá consultar sus comprobantes electrónicos en:<br>
-                    <a class="repo-link" href="https://consultar.comprobante.pe" target="_blank">https://consultar.comprobante.pe</a>
-                </td>
-            </tr>
-        </table>
+                    <td>
+                        Representación impresa - Comprobante de Pago Electrónico<br><br>
+                        Siempre podrá consultar sus comprobantes electrónicos en:<br>
+                        <a class="repo-link" href="https://consultar.comprobante.pe" target="_blank">https://consultar.comprobante.pe</a>
+                    </td>
+                </tr>
+            </table>
     </body>
 </html>

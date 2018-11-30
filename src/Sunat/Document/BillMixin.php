@@ -206,7 +206,7 @@ trait BillMixin {
                         ->setCurrencyID($currencyCode)
                         ->setTaxAmount($itemTaxAmount)
                         ->addTaxSubTotal($TaxSubTotal
-                                ->setCurrencyID($currencyCode)            // Tipo de moneda
+                                ->setCurrencyID($currencyCode)          // Tipo de moneda
                                 ->setTaxableAmount($itemTaxableAmount)  // Valor de venta del item sin impuestos
                                 ->setTaxAmount($itemTaxAmount)          // IGV
                                 ->setTaxCategory($TaxCategory

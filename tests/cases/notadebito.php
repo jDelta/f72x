@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'currencyCode'      => 'PEN',                 // Tipo de moneda (ISO 4217)
-    'noteType'          => '02',                  // Tipo de nota, Catálogo #10
     'documentSeries'    => 'D01',                 // Serie C##|D##
     'documentNumber'    => 211,                   // Número correlativo,
+    'currencyCode'      => 'PEN',                 // Tipo de moneda (ISO 4217)
+    'noteType'          => '02',                  // Tipo de nota, Catálogo #10
     'affectedDocType'   => '01',                  // Tipo de documento al que aplica
                                                   // 01|03|12 : Factura|Boleta|Ticket de maquina registradora
     'affectedDocId'     => 'F001-4355',           // Documento al que aplica Serie-Numero

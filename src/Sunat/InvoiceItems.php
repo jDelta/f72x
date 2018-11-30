@@ -169,8 +169,8 @@ class InvoiceItems extends XMatrix {
         if ($priceType === Catalogo::CAT16_UNITARY_PRICE) {
             $amount = Operations::applyAllowancesAndCharges($baseAmount, $ac);
         } else {
-            // 0 si el valor del item es referencial!
-            $amount = 0;
+            // Monto base si el valor del item es referencial!
+            $amount = $baseAmount;
         }
         return $amount;
     }
