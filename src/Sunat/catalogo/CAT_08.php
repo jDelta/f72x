@@ -1,6 +1,6 @@
 <?php
 
-//Catálogo N° 8:
+//Catálogo N° 08:
 
 return [
     '01' => ['id' => '01', 'value' => 'Sistema al valor (Apéndice IV, lit. A – T.U.O IGV e ISC)'],

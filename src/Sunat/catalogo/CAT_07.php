@@ -1,6 +1,6 @@
 <?php
 
-//Catálogo N° 7:
+//Catálogo N° 07:
 
 return [
     '10' => ['id' => '10', 'value' => 'Gravado - Operación Onerosa', 'igv' => '1'],

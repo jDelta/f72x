@@ -1,6 +1,6 @@
 <?php
 
-//Catálogo N° 5:
+//Catálogo N° 05:
 
 return [
     '1000' => ['id' => '1000', 'value' => 'IGV IMPUESTO GENERAL A LAS VENTAS', 'UN_ECE_5153' => 'VAT', 'categoria' => 'S', 'name' => 'IGV'],

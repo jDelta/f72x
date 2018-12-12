@@ -1,6 +1,6 @@
 <?php
 
-//Catálogo N° 9:
+//Catálogo N° 09:
 
 return [
     '01' => ['id' => '01', 'value' => 'Anulación de la operación'],

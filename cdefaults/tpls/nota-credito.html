@@ -39,12 +39,22 @@
                 vertical-align: top;
                 height: 100px;
             }
+            .head-title{
+                margin: 10px 0 0;
+                padding-bottom: 2px;
+                border-bottom: solid 2px;
+                font-weight: bold;
+            }
             .head-section {
                 width: 100%;
-                margin: 10px 0;
+                margin: 0;
             }
             .head-section td {
                 vertical-align: top;
+                padding: 5px 0 2px;
+            }
+            .bottom-bordered{
+                border-bottom: solid 1px;
             }
             .detail-table {
                 border: solid 1px;
@@ -54,7 +64,7 @@
             }
             .detail-table th {
                 font-weight: normal;
-                padding:3px 4px;
+                padding: 3px 4px;
                 vertical-align: middle;
                 border: solid 1px;
             }
@@ -128,10 +138,15 @@
             NOTA DE CRÉDITO ELECTRÓNICA<br>
             N° {{documentSeries}}-{{documentNumber}}
         </div>
+        <div class="head-title">DOCUMENTO QUE MODIFICA:</div>
         <table class="head-section">
             <tbody>
                 <tr>
-                    <td width="50">SEÑOR(ES)</td>
+                    <td colspan="2">{{affectedDocumentOficialName}} ELECTRÓNICA: <b>{{affectedDocumentId}}</b></td>
+                    <td colspan="2">ANULACIÓN DE LA OPERACIÓN</td>
+                </tr>
+                <tr>
+                    <td>SEÑOR(ES)</td>
                     <td><div class="one-line">: {{customerRegName}}</div></td>
                     <td width="60">FEC. EMISIÓN</td>
                     <td width="70">: {{issueDate}}</td>
@@ -146,6 +161,10 @@
                     <td>DIRECCIÓN</td>
                     <td><div class="one-line">: {{customerAddress}}</div></td>
                     <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td>OBSERVACIÓN</td>
+                    <td colspan="3">: {{note}}</td>
                 </tr>
             </tbody>
         </table>

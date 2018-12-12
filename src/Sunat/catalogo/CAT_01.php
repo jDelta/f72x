@@ -1,6 +1,6 @@
 <?php
 
-//Catálogo N° 1:
+//Catálogo N° 01:
 
 return [
     '01' => ['id' => '01', 'value' => 'Factura'],

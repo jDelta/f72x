@@ -19,44 +19,47 @@ use Sabre\Xml\Reader;
 
 class Catalogo {
 
-    const CAT_TAX_DOCUMENT_TYPE    = 1;
-    const CAT_CURRENCY_TYPE        = 2;
-    const CAT_MEASUREMENT_UNIT     = 3;
-    const CAT_COUNTRY_CODE         = 4;
-    const CAT_TAX_TYPE             = 5;
-    const CAT_IDENT_DOCUMENT_TYPE  = 6;
+    const CAT_TAX_DOCUMENT_TYPE = 1;
+    const CAT_CURRENCY_TYPE = 2;
+    const CAT_MEASUREMENT_UNIT = 3;
+    const CAT_COUNTRY_CODE = 4;
+    const CAT_TAX_TYPE = 5;
+    const CAT_IDENT_DOCUMENT_TYPE = 6;
     const CAT_IGV_AFFECTATION_TYPE = 7;
     const CAT_ISC_CALC_SYSTEM_TYPE = 8;
-    const CAT_NOTA_CREDITO_TYPE    = 9;
-    const CAT_NOTA_DEBITO_TYPE     = 10;
-    const CAT_FACTURA_TYPE         = 51;
+    const CAT_NOTA_CREDITO_TYPE = 9;
+    const CAT_NOTA_DEBITO_TYPE = 10;
+    const CAT_FACTURA_TYPE = 51;
+
     /** @CAT1 Código tipo de documento */
-    const DOCTYPE_FACTURA      = '01';
-    const DOCTYPE_BOLETA       = '03';
+    const DOCTYPE_FACTURA = '01';
+    const DOCTYPE_BOLETA = '03';
     const DOCTYPE_NOTA_CREDITO = '07';
-    const DOCTYPE_NOTA_DEBITO  = '08';
-    const DOCTYPE_VOUCHER      = '12';
-    const DOCTYPE_SC_FACTURA      = 'FAC';
-    const DOCTYPE_SC_BOLETA       = 'BOL';
+    const DOCTYPE_NOTA_DEBITO = '08';
+    const DOCTYPE_VOUCHER = '12';
+    const DOCTYPE_SC_FACTURA = 'FAC';
+    const DOCTYPE_SC_BOLETA = 'BOL';
     const DOCTYPE_SC_NOTA_CREDITO = 'NCR';
-    const DOCTYPE_SC_NOTA_DEBITO  = 'NDE';
-    /** @CAT5 Tipo de impuesto*/
-    const CAT5_IGV   = '1000';
-    const CAT5_IVAP  = '1016';
-    const CAT5_ISC   = '2000';
-    const CAT5_EXP   = '9995';
-    const CAT5_GRA   = '9996';
-    const CAT5_EXO   = '9997';
-    const CAT5_INA   = '9998';
+    const DOCTYPE_SC_NOTA_DEBITO = 'NDE';
+
+    /** @CAT5 Tipo de impuesto */
+    const CAT5_IGV = '1000';
+    const CAT5_IVAP = '1016';
+    const CAT5_ISC = '2000';
+    const CAT5_EXP = '9995';
+    const CAT5_GRA = '9996';
+    const CAT5_EXO = '9997';
+    const CAT5_INA = '9998';
     const CAT5_OTROS = '9999';
 
     /** @CAT7 Tipo de afectación del IGV */
-    const CAT7_GRA_IGV        = '10';
+    const CAT7_GRA_IGV = '10';
+
     /** @CAT16 Tipo de precio */
     const CAT16_UNITARY_PRICE = '01';
-    const CAT16_REF_VALUE     = '02';
+    const CAT16_REF_VALUE = '02';
 
-    /** @CAT6*/
+    /** @CAT6 */
     const IDENTIFICATION_DOC_DNI = '1';
     const IDENTIFICATION_DOC_RUC = '6';
 
@@ -95,10 +98,10 @@ class Catalogo {
      */
     public static function getOfficialDocumentName($documentType) {
         switch ($documentType) {
-            case self::DOCTYPE_FACTURA      : return 'FACTURA';
-            case self::DOCTYPE_BOLETA       : return 'BOLETA DE VENTA';
+            case self::DOCTYPE_FACTURA : return 'FACTURA';
+            case self::DOCTYPE_BOLETA : return 'BOLETA DE VENTA';
             case self::DOCTYPE_NOTA_CREDITO : return 'NOTA DE CRÉDITO';
-            case self::DOCTYPE_NOTA_DEBITO  : return 'NOTA DE DÉBITO';
+            case self::DOCTYPE_NOTA_DEBITO : return 'NOTA DE DÉBITO';
         }
         throw new InvalidArgumentException("Error: $documentType isn't a valid document type");
     }
@@ -110,10 +113,10 @@ class Catalogo {
      */
     public static function getDocumentType($shortCode) {
         switch ($shortCode) {
-            case self::DOCTYPE_SC_FACTURA:      return self::DOCTYPE_FACTURA ;
-            case self::DOCTYPE_SC_BOLETA:       return self::DOCTYPE_BOLETA;
+            case self::DOCTYPE_SC_FACTURA: return self::DOCTYPE_FACTURA;
+            case self::DOCTYPE_SC_BOLETA: return self::DOCTYPE_BOLETA;
             case self::DOCTYPE_SC_NOTA_CREDITO: return self::DOCTYPE_NOTA_CREDITO;
-            case self::DOCTYPE_SC_NOTA_DEBITO:  return self::DOCTYPE_NOTA_DEBITO;
+            case self::DOCTYPE_SC_NOTA_DEBITO: return self::DOCTYPE_NOTA_DEBITO;
         }
         throw new InvalidArgumentException("Error: $shortCode isn't valid short code");
     }
@@ -122,7 +125,7 @@ class Catalogo {
         $items = self::getCatItems($catNumber);
         return key_exists($itemID, $items);
     }
-    
+
     public static function getCatItem($catNumber, $itemID, $key = 'id') {
         $items = self::getCatItems($catNumber);
         foreach ($items as $item) {
@@ -191,11 +194,12 @@ class Catalogo {
 
     public static function getCustomListItem($listName, $itemId) {
         $customList = self::getCustomList($listName);
-        if(isset($customList[$itemId])){
+        if (isset($customList[$itemId])) {
             return $customList[$itemId];
         }
         throw new ConfigException("El codigó de item $itemId no existe en la lista $listName");
     }
+
     public static function getCustomList($listName) {
         // returns from cache
         if (isset(self::$_LIST['LIST_' . $listName])) {
@@ -204,7 +208,7 @@ class Catalogo {
         // Company customization
         $customListsPath = Company::getListsPath();
         $fileName = "$customListsPath/$listName.php";
-        if(file_exists($fileName)){
+        if (file_exists($fileName)) {
             $customListsPath = Company::getListsPath();
             $list = require $fileName;
             // Cache
@@ -218,6 +222,26 @@ class Catalogo {
         // Cache
         self::$_CAT['LIST_' . $listName] = $list;
         return $list;
+    }
+    
+    public static function getAllCatNumbers() {
+        $catNumbers = [];
+        for ($i = 1; $i <= 3; $i++) {
+            $catNumbers[] = $i;
+        }
+        for ($i = 5; $i <= 9; $i++) {
+            $catNumbers[] = $i;
+        }
+        for ($i = 10; $i <= 11; $i++) {
+            $catNumbers[] = $i;
+        }
+        for ($i = 13; $i <= 27; $i++) {
+            $catNumbers[] = $i;
+        }
+        for ($i = 51; $i <= 59; $i++) {
+            $catNumbers[] = $i;
+        }
+        return $catNumbers;
     }
 
     public static function catItemsToPhpArray($catNumber, $resultPath) {
@@ -233,6 +257,7 @@ class Catalogo {
                     $line[] = "'id' => '$id'";
                 }
                 if ($key != 'id') {
+                    $val = addslashes($val);
                     $line[] = "'$key' => '$val'";
                 }
                 $k++;
@@ -253,6 +278,58 @@ $joinedLines
 
 FILE;
         file_put_contents($resultPath, $result);
+    }
+
+    public static function catsToJsFile($catNumbers, $resultPath) {
+        $cats = [];
+        $ENTER = chr(13) . chr(10);
+        foreach ($catNumbers as $catNumber) {
+            $catNumber = str_pad($catNumber, 2, '0', STR_PAD_LEFT);
+            $cats[] = self::getCatJsItem($catNumber);
+        }
+        $joinedCats = implode(',' . $ENTER, $cats);
+        $result = <<<FILE
+({
+    cats: {
+$joinedCats
+    }
+});
+
+FILE;
+        file_put_contents($resultPath, $result);
+    }
+
+    public static function getCatJsItem($catNumber) {
+        $items = Catalogo::getCatItems($catNumber, true);
+        $lines = [];
+        $ENTER = chr(13) . chr(10);
+        foreach ($items as $item) {
+            $line = [];
+            $k = 0;
+            foreach ($item as $key => $val) {
+                if (!$k) {
+                    $id = $item['id'];
+                    $line[] = "id: '$id'";
+                }
+                if ($key != 'id') {
+                    $val = addslashes($val);
+                    $line[] = "$key: '$val'";
+                }
+                $k++;
+            }
+            $lineS = implode(', ', $line);
+            $id = $item['id'];
+            $lines[] = "                {{$lineS}}";
+        }
+        $joinedLines = implode(',' . $ENTER, $lines);
+        $result = <<<TPL
+        N$catNumber: {
+            items: [
+$joinedLines
+            ]
+        }
+TPL;
+        return $result;
     }
 
 }

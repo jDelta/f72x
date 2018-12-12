@@ -1,6 +1,6 @@
 <?php
 
-//Catálogo N° 2:
+//Catálogo N° 02:
 
 return [
     'AFN' => ['id' => 'AFN', 'value' => 'Afghani'],

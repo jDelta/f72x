@@ -59,7 +59,7 @@ class PdfGenerator {
         $currency = Catalogo::getCurrencyPlural($inv->getCurrencyCode());
         $payableAmount = $inv->getPayableAmount();
         $payableInWords = Operations::getAmountInWords($payableAmount, $currency);
-        return [
+        $data = [
             'companyRuc'           => Company::getRUC(),
             'companyAddress'       => Company::getAddress(),
             'companyCity'          => Company::getCity(),
@@ -83,9 +83,20 @@ class PdfGenerator {
             'igvAmount'            => $inv->getIGV(),                       // Total a pagar
             'payableAmount'        => $payableAmount,                       // Total a pagar
             'payableInWords'       => $payableInWords,                      // Monto en palabras
-            'items'                => self::getDocumentDataItems($inv)      // Items
-                
+            'items'                => self::getDocumentDataItems($inv)     // Items
         ];
+        // For credit and debit notes
+        if (in_array($inv->getDocumentType(), [Catalogo::DOCTYPE_NOTA_CREDITO, Catalogo::DOCTYPE_NOTA_DEBITO])) {
+            $noteData = [
+                'noteType'                    => $inv->getNoteType(),
+                'affectedDocumentId'          => $inv->getNoteAffectedDocId(),
+                'affectedDocumentOficialName' => Catalogo::getOfficialDocumentName($inv->getNoteAffectedDocType()),
+                'note'                        => $inv->getNoteDescription()
+            ];
+            return array_merge($data, $noteData);
+        }
+
+        return $data;
     }
 
     private static function getDocumentDataItems(DataMap $inv) {

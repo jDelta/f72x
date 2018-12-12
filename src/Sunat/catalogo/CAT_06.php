@@ -1,6 +1,6 @@
 <?php
 
-//Catálogo N° 6:
+//Catálogo N° 06:
 
 return [
     '0' => ['id' => '0', 'value' => 'DOC.TRIB.NO.DOM.SIN.RUC'],

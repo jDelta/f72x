@@ -1,6 +1,6 @@
 <?php
 
-//Catálogo N° 3:
+//Catálogo N° 03:
 
 return [
     'NIU' => ['id' => 'NIU', 'value' => 'UNIDAD (BIENES)'],

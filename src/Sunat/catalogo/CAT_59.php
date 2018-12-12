@@ -9,7 +9,7 @@ return [
     '004' => ['id' => '004', 'value' => 'Orden de pago'],
     '005' => ['id' => '005', 'value' => 'Tarjeta de débito'],
     '006' => ['id' => '006', 'value' => 'Tarjeta de crédito emitida en el país por una empresa del sistema financiero '],
-    '007' => ['id' => '007', 'value' => 'Cheques con la cláusula de "NO NEGOCIABLE", "INTRANSFERIBLES", "NO A LA ORDEN" u otra equivalente, a que se refiere el inciso g) del artículo 5° de la ley'],
+    '007' => ['id' => '007', 'value' => 'Cheques con la cláusula de \"NO NEGOCIABLE\", \"INTRANSFERIBLES\", \"NO A LA ORDEN\" u otra equivalente, a que se refiere el inciso g) del artículo 5° de la ley'],
     '008' => ['id' => '008', 'value' => 'Efectivo, por operaciones en las que no existe obligación de utilizar medio de pago'],
     '009' => ['id' => '009', 'value' => 'Efectivo, en los demás casos'],
     '010' => ['id' => '010', 'value' => 'Medios de pago usados en comercio exterior '],
