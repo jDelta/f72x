@@ -26,16 +26,19 @@ use Dompdf\Dompdf;
 class PdfGenerator {
 
     public static function generatePdf(DataMap $Invoice, $documentName) {
+        Repository::savePDF($documentName, self::buildPdf($Invoice));
+    }
+
+    public static function buildPdf(DataMap $Invoice) {
         $dompdf = new Dompdf();
         $docType = self::getTplFor($Invoice->getDocumentType());
         $html = self::getRenderedHtml($Invoice,$docType);
         // Render the HTML as PDF
         $dompdf->loadHtml($html);
         $dompdf->render();
-        $pdf = $dompdf->output();
-        Repository::savePDF($documentName, $pdf);
+        return $dompdf->output();
     }
-
+    
     private static function getTplFor($docType) {
         if ($docType == Catalogo::DOCTYPE_FACTURA) {
             return 'factura.html';
