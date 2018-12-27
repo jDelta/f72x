@@ -43,18 +43,4 @@ final class CatalogoTest extends TestCase {
         self::assertEquals($expected, $actual);
     }
 
-    public function testGeneratePhpArrays() {
-        $path = __DIR__ . '/../src/Sunat/catalogo';
-        $cats = Catalogo::getAllCatNumbers();
-        foreach ($cats as $num) {
-            $num = str_pad($num, 2, '0', STR_PAD_LEFT);
-            Catalogo::catItemsToPhpArray($num, "$path/CAT_$num.php");
-        }
-    }
-
-    public function testGenerateJsFile() {
-        $requiredCats = Catalogo::getAllCatNumbers();
-        Catalogo::catsToJsFile($requiredCats, __DIR__ . '/cats.js');
-    }
-
 }

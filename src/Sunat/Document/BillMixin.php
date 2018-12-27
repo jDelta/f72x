@@ -107,8 +107,8 @@ trait BillMixin {
         if ($totalUnaffectedOperations) {
             UblHelper::addTaxSubtotal($TaxTotal, $currencyID, 0, $totalUnaffectedOperations, Catalogo::CAT5_INA);
         }
-        // Total operaciones gratuitas solo aplica a FACTURA
-        if ($totalFreeOpertions && $Invoice->getDocumentType() === Catalogo::DOCTYPE_FACTURA) {
+        // Total operaciones gratuitas
+        if ($totalFreeOpertions) {
             UblHelper::addTaxSubtotal($TaxTotal, $currencyID, 0, $totalFreeOpertions,        Catalogo::CAT5_GRA);
         }
 
@@ -169,6 +169,7 @@ trait BillMixin {
         $priceTypeCode      = $Items->getPriceTypeCode($itemIndex);
         $taxTypeCode        = $Items->getTaxTypeCode($itemIndex);
         $igvAffectationType = $Items->getIgvAffectationType($itemIndex);
+        $taxCategoryPercent = $igvAffectationType === '10' ? SunatVars::IGV_PERCENT : '0.00';
 
         $itemValue          = $Items->getItemValue($itemIndex);
         $ac                 = $Items->getAllowancesAndCharges($itemIndex);
@@ -211,7 +212,7 @@ trait BillMixin {
                                 ->setTaxAmount($itemTaxAmount)          // IGV
                                 ->setTaxCategory($TaxCategory
                                         ->setID($cat5Item['categoria'])                     // Codigo de categoria de immpuestos @CAT5
-                                        ->setPercent(SunatVars::IGV_PERCENT)                // Porcentaje de IGV (18.00)
+                                        ->setPercent($taxCategoryPercent)                // Porcentaje de IGV (18.00)
                                         ->setTaxExemptionReasonCode($igvAffectationType)    // Código de afectación del IGV
                                         ->setTaxScheme($TaxScheme
                                                 ->setID($taxTypeCode)                       // Codigo de categoria de impuesto

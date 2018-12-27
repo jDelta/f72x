@@ -35,10 +35,12 @@ class InvoiceItems extends XMatrix {
     const COL_ALLOWANCES_AMOUNT     = 15;
     const COL_CHARGES_AMOUNT        = 16;
 
-    const COL_ITEM_TAXABLE_AMOUNT   = 17;
 
-    const COL_IGV                   = 18;
-    const COL_ITEM_PAYABLE_AMOUNT   = 19;
+    const COL_ITEM_BILLABLE_AMOUNT  = 17;
+    const COL_ITEM_TAXABLE_AMOUNT   = 18;
+
+    const COL_IGV                   = 19;
+    const COL_ITEM_PAYABLE_AMOUNT   = 20;
 
     protected $columns = [
         'COL_PRODUCT_CODE',
@@ -58,7 +60,8 @@ class InvoiceItems extends XMatrix {
         'COL_ALLOWANCES_CHARGES',
         'COL_ALLOWANCES_AMOUNT [COL_ITEM_BILLABLE_VALUE*k]',
         'COL_CHARGES_AMOUNT [COL_ITEM_BILLABLE_VALUE*k]',
-        'COL_ITEM_TAXABLE_AMOUNT(operacion_gravada) [COL_ITEM_BILLABLE_VALUE-descuentos+cargos]',
+        'COL_ITEM_BILLABLE_AMOUNT [COL_ITEM_BILLABLE_VALUE-descuentos+cargos]',
+        'COL_ITEM_TAXABLE_AMOUNT(operacion_gravada) [COL_ITEM_VALUE-descuentos+cargos]',
         'COL_IGV(operacion_gravada) [COL_ITEM_BILLABLE_VALUE*IGV_PERCENT]',
         'COL_ITEM_PAYABLE_AMOUNT [base_imponible+IGV]'
     ];
@@ -82,6 +85,7 @@ class InvoiceItems extends XMatrix {
             $itemBillableValue    = $unitBillableValue * $quantity; // Valor de item
             $itemAllowancesAmount = Operations::getTotalAllowances($itemBillableValue, $ac); // Descuentos de item
             $itemChargesAmount    = Operations::getTotalCharges($itemValue, $ac);            // Cargos de item
+            $itemBillableAmount   = $this->calcItemBillableAmount($itemValue, $priceType, $ac);         // Valor de venta del ítem = (Valor del item - Descuentos + Cargos), 0 si el valor del item es referencial!
             $itemTaxableAmount    = $this->calcItemTaxableAmount($itemValue, $priceType, $ac);         // Valor de venta del ítem = (Valor del item - Descuentos + Cargos), 0 si el valor del item es referencial!
             $igvAmount            = $this->calcIgvAmount($igvAffectCode, $itemTaxableAmount); // Afectación al IGV por item
             
@@ -106,6 +110,7 @@ class InvoiceItems extends XMatrix {
             $this->set(self::COL_ALLOWANCES_CHARGES,  $idx, $ac);
             $this->set(self::COL_ALLOWANCES_AMOUNT,   $idx, $itemAllowancesAmount);
             $this->set(self::COL_CHARGES_AMOUNT,      $idx, $itemChargesAmount);
+            $this->set(self::COL_ITEM_BILLABLE_AMOUNT,$idx, $itemBillableAmount);
             $this->set(self::COL_ITEM_TAXABLE_AMOUNT, $idx, $itemTaxableAmount);
             $this->set(self::COL_IGV,                 $idx, $igvAmount);
             $this->set(self::COL_ITEM_PAYABLE_AMOUNT, $idx, $itemPayableAmount);
@@ -164,15 +169,22 @@ class InvoiceItems extends XMatrix {
         return ($priceType === Catalogo::CAT16_REF_VALUE) ? 0 : $baseAmount;
     }
 
+    private function calcItemBillableAmount($baseAmount, $priceType, $ac) {
+        // Valor de venta del ítem = (Valor del item - Descuentos + Cargos)
+        if ($priceType === Catalogo::CAT16_UNITARY_PRICE) {
+            return Operations::applyAllowancesAndCharges($baseAmount, $ac);
+        }
+        // 0 si el valor del item es referencial!
+        return 0;
+    }
+
     private function calcItemTaxableAmount($baseAmount, $priceType, $ac) {
         // Valor de venta del ítem = (Valor del item - Descuentos + Cargos)
         if ($priceType === Catalogo::CAT16_UNITARY_PRICE) {
-            $amount = Operations::applyAllowancesAndCharges($baseAmount, $ac);
-        } else {
-            // Monto base si el valor del item es referencial!
-            $amount = $baseAmount;
+            return Operations::applyAllowancesAndCharges($baseAmount, $ac);
         }
-        return $amount;
+        // Monto base si el valor del item es referencial!
+        return $baseAmount;
     }
 
     /**
@@ -275,7 +287,9 @@ class InvoiceItems extends XMatrix {
     public function getChargesAmount($rowIndex) {
         return $this->get(self::COL_CHARGES_AMOUNT, $rowIndex);
     }
-
+    public function getBillableAmount($rowIndex) {
+        return $this->get(self::COL_ITEM_BILLABLE_AMOUNT, $rowIndex);
+    }
     public function getTaxableAmount($rowIndex) {
         return $this->get(self::COL_ITEM_TAXABLE_AMOUNT, $rowIndex);
     }
@@ -369,6 +383,14 @@ class InvoiceItems extends XMatrix {
      */
     public function getTotalIgv() {
         return $this->sum(self::COL_IGV);
+    }
+
+    /**
+     * El monto total facturable libre de impuestos
+     * @return float
+     */
+    public function getTotalBillableAmount() {
+        return $this->sum(self::COL_ITEM_BILLABLE_AMOUNT);
     }
 
     /**

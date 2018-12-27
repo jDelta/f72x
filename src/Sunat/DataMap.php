@@ -11,6 +11,7 @@
 namespace F72X\Sunat;
 
 use DateTime;
+use InvalidArgumentException;
 use F72X\Company;
 use F72X\Sunat\Catalogo;
 use F72X\Sunat\DocumentGenerator;
@@ -36,7 +37,7 @@ class DataMap {
     private $issueDate;
 
     /** @var DateTime */
-    private $DueDate;
+    private $dueDate;
     private $operationType;
     private $customerDocType;
     private $customerDocNumber;
@@ -51,14 +52,19 @@ class DataMap {
 
     /** NOTES FIELDS */
     private $noteType;
+    private $discrepancyResponseReason;
     private $noteAffectedDocType;
     private $noteAffectedDocId;
     /**
      * 
      * @param array $data
-     * @param string $type 01|03|07|08
+     * @param string $type 01|03|07|08 The document type
      */
     public function __construct(array $data, $type) {
+        // Type validation
+        if (!in_array($type, ['01', '03', '07', '08'])) {
+            throw new InvalidArgumentException("DataMap Error, el tipo de documento '$type', no es válido use 01|03|07|08");
+        }
         // Items
         $items = new InvoiceItems();
         $items->populate($data['items'], $data['currencyCode']);
@@ -73,6 +79,9 @@ class DataMap {
         $this->officialDocumentName = Catalogo::getOfficialDocumentName($type);
         $this->documentId           = $this->documentSeries . '-' . $this->documentNumber;
         $this->issueDate            = new DateTime($data['issueDate']);
+        if (isset($data['dueDate'])) {
+            $this->dueDate            = new DateTime($data['dueDate']);
+        }
         $this->customerDocType      = $data['customerDocType'];
         $this->customerDocNumber    = $data['customerDocNumber'];
         $this->customerRegName      = mb_strtoupper($data['customerRegName']);
@@ -88,6 +97,9 @@ class DataMap {
             $this->operationType = $data['operationType'];
             $this->purchaseOrder = $data['purchaseOrder'];
         } else {
+            // Catálogo 9 tipo de nota de crédito, 10 tipo de nota de débito
+            $catNumber = ($type == Catalogo::DOCTYPE_NOTA_CREDITO ? 9 : 10);
+            $this->discrepancyResponseReason = Catalogo::getCatItemValue($catNumber, $data['noteType']);
             $this->noteType            = $data['noteType'];
             $this->noteAffectedDocType = $data['affectedDocType'];
             $this->noteAffectedDocId   = $data['affectedDocId'];
@@ -102,6 +114,10 @@ class DataMap {
     }
     public function getNoteType() {
         return $this->noteType;
+    }
+
+    public function getDiscrepancyResponseReason() {
+        return $this->discrepancyResponseReason;
     }
 
     public function getNoteDescription() {
@@ -170,11 +186,11 @@ class DataMap {
     }
 
     public function getDueDate() {
-        return $this->DueDate;
+        return $this->dueDate;
     }
 
     public function setDueDate(DateTime $DueDate) {
-        $this->DueDate = $DueDate;
+        $this->dueDate = $DueDate;
         return $this;
     }
 
@@ -261,6 +277,17 @@ class DataMap {
     }
 
     /**
+     * Monto facturable (Valor de venta)
+     * 
+     * Formula = SUM(BASE_FACTURABLE_X_ITEM)
+     * 
+     * @return float
+     */
+    public function getBillableAmount() {
+        return $this->_items->getTotalBillableAmount();
+    }
+
+    /**
      * Base imponible
      * 
      * Formula = SUM(BASE_IMPONIBLE_X_ITEM) - DESCUENTOS_GLOBALES + CARGOS_GLOBALES
@@ -340,8 +367,8 @@ class DataMap {
      */
     public function getTotalAllowances() {
         $totalItems = $this->_items->getTotalAllowances();
-        $totalTaxableAmountItems = $this->_items->getTotalTaxableAmount();
-        $globalAllowancesAmount = Operations::getTotalAllowances($totalTaxableAmountItems, $this->allowancesAndCharges);
+        $totalBillableAmount = $this->getBillableAmount();
+        $globalAllowancesAmount = Operations::getTotalAllowances($totalBillableAmount, $this->allowancesAndCharges);
         return $totalItems + $globalAllowancesAmount;
     }
 

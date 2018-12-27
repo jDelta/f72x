@@ -4,6 +4,8 @@
 /docs/
 /tests/testdox.txt
 #Generated Docs
-tests/edocs/**/20*
+tests/edocs/**/20*.json
+tests/edocs/**/20*.pdf
+tests/edocs/**/20*.zip
 tests/edocs/**/R20*
 tests/edocs/**/S-20*

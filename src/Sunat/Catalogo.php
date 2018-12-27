@@ -126,6 +126,21 @@ class Catalogo {
         return key_exists($itemID, $items);
     }
 
+    /**
+     * Valor de item de catálogo
+     * @param int $catNumber
+     * @param string $itemID
+     * @return string
+     * @throws InvalidArgumentException cuando el item no existe en el catálogo.
+     */
+    public static function getCatItemValue($catNumber, $itemID) {
+        $item = self::getCatItem($catNumber, $itemID);
+        if ($item) {
+            return $item['value'];
+        }
+        throw new InvalidArgumentException("Catálogo Error, no existe un item con ID='$itemID' en el cátalogo='$catNumber'");
+    }
+
     public static function getCatItem($catNumber, $itemID, $key = 'id') {
         $items = self::getCatItems($catNumber);
         foreach ($items as $item) {
@@ -142,38 +157,10 @@ class Catalogo {
             return self::$_CAT['CAT_' . $catNumber];
         }
         // Load from file
-        $items = $useXmlFiles ? self::getCatItemsFromXmlFile($catNumber) : self::getCatItemsFromPhpFile($catNumber);
+        $fileName = strtoupper(self::getCatFileName($catNumber));
+        $items = require SunatVars::DIR_CATS . "/$fileName.php";
         self::$_CAT['CAT_' . $catNumber] = $items;
         return $items;
-    }
-
-    private static function getCatItemsFromXmlFile($catNumber) {
-        // Load the XML
-        $xmlName = self::getCatFileName($catNumber);
-        $doc = new DOMDocument();
-        $doc->load(SunatVars::DIR_CATS . "/$xmlName.xml");
-
-        $reader = new Reader();
-        $reader->xml($doc->saveXML());
-
-        $catData = $reader->parse();
-        $items = $catData['value'];
-        $itemsO = [];
-        foreach ($items as &$item) {
-            unset($item['name']); // Here because the item may contain the name attribute!
-            foreach ($item['attributes'] as $attKey => $att) {
-                $item[$attKey] = $att;
-            }
-            unset($item['attributes']);
-            $itemsO[$item['id']] = $item;
-        }
-        return $itemsO;
-    }
-
-    private static function getCatItemsFromPhpFile($catNumber) {
-        // Load the XML
-        $fileName = strtoupper(self::getCatFileName($catNumber));
-        return require SunatVars::DIR_CATS . "/$fileName.php";
     }
 
     private static function getCatFileName($catNumeber) {
@@ -197,7 +184,7 @@ class Catalogo {
         if (isset($customList[$itemId])) {
             return $customList[$itemId];
         }
-        throw new ConfigException("El codigó de item $itemId no existe en la lista $listName");
+        throw new ConfigException("El codigó de item '$itemId' no existe en la lista $listName");
     }
 
     public static function getCustomList($listName) {
@@ -223,7 +210,7 @@ class Catalogo {
         self::$_CAT['LIST_' . $listName] = $list;
         return $list;
     }
-    
+
     public static function getAllCatNumbers() {
         $catNumbers = [];
         for ($i = 1; $i <= 3; $i++) {
@@ -242,94 +229,6 @@ class Catalogo {
             $catNumbers[] = $i;
         }
         return $catNumbers;
-    }
-
-    public static function catItemsToPhpArray($catNumber, $resultPath) {
-        $items = Catalogo::getCatItems($catNumber, true);
-        $lines = [];
-        $ENTER = chr(13) . chr(10);
-        foreach ($items as $item) {
-            $line = [];
-            $k = 0;
-            foreach ($item as $key => $val) {
-                if (!$k) {
-                    $id = $item['id'];
-                    $line[] = "'id' => '$id'";
-                }
-                if ($key != 'id') {
-                    $val = addslashes($val);
-                    $line[] = "'$key' => '$val'";
-                }
-                $k++;
-            }
-            $lineS = implode(', ', $line);
-            $id = $item['id'];
-            $lines[] = "    '$id' => [$lineS]";
-        }
-        $joinedLines = implode(',' . $ENTER, $lines);
-        $result = <<<FILE
-<?php
-
-//Catálogo N° $catNumber:
-
-return [
-$joinedLines
-];
-
-FILE;
-        file_put_contents($resultPath, $result);
-    }
-
-    public static function catsToJsFile($catNumbers, $resultPath) {
-        $cats = [];
-        $ENTER = chr(13) . chr(10);
-        foreach ($catNumbers as $catNumber) {
-            $catNumber = str_pad($catNumber, 2, '0', STR_PAD_LEFT);
-            $cats[] = self::getCatJsItem($catNumber);
-        }
-        $joinedCats = implode(',' . $ENTER, $cats);
-        $result = <<<FILE
-({
-    cats: {
-$joinedCats
-    }
-});
-
-FILE;
-        file_put_contents($resultPath, $result);
-    }
-
-    public static function getCatJsItem($catNumber) {
-        $items = Catalogo::getCatItems($catNumber, true);
-        $lines = [];
-        $ENTER = chr(13) . chr(10);
-        foreach ($items as $item) {
-            $line = [];
-            $k = 0;
-            foreach ($item as $key => $val) {
-                if (!$k) {
-                    $id = $item['id'];
-                    $line[] = "id: '$id'";
-                }
-                if ($key != 'id') {
-                    $val = addslashes($val);
-                    $line[] = "$key: '$val'";
-                }
-                $k++;
-            }
-            $lineS = implode(', ', $line);
-            $id = $item['id'];
-            $lines[] = "                {{$lineS}}";
-        }
-        $joinedLines = implode(',' . $ENTER, $lines);
-        $result = <<<TPL
-        N$catNumber: {
-            items: [
-$joinedLines
-            ]
-        }
-TPL;
-        return $result;
     }
 
 }

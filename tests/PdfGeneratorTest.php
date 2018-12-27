@@ -22,4 +22,24 @@ final class PdfGeneratorTest extends TestCase {
         PdfGenerator::generatePdf($Invoice, $documentName);
     }
 
+    /**
+     * 
+     * @param type $param
+     */
+    public function XtestPrintInvoiceHTMLInput() {
+        $input = Util::getCaseData('factura');
+        $dataMap = new DataMap($input, Catalogo::DOCTYPE_FACTURA);
+        $out = PdfGenerator::getRenderedHtml($dataMap, 'factura.html');
+        file_put_contents(__DIR__.'/factura.html', $out);
+    }
+    /**
+     * 
+     * @param type $param
+     */
+    public function XtestPrintCreditNoteHTMLInput() {
+        $input = Util::getCaseData('notacredito');
+        $dataMap = new DataMap($input, Catalogo::DOCTYPE_NOTA_CREDITO);
+        $out = PdfGenerator::getRenderedHtml($dataMap, 'nota-credito.html');
+        file_put_contents(__DIR__.'/nota-credito.html', $out);
+    }
 }

@@ -29,7 +29,6 @@ abstract class SunatInvoice extends Invoice {
     public function __construct(DataMap $DataMap) {
         $this->dataMap = $DataMap;
         $currencyCode = $DataMap->getCurrencyCode();
-        $Items = $DataMap->getItems();
         // Invoice Type
         $this->setInvoiceTypeCode($DataMap->getDocumentType());
         // ID
@@ -54,7 +53,7 @@ abstract class SunatInvoice extends Invoice {
         $this->addDocumentTaxes();
         // Descuentos globales
         $ac = $DataMap->getAllowancesAndCharges();
-        $baseAmount = $Items->getTotalTaxableAmount();
+        $baseAmount = $DataMap->getBillableAmount();
         UblHelper::addAllowancesCharges($this, $ac, $baseAmount, $currencyCode);
         // Totales
         $this->addInvoiceLegalMonetaryTotal();

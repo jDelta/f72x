@@ -7,7 +7,7 @@ return [
     'operationType'     => '0101',                      // Tipo de operación Catálogo #51
     'customerDocType'   => '1',                         // Tipo de documento Catálogo #6
     'customerDocNumber' => '46237547',                  // DNI
-    'customerRegName'   => 'LUANA KARINA PAZOS ATOCHE', // Nombre de cliente
+    'customerRegName'   => 'LUANA KARINA PAZOS ATOCHE  --- ADDITIONAL TEXT IN ORDER TO TEST LONG NAMES BEHAVIOUR---', // Nombre de cliente
     'customerAddress'   => '485 UNIVERSAL STREET',      // Dirección del cliente
     'issueDate'         => '2017-05-14T13:25:51',       // Fecha de emisión - ISO 8601 date
     'allowancesCharges' => [
@@ -41,23 +41,23 @@ return [
             'igvAffectationType' => '10',
             'unitPrice'          => 750.00,
             'igvIncluded'        => true
+        ],
+        [
+            'productCode'        => 'NOB012',
+            'unspsc'             => '24121803',
+            'unitCode'           => 'NIU',
+            'quantity'           => 10,
+            'description'        => 'Sixpack de gaseosa “Guerené” de 400 ml',
+            'priceType'          => '02',
+            'taxType'            => '9996',
+            'igvAffectationType' => '31',
+            'unitPrice'          => 4.80,
+            'igvIncluded'        => false
         ]
-//        [
-//            'productCode'        => 'NOB012',
-//            'unspsc'             => '24121803',
-//            'unitCode'           => 'NIU',
-//            'quantity'           => 10,
-//            'description'        => 'Sixpack de gaseosa “Guerené” de 400 ml',
-//            'priceType'          => '02',
-//            'taxType'            => '9996',
-//            'igvAffectationType' => '31',
-//            'unitPrice'          => 4.80,
-//            'igvIncluded'        => false
-//        ]
     ],
     // Campos calculados solo con fines de validación
     'totalTaxes'          => 253.31,
-    'totalFreeOperations' => 0,
+    'totalFreeOperations' => 48.0,
     'taxableAmount'       => 1407.29,
     'totalAllowances'     => 74.07,
     'payableAmount'       => 1660.60

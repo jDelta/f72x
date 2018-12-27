@@ -23,8 +23,8 @@ return [
             'quantity'           => 250,         // Cantidad
             'description'        => 'Ampliación de garantía de memoria DDR-B1333 Kingston', // Descripción detallada
             'priceType'          => '01',        // Catálogo #16 [01:Precio Unitario|02:Valor Referencial]
-            'taxType'            => '1000',      // Catálogo #5
-            'igvAffectationType' => '10',        // Catálogo #7
+            'taxType'            => '9997',      // Catálogo #5
+            'igvAffectationType' => '20',        // Catálogo #7
             'unitPrice'          => 5,           // Precio Unitario/Valor refencial
             'igvIncluded'        => true
         ]

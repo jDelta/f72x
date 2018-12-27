@@ -24,7 +24,7 @@
                 vertical-align: top;
             }
             body {
-                font-family: "Segoe UI", "Open Sans", sans-serif, serif;
+                font-family: arial, sans-serif;
                 font-size: 8.5pt;
                 line-height: 1.1;
                 font-weight: 400;
@@ -54,7 +54,7 @@
             }
             .detail-table th {
                 font-weight: normal;
-                padding:3px 4px;
+                padding: 3px 4px;
                 vertical-align: middle;
                 border: solid 1px;
             }
@@ -62,9 +62,9 @@
                 background: #e2e2e2;
             }
             .detail-table tr td {
-                color:#333333;
-                height:23px;
-                padding: 2px 3px;
+                color: #333333;
+                height: 23px;
+                padding: 1px 3px;
                 vertical-align: middle;
             }
             .detail-table td, .detail-table th {
@@ -77,12 +77,12 @@
                 position: absolute;
                 top: 0;
                 right: 0;
-                padding: 15px;
+                padding: 5px 15px;
                 border: 1px solid;
                 text-align: center;
                 font-size: 10pt;
                 font-weight: 700;
-                line-height: 2;
+                line-height: 1.5;
             }
             .align-l {
                 text-align: left;
@@ -93,14 +93,8 @@
             .align-r {
                 text-align: right;
             }
-            .float-r {
-                float: right;
-            }
-            .one-line {
+            .no-wrap{
                 white-space: nowrap;
-                overflow: hidden;
-                width: 450px;
-                /** background: yellow;**/
             }
             .words-amount {
                 font-weight: bold;
@@ -115,106 +109,117 @@
             .footer{
                 margin: 60px 0 0 0;
             }
+            .keyfields-wrapper{
+                padding: 1px 3px 1px 10px;
+            }
+            .keyfields td{
+                white-space: nowrap;
+            }
         </style>
     </head>
     <body>
         <img class="logo" src="data:image/png;base64,{{logo}}" />
-            <div class="company-location-info">
+        <div class="company-location-info">
             {{companyAddress}} - {{companyCity}}<br>
             {{companyContactInfo|raw}}
-            </div>
-            <div class="invoice-id-area">
+        </div>
+        <div class="invoice-id-area">
             R.U.C. {{companyRuc}}<br>
-                BOLETA DE VENTA ELECTRÓNICA<br>
+            BOLETA DE VENTA ELECTRÓNICA<br>
             N° {{documentSeries}}-{{documentNumber}}
-            </div>
-            <table class="head-section">
-                <tbody>
-                    <tr>
-                        <td width="50">SEÑOR(ES)</td>
-                    <td><div class="one-line">: {{customerRegName}}</div></td>
-                        <td width="60">FEC. EMISIÓN</td>
-                    <td width="70">: {{issueDate}}</td>
-                    </tr>
-                    <tr>
-                        <td>R.U.C.</td>
-                    <td>: {{customerDocNumber}}</td>
-                        <td>MONEDA</td>
-                    <td>: {{currency}}</td>
-                    </tr>
-                    <tr>
-                        <td>DIRECCIÓN</td>
-                    <td><div class="one-line">: {{customerAddress}}</div></td>
-                        <td colspan="2"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="detail-table dim-full">
-                <thead>
-                    <tr>
-                        <th width="30" class="align-c">ITEM</th>
-                        <th width="30" class="align-c">CANT.</th>
-                        <th width="30" class="align-c">UND.</th>
-                        <th class="align-l">DESCRIPCIÓN</th>
-                        <th width="60" class="align-c">PRECIO UNIT.</th>
-                        <th width="60" class="align-c">TOTAL</th>
-                    </tr>
-                </thead>
-                <tbody>
+        </div>
+        <table class="head-section">
+            <tbody>
+                <tr>
+                    <td width="50">SEÑOR(ES)</td>
+                    <td width="6">:</td>
+                    <td>{{customerRegName}}</td>
+                    <td rowspan="3" width="100" class="keyfields-wrapper">
+                        <table class="keyfields">
+                            <tr><td>FEC. EMISIÓN</td><td width="6">:</td><td>{{issueDate}}</td></tr>
+                            {% if dueDate %}<tr><td>FEC. VENCIMIENTO</td><td>:</td><td>{{dueDate}}</td></tr>{% endif %}
+                            <tr><td>MONEDA</td><td>:</td><td class="ws-normal">{{currency}}</td></tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>R.U.C.</td>
+                    <td>:</td>
+                    <td>{{customerDocNumber}}</td>
+                </tr>
+                <tr>
+                    <td>DIRECCIÓN</td>
+                    <td>:</td>
+                    <td>{{customerAddress}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="detail-table dim-full">
+            <thead>
+                <tr>
+                    <th width="30" class="align-c">ITEM</th>
+                    <th width="30" class="align-c">CANT.</th>
+                    <th width="30" class="align-c">UND.</th>
+                    <th class="align-l">DESCRIPCIÓN</th>
+                    <th width="60" class="align-c">PRECIO UNIT.</th>
+                    <th width="60" class="align-c">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
                 {% for item in items %}
-                    <tr>
+                <tr>
                     <td class="align-c">{{loop.index}}</td>
                     <td class="align-c">{{item.quantity}}</td>
                     <td class="align-c">{{item.unitName}}</td>
                     <td>{{item.description}}</td>
                     <td class="align-r">{{item.unitBillableValue|number_format(2)}}</td>
                     <td class="align-r">{{item.itemPayableAmount|number_format(2)}}</td>
-                    </tr>
+                </tr>
                 {% endfor %}
-                </tbody>
-            </table>
+            </tbody>
+        </table>
         <div class="words-amount">SON: {{payableInWords}}</div>
-            <table class="dim-full">
-                <tr>
-                    <td width="35">&nbsp;</td>
-                    <td>
-                        <table class="detail-table">
-                            <thead>
-                                <tr>
-                                    <th class="dim-total-col align-c">OP. GRABADAS</th>
-                                    <th class="dim-total-col align-c">OP. GRATUITAS</th>
-                                    <th class="dim-total-col align-c">OP. INAFECTAS</th>
-                                    <th class="dim-total-col align-c">OP. EXONERADAS</th>
-                                    <th class="dim-total-col align-c">DESCUENTOS</th>
+        <table class="dim-full">
+            <tr>
+                <td width="35">&nbsp;</td>
+                <td>
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th class="dim-total-col align-c">OP. GRABADAS</th>
+                                <th class="dim-total-col align-c">OP. GRATUITAS</th>
+                                <th class="dim-total-col align-c">OP. INAFECTAS</th>
+                                <th class="dim-total-col align-c">OP. EXONERADAS</th>
+                                <th class="dim-total-col align-c">DESCUENTOS</th>
                                 <th class="dim-total-col align-c">I.G.V. ({{igvPercent|number_format(2)}}%)</th>
-                                    <th class="dim-total-col align-c">IMPORTE TOTAL</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                <td class="align-r">{%if taxableOperations %}{{taxableOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if freeOperations %}{{freeOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if unaffectedOperations %}{{unaffectedOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if exemptedOperations %}{{exemptedOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if totalAllowances %}{{totalAllowances|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if igvAmount %}{{igvAmount|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if payableAmount %}{{payableAmount|number_format(2)}}{% endif %}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <table class="footer dim-full">
-                <tr>
-                    <td width="35">&nbsp;</td>
+                                <th class="dim-total-col align-c">IMPORTE TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="align-r">{% if taxableOperations %}{{taxableOperations|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if freeOperations %}{{freeOperations|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if unaffectedOperations %}{{unaffectedOperations|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if exemptedOperations %}{{exemptedOperations|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if totalAllowances %}{{totalAllowances|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if igvAmount %}{{igvAmount|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if payableAmount %}{{payableAmount|number_format(2)}}{% endif %}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="footer dim-full">
+            <tr>
+                <td width="35">&nbsp;</td>
                 <td width="64"><img class="dim-qr" src="data:image/png;base64,{{qr}}" /></td>
-                    <td>
-                        Representación impresa - Comprobante de Pago Electrónico<br><br>
-                        Siempre podrá consultar sus comprobantes electrónicos en:<br>
-                        <a class="repo-link" href="https://consultar.comprobante.pe" target="_blank">https://consultar.comprobante.pe</a>
-                    </td>
-                </tr>
-            </table>
+                <td>
+                    Representación impresa - Comprobante de Pago Electrónico<br><br>
+                    Siempre podrá consultar sus comprobantes electrónicos en:<br>
+                    <a class="repo-link" href="https://consultar.comprobante.pe" target="_blank">https://consultar.comprobante.pe</a>
+                </td>
+            </tr>
+        </table>
     </body>
 </html>

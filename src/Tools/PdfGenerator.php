@@ -25,14 +25,24 @@ use Dompdf\Dompdf;
 
 class PdfGenerator {
 
+    /**
+     * Generates a PDF based on the invoice data
+     * @param DataMap $Invoice
+     * @param type $documentName
+     */
     public static function generatePdf(DataMap $Invoice, $documentName) {
         Repository::savePDF($documentName, self::buildPdf($Invoice));
     }
 
+    /**
+     * Builds a PDF and returns the stream
+     * @param DataMap $Invoice
+     * @return string The PDF stream
+     */
     public static function buildPdf(DataMap $Invoice) {
         $dompdf = new Dompdf();
         $docType = self::getTplFor($Invoice->getDocumentType());
-        $html = self::getRenderedHtml($Invoice,$docType);
+        $html = self::getRenderedHtml($Invoice, $docType);
         // Render the HTML as PDF
         $dompdf->loadHtml($html);
         $dompdf->render();
@@ -52,6 +62,12 @@ class PdfGenerator {
         return 'nota-debito.html';
     }
 
+    /**
+     * Compiles the template with the input data
+     * @param DataMap $Invoice The invoice data
+     * @param string $tpl The template name
+     * @return string
+     */
     public static function getRenderedHtml(DataMap $Invoice, $tpl) {
         $invoiceData = self::getDocumentData($Invoice);
         $renderer = self::getRenderer();
@@ -62,6 +78,8 @@ class PdfGenerator {
         $currency = Catalogo::getCurrencyPlural($inv->getCurrencyCode());
         $payableAmount = $inv->getPayableAmount();
         $payableInWords = Operations::getAmountInWords($payableAmount, $currency);
+        // has dueDate =
+        $dueDate = $inv->getDueDate();
         $data = [
             'companyRuc'           => Company::getRUC(),
             'companyAddress'       => Company::getAddress(),
@@ -75,6 +93,7 @@ class PdfGenerator {
             'customerDocNumber'    => $inv->getCustomerDocNumber(),
             'customerAddress'      => $inv->getCustomerAddress(),
             'issueDate'            => $inv->getIssueDate()->format('d-m-Y'),
+            'dueDate'              => $dueDate ? $dueDate->format('d-m-Y') : '',
             'igvPercent'           => SunatVars::IGV_PERCENT,
             'logo'                 => LogoMgr::getLogoString(),
             'qr'                   => QrGenerator::getQrString($inv), // QR Code
@@ -92,6 +111,7 @@ class PdfGenerator {
         if (in_array($inv->getDocumentType(), [Catalogo::DOCTYPE_NOTA_CREDITO, Catalogo::DOCTYPE_NOTA_DEBITO])) {
             $noteData = [
                 'noteType'                    => $inv->getNoteType(),
+                'discrepancyResponseReason'   => $inv->getDiscrepancyResponseReason(),
                 'affectedDocumentId'          => $inv->getNoteAffectedDocId(),
                 'affectedDocumentOficialName' => Catalogo::getOfficialDocumentName($inv->getNoteAffectedDocType()),
                 'note'                        => $inv->getNoteDescription()

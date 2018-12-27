@@ -24,7 +24,7 @@
                 vertical-align: top;
             }
             body {
-                font-family: "Segoe UI", "Open Sans", sans-serif, serif;
+                font-family: arial, sans-serif;
                 font-size: 8.5pt;
                 line-height: 1.1;
                 font-weight: 400;
@@ -40,9 +40,9 @@
                 height: 100px;
             }
             .head-title{
-                margin: 10px 0 0;
+                margin: 10px 0 5px 0;
                 padding-bottom: 2px;
-                border-bottom: solid 2px;
+                border-bottom: solid 1px;
                 font-weight: bold;
             }
             .head-section {
@@ -51,10 +51,6 @@
             }
             .head-section td {
                 vertical-align: top;
-                padding: 5px 0 2px;
-            }
-            .bottom-bordered{
-                border-bottom: solid 1px;
             }
             .detail-table {
                 border: solid 1px;
@@ -72,9 +68,9 @@
                 background: #e2e2e2;
             }
             .detail-table tr td {
-                color:#333333;
-                height:23px;
-                padding: 2px 3px;
+                color: #333333;
+                height: 23px;
+                padding: 1px 3px;
                 vertical-align: middle;
             }
             .detail-table td, .detail-table th {
@@ -87,12 +83,12 @@
                 position: absolute;
                 top: 0;
                 right: 0;
-                padding: 15px;
+                padding: 5px 15px;
                 border: 1px solid;
                 text-align: center;
                 font-size: 10pt;
                 font-weight: 700;
-                line-height: 2;
+                line-height: 1.5;
             }
             .align-l {
                 text-align: left;
@@ -103,14 +99,11 @@
             .align-r {
                 text-align: right;
             }
-            .float-r {
-                float: right;
-            }
-            .one-line {
+            .no-wrap{
                 white-space: nowrap;
-                overflow: hidden;
-                width: 450px;
-                /** background: yellow;**/
+            }
+            .uppercase{
+                text-transform: uppercase;
             }
             .words-amount {
                 font-weight: bold;
@@ -125,6 +118,12 @@
             .footer{
                 margin: 60px 0 0 0;
             }
+            .keyfields-wrapper{
+                padding: 1px 3px 1px 10px;
+            }
+            .keyfields td{
+                white-space: nowrap;
+            }
         </style>
     </head>
     <body>
@@ -138,33 +137,36 @@
             NOTA DE CRÉDITO ELECTRÓNICA<br>
             N° {{documentSeries}}-{{documentNumber}}
         </div>
+        <br>
+        <div>FEC. EMISIÓN: <b>{{issueDate}}</b></div>
         <div class="head-title">DOCUMENTO QUE MODIFICA:</div>
         <table class="head-section">
             <tbody>
                 <tr>
-                    <td colspan="2">{{affectedDocumentOficialName}} ELECTRÓNICA: <b>{{affectedDocumentId}}</b></td>
-                    <td colspan="2">ANULACIÓN DE LA OPERACIÓN</td>
+                    <td width="50" class="no-wrap">{{affectedDocumentOficialName}} ELECTRÓNICA</td>
+                    <td width="6">:</td>
+                    <td>{{affectedDocumentId}}</td>
+                    <td width="50" class="align-r no-wrap uppercase"><b>{{discrepancyResponseReason}}</b></td>
                 </tr>
                 <tr>
                     <td>SEÑOR(ES)</td>
-                    <td><div class="one-line">: {{customerRegName}}</div></td>
-                    <td width="60">FEC. EMISIÓN</td>
-                    <td width="70">: {{issueDate}}</td>
+                    <td>:</td>
+                    <td>{{customerRegName}}</td>
                 </tr>
                 <tr>
                     <td>R.U.C.</td>
-                    <td>: {{customerDocNumber}}</td>
-                    <td>MONEDA</td>
-                    <td>: {{currency}}</td>
+                    <td>:</td>
+                    <td>{{customerDocNumber}}</td>
                 </tr>
                 <tr>
-                    <td>DIRECCIÓN</td>
-                    <td><div class="one-line">: {{customerAddress}}</div></td>
-                    <td colspan="2"></td>
+                    <td>MONEDA</td>
+                    <td>:</td>
+                    <td>{{currency}}</td>
                 </tr>
                 <tr>
                     <td>OBSERVACIÓN</td>
-                    <td colspan="3">: {{note}}</td>
+                    <td>:</td>
+                    <td>{{note}}</td>
                 </tr>
             </tbody>
         </table>
@@ -211,13 +213,13 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="align-r">{%if taxableOperations %}{{taxableOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if freeOperations %}{{freeOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if unaffectedOperations %}{{unaffectedOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if exemptedOperations %}{{exemptedOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if totalAllowances %}{{totalAllowances|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if igvAmount %}{{igvAmount|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{%if payableAmount %}{{payableAmount|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if taxableOperations %}{{taxableOperations|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if freeOperations %}{{freeOperations|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if unaffectedOperations %}{{unaffectedOperations|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if exemptedOperations %}{{exemptedOperations|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if totalAllowances %}{{totalAllowances|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if igvAmount %}{{igvAmount|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{% if payableAmount %}{{payableAmount|number_format(2)}}{% endif %}</td>
                             </tr>
                         </tbody>
                     </table>

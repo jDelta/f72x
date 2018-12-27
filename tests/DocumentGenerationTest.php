@@ -15,8 +15,8 @@ final class DocumentGenerationTest extends TestCase {
     public function __construct() {
         Util::initF72X();
         $this->removeBillDocs();
-        $this->generateDetailMatrix('boleta');
-        $this->generateDetailMatrix('factura');
+//        $this->generateDetailMatrix('boleta');
+//        $this->generateDetailMatrix('factura');
     }
 
     public function removeBillDocs() {
@@ -68,6 +68,7 @@ final class DocumentGenerationTest extends TestCase {
             'customerRegName'   => $Invoice->getCustomerRegName(),
             'customerAddress'   => $Invoice->getCustomerAddress(),
             'issueDate'         => $Invoice->getIssueDate()->format('Y-m-d\TH:i:s'),
+            'dueDate'           => $Invoice->getDueDate()->format('Y-m-d\TH:i:s'),
             'purchaseOrder'     => $Invoice->getPurchaseOrder(),
             'allowancesCharges' => $Invoice->getAllowancesAndCharges(),
             'items'             => $Invoice->getRawItems(),

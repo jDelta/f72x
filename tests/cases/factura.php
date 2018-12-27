@@ -7,9 +7,10 @@ return [
     'operationType'     => '0101',                // Tipo de operación Catálogo #51
     'customerDocType'   => '6',                   // Tipo de documento Catálogo #6
     'customerDocNumber' => '20587896411',         // RUC
-    'customerRegName'   => 'SERVICABINAS S.A.',   // Razón social
-    'customerAddress'   => '215 NY STREET',       // Dirección del cliente
+    'customerRegName'   => 'SERVICABINAS S.A. SERVICABINAS S.A.',   // Razón social
+    'customerAddress'   => '215 NY STREET 215 NY STREET 215 --- ADDITIONAL TEXT IN ORDER TO TEST LONG ADRESSES BEHAVIOUR---',       // Dirección del cliente
     'issueDate'         => '2017-05-14T13:25:51', // Fecha de emisión - ISO 8601 date
+    'dueDate'           => '2017-06-14T13:25:51', // (Opcional) Fecha de venimiento - ISO 8601 date
     'purchaseOrder'     => 7852166,               // Numero de orden de commpra,
     'allowancesCharges' => [
         [

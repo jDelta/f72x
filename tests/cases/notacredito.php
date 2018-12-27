@@ -13,7 +13,7 @@ return [
     'customerRegName'   => 'SERVICABINAS S.A.',   // Razón social|Nombre del cliente
     'customerAddress'   => '215 NY STREET',       // Dirección del cliente
     'issueDate'         => '2017-06-25T20:25:41', // Fecha de emisión - ISO 8601 date
-    'note'              => 'Unidades defectuosas, no leen CD que contengan archivos MP3',
+    'note'              => 'Unidades defectuosas, no leen CD que contengan archivos MP3. --- ADDITIONAL TEXT IN ORDER TO TEST LONG DESC BEHAVIOUR---',
                                                   // Motivo de emisión de la Nota de Crédito
     'items' => [
         [
