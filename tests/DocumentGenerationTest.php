@@ -55,6 +55,11 @@ final class DocumentGenerationTest extends TestCase {
         $eDocument = DocumentGenerator::createResumenDiario('RC',$data);
         DocumentGenerator::generateResumenFiles($eDocument);
     }
+    public function testComunicacionDeBaja() {
+        $data = self::getCaseData('comunicacion-baja');
+        $eDocument = DocumentGenerator::createComunicacionBaja($data);
+        $eDocument->generateFiles();
+    }
     public function testDataMapRightCalcsForFactura() {
         $in = self::getCaseData('factura');
         $Invoice = new DataMap($in, Catalogo::DOCTYPE_FACTURA);

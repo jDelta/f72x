@@ -23,6 +23,7 @@ use F72X\Sunat\Document\Boleta;
 use F72X\Sunat\Document\NotaCredito;
 use F72X\Sunat\Document\NotaDebito;
 use F72X\Sunat\Document\ResumenDiario;
+use F72X\Sunat\Document\ComunicacionBaja;
 use F72X\Exception\InvalidInputException;
 
 class DocumentGenerator {
@@ -107,16 +108,27 @@ class DocumentGenerator {
      */
     public static function createResumenDiario($summaryType, $data) {
         return new ResumenDiario($summaryType, $data);
-    }  
+    }
+
+    /**
+     * 
+     * @param array $data La data
+     * @return ComunicacionBaja
+     */
+    public static function createComunicacionBaja($data) {
+        return new ComunicacionBaja($data);
+    }
+
     public static function generateResumenFiles(ResumenDiario $eDocument) {
         $docFileName = $eDocument->getDocumentFileName();
-        $tpRenderer = TplRenderer::getRenderer(F72X::getSrcDir().'/templates');
+        $tpRenderer = TplRenderer::getRenderer(F72X::getSrcDir() . '/templates');
         $xmlContent = $tpRenderer->render('SummaryDocuments.xml', $eDocument->getDataForXml());
         Repository::saveDocumentInput($docFileName, json_encode($eDocument->getRawData(), JSON_PRETTY_PRINT));
         Repository::saveDocument($docFileName, $xmlContent);
         XmlDSig::sign($docFileName);
         Repository::zipDocument($docFileName);
     }
+
     private static function saveDocumentInput($XmlDoc) {
         $documentName = $XmlDoc->getDocumentName();
         Repository::saveDocumentInput($documentName, json_encode($XmlDoc->getDataMap()->getRawData(), JSON_PRETTY_PRINT));
@@ -157,13 +169,13 @@ class DocumentGenerator {
      */
     private static function getXmlRoot($documentType) {
         switch ($documentType) {
-            case Catalogo::DOCTYPE_FACTURA      :
-            case Catalogo::DOCTYPE_BOLETA       : return 'Invoice';
+            case Catalogo::DOCTYPE_FACTURA :
+            case Catalogo::DOCTYPE_BOLETA : return 'Invoice';
             case Catalogo::DOCTYPE_NOTA_CREDITO : return 'CreditNote';
-            case Catalogo::DOCTYPE_NOTA_DEBITO  : return 'DebitNote';
+            case Catalogo::DOCTYPE_NOTA_DEBITO : return 'DebitNote';
         }
     }
- 
+
     /**
      * 
      * @param string $documentType 01|03|07|08

@@ -16,16 +16,16 @@
 {#  Identificador del resumen #}
     <cbc:ID>{{documentId}}</cbc:ID>
 {#  Fecha de generacion del resumen #}
-    <cbc:ReferenceDate>{{referenceDate}}</cbc:ReferenceDate>
-{#  Fecha de emision de los documentos #}
     <cbc:IssueDate>{{issueDate}}</cbc:IssueDate>
+{#  Fecha de emision de los documentos #}
+    <cbc:ReferenceDate>{{referenceDate}}</cbc:ReferenceDate>
     <cbc:Note><![CDATA[CONSOLIDADO DE BOLETAS DE VENTA]]></cbc:Note>
 {#  - RUC
     - Apellidos y nombres o denominacion o razon social
     - Identificador del resumen
 #}
     <cac:Signature>
-        <cbc:ID>{{companyRUC}}</cbc:ID>
+        <cbc:ID>SignIMM</cbc:ID>
         <cac:SignatoryParty>
             <cac:PartyIdentification>
                 <cbc:ID>{{companyRUC}}</cbc:ID>

@@ -21,12 +21,12 @@ class TplRenderer {
         $loader = new Twig_Loader_Filesystem();
         // templates path
         $loader->addPath($path);
-        $view = new Twig_Environment($loader, ['cache' => false]);
+        $renderer = new Twig_Environment($loader, ['cache' => false]);
         // I18n ext
-        $view->addExtension(new Twig_Extensions_Extension_Intl());
+        $renderer->addExtension(new Twig_Extensions_Extension_Intl());
         // Scape html ext
-        $view->addExtension(new Twig_Extension_Escaper('html'));
-        return $view;
+        $renderer->addExtension(new Twig_Extension_Escaper('html'));
+        return $renderer;
     }
 
 }
