@@ -1,3 +1,13 @@
 s\DocumentGeneration
+ [x] Generate factura
+ [x] Generat boleta
+ [x] Generate credit note
+ [x] Generate debit note
+ [x] Resumen diario
  [x] Comunicacion de baja
+ [x] Percepcion
+ [x] Retencion
+ [x] Data map right calcs for factura
+ [x] Data map right calcs for boleta
+ [x] Get cat item
 

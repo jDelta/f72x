@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+{#
+    Documento elaborado de acuerdo con las siguientes especificaciones:
+    http://orientacion.sunat.gob.pe/images/cdp-electronicos/Guia_XML_Percepcion_v1_2.pdf
+#}
+<Perception
+    xmlns="urn:sunat:names:specification:ubl:peru:schema:xsd:Perception-1"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:ccts="urn:un:unece:uncefact:documentation:2"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+    xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2"
+    xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1"
+    xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ext:UBLExtensions>
+        <ext:UBLExtension>
+            <ext:ExtensionContent>
+            </ext:ExtensionContent>
+        </ext:UBLExtension>
+    </ext:UBLExtensions>
+    <cbc:UBLVersionID>2.0</cbc:UBLVersionID>
+    <cbc:CustomizationID>1.0</cbc:CustomizationID>
+{#  Identificador #}
+    <cbc:ID>{{id}}</cbc:ID>
+{#  Fecha de generacion #}
+    <cbc:IssueDate>{{issueDate}}</cbc:IssueDate>
+{# 
+    Datos del Emisor electrónico:
+    - RUC
+    - Apellidos y nombres o denominacion o razon social
+    - Identificador del resumen
+#}
+    <cac:Signature>
+        <cbc:ID>{{signatureId}}</cbc:ID>
+        <cac:SignatoryParty>
+            <cac:PartyIdentification>
+                <cbc:ID>{{issuer.idDocNumber}}</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name><![CDATA[{{issuer.regName}}]]></cbc:Name>
+            </cac:PartyName>
+        </cac:SignatoryParty>
+        <cac:DigitalSignatureAttachment>
+            <cac:ExternalReference>
+                <cbc:URI>#{{id}}</cbc:URI>
+            </cac:ExternalReference>
+        </cac:DigitalSignatureAttachment>
+    </cac:Signature>
+{# 
+    Datos del Emisor electrónico:
+    - Tipo documento de identidad del emisor (6:RUC)
+    - RUC
+    - [?] Nombre comercial
+    - [?] Domicilio fiscal del emisor electrónico
+    - Razón social
+#}
+    <cac:AgentParty>
+        <cac:PartyIdentification>
+            <cbc:ID schemeID="6">{{issuer.idDocNumber}}</cbc:ID>
+        </cac:PartyIdentification>
+{% if issuer.comName %}
+        <cac:PartyName>
+            <cbc:Name><![CDATA[{{issuer.comName}}]]></cbc:Name>
+        </cac:PartyName>
+{% endif %}
+{% if issuer.postalAddress %}
+        <cac:PostalAddress>
+            <cbc:ID>{{issuer.postalAddress.id}}</cbc:ID>
+            <cbc:StreetName>{{issuer.postalAddress.streetName}}</cbc:StreetName>
+            <cbc:CitySubdivisionName>{{issuer.postalAddress.citySubdivisionName}}</cbc:CitySubdivisionName>
+            <cbc:CityName>{{issuer.postalAddress.cityName}}</cbc:CityName>
+            <cbc:CountrySubentity>{{issuer.postalAddress.countryCity}}</cbc:CountrySubentity>
+            <cbc:District>{{issuer.postalAddress.district}}</cbc:District>
+            <cac:Country>
+                <cbc:IdentificationCode>{{issuer.postalAddress.countryCode}}</cbc:IdentificationCode>
+            </cac:Country>
+        </cac:PostalAddress>
+{% endif %}
+        <cac:PartyLegalEntity>
+            <cbc:RegistrationName><![CDATA[{{issuer.regName}}]]></cbc:RegistrationName>
+        </cac:PartyLegalEntity>
+    </cac:AgentParty>
+{# 
+    Datos del Cliente
+    - Tipo documento de identidad del emisor
+        0 DOC.TRIB.NO.DOM.SIN.RUC
+        1 DOC. NACIONAL DE IDENTIDAD
+        4 CARNET DE EXTRANJERIA
+        6 REG. UNICO DE CONTRIBUYENTES
+        7 PASAPORTE
+        A CED. DIPLOMATICA DE IDENTIDAD
+    - RUC
+    - [?] Nombre comercial
+    - [?] Domicilio fiscal del emisor electrónico
+    - Razón social
+#}
+    <cac:ReceiverParty>
+        <cac:PartyIdentification>
+            <cbc:ID schemeID="{{customer.idDocType}}">{{customer.idDocNumber}}</cbc:ID>
+        </cac:PartyIdentification>
+{% if customer.comName %}
+        <cac:PartyName>
+            <cbc:Name><![CDATA[{{customer.comName}}]]></cbc:Name>
+        </cac:PartyName>
+{% endif %}
+{% if customer.postalAddress %}
+        <cac:PostalAddress>
+            <cbc:ID>{{customer.postalAddress.id}}</cbc:ID>
+            <cbc:StreetName>{{customer.postalAddress.streetName}}</cbc:StreetName>
+            <cbc:CitySubdivisionName>{{customer.postalAddress.citySubdivisionName}}</cbc:CitySubdivisionName>
+            <cbc:CityName>{{customer.postalAddress.cityName}}</cbc:CityName>
+            <cbc:CountrySubentity>{{customer.postalAddress.countryCity}}</cbc:CountrySubentity>
+            <cbc:District>{{customer.postalAddress.district}}</cbc:District>
+            <cac:Country>
+                <cbc:IdentificationCode>{{customer.postalAddress.countryCode}}</cbc:IdentificationCode>
+            </cac:Country>
+        </cac:PostalAddress>
+{% endif %}
+        <cac:PartyLegalEntity>
+            <cbc:RegistrationName><![CDATA[{{customer.regName}}]]></cbc:RegistrationName>
+        </cac:PartyLegalEntity>
+    </cac:ReceiverParty>
+{#
+    Datos de la percepción
+    - Régimen Description                                                - Tasa
+       01   PERCEPCION VENTA INTERNA                                       2.00
+       02   PERCEPCION A LA ADQUISICION DE COMBUSTIBLE                     1.00
+       03   PERCEPCION REALIZADA AL AGENTE DE PERCEPCION CON TASA ESPECIAL 0.50
+    - [?] Observaciones
+    - Importe total Percibido (Siempre en Soles)
+    - Importe total Cobrado(Siempre en Soles)
+#}
+    <sac:SUNATPerceptionSystemCode>{{systemCode}}</sac:SUNATPerceptionSystemCode>
+    <sac:SUNATPerceptionPercent>{{percent}}</sac:SUNATPerceptionPercent>
+    <cbc:Note>{{note}}</cbc:Note>
+    <cbc:TotalInvoiceAmount currencyID="PEN">{{totalInvoicedAmount}}</cbc:TotalInvoiceAmount>
+    <sac:SUNATTotalCashed currencyID="PEN">{{totalCashed}}</sac:SUNATTotalCashed>
+{#  Datos del Comprobante Relacionado #}
+{% for line in lines %}
+    <sac:SUNATPerceptionDocumentReference>
+        <cbc:ID schemeID="{{line.documentType}}">{{line.documentSeries}}-{{line.documentNumber}}</cbc:ID>
+        <cbc:IssueDate>{{line.issueDate}}</cbc:IssueDate>
+        <cbc:TotalInvoiceAmount currencyID="{{line.currencyCode}}">{{line.totalInvoiceAmount}}</cbc:TotalInvoiceAmount>
+        <cac:Payment>
+            <cbc:ID>1</cbc:ID>
+            <cbc:PaidAmount currencyID="USD">5000.00</cbc:PaidAmount>
+            <cbc:PaidDate>2015-12-23</cbc:PaidDate>
+        </cac:Payment>
+        <sac:SUNATPerceptionInformation>
+            <sac:SUNATPerceptionAmount currencyID="PEN">324.00</sac:SUNATPerceptionAmount>
+            <sac:SUNATPerceptionDate>2015-12-23</sac:SUNATPerceptionDate>
+            <sac:SUNATNetTotalCashed currencyID="PEN">16524.00</sac:SUNATNetTotalCashed>
+            <cac:ExchangeRate>
+                <cbc:SourceCurrencyCode>USD</cbc:SourceCurrencyCode>
+                <cbc:TargetCurrencyCode>PEN</cbc:TargetCurrencyCode>
+                <cbc:CalculationRate>3.24</cbc:CalculationRate>
+                <cbc:Date>2015-12-23</cbc:Date>
+            </cac:ExchangeRate>
+        </sac:SUNATPerceptionInformation>
+    </sac:SUNATPerceptionDocumentReference>
+{% endfor %}
+</Perception>

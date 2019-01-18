@@ -14,11 +14,11 @@
     <cbc:UBLVersionID>2.0</cbc:UBLVersionID>
     <cbc:CustomizationID>1.1</cbc:CustomizationID>
 {#  Identificador del resumen #}
-    <cbc:ID>{{documentId}}</cbc:ID>
-{#  Fecha de generacion del resumen #}
-    <cbc:IssueDate>{{issueDate}}</cbc:IssueDate>
+    <cbc:ID>{{id}}</cbc:ID>
 {#  Fecha de emision de los documentos #}
     <cbc:ReferenceDate>{{referenceDate}}</cbc:ReferenceDate>
+{#  Fecha de generacion del resumen #}
+    <cbc:IssueDate>{{issueDate}}</cbc:IssueDate>
     <cbc:Note><![CDATA[CONSOLIDADO DE BOLETAS DE VENTA]]></cbc:Note>
 {#  - RUC
     - Apellidos y nombres o denominacion o razon social
@@ -28,15 +28,15 @@
         <cbc:ID>SignIMM</cbc:ID>
         <cac:SignatoryParty>
             <cac:PartyIdentification>
-                <cbc:ID>{{companyRUC}}</cbc:ID>
+                <cbc:ID>{{issuer.idDocNumber}}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name><![CDATA[{{companyName}}]]></cbc:Name>
+                <cbc:Name><![CDATA[{{issuer.regName}}]]></cbc:Name>
             </cac:PartyName>
         </cac:SignatoryParty>
         <cac:DigitalSignatureAttachment>
             <cac:ExternalReference>
-                <cbc:URI>#{{documentId}}</cbc:URI>
+                <cbc:URI>#{{id}}</cbc:URI>
             </cac:ExternalReference>
         </cac:DigitalSignatureAttachment>
     </cac:Signature>
@@ -45,15 +45,15 @@
     - Apellidos y nombres o denominacion o razon social
 #}
     <cac:AccountingSupplierParty>
-        <cbc:CustomerAssignedAccountID>{{companyRUC}}</cbc:CustomerAssignedAccountID>
-        <cbc:AdditionalAccountID>6</cbc:AdditionalAccountID>
+        <cbc:CustomerAssignedAccountID>{{issuer.idDocNumber}}</cbc:CustomerAssignedAccountID>
+        <cbc:AdditionalAccountID>{{issuer.idDocType}}</cbc:AdditionalAccountID>
         <cac:Party>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName><![CDATA[{{companyName}}]]></cbc:RegistrationName>
+                <cbc:RegistrationName><![CDATA[{{issuer.regName}}]]></cbc:RegistrationName>
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingSupplierParty>
-{% for item in items %}
+{% for line in lines %}
     <sac:SummaryDocumentsLine>
 {#
         - N° de linea
@@ -63,18 +63,18 @@
         - Tipo de documento del cliente
 #}
         <cbc:LineID>{{loop.index}}</cbc:LineID>
-        <cbc:DocumentTypeCode>{{item.documentType}}</cbc:DocumentTypeCode>
-        <cbc:ID>{{item.documentSeries}}-{{item.documentNumber}}</cbc:ID>
+        <cbc:DocumentTypeCode>{{line.documentType}}</cbc:DocumentTypeCode>
+        <cbc:ID>{{line.documentSeries}}-{{line.documentNumber}}</cbc:ID>
         <cac:AccountingCustomerParty>
-            <cbc:CustomerAssignedAccountID>{{item.customerDocNumber}}</cbc:CustomerAssignedAccountID>
-            <cbc:AdditionalAccountID>{{item.customerDocType}}</cbc:AdditionalAccountID>
+            <cbc:CustomerAssignedAccountID>{{line.customerDocNumber}}</cbc:CustomerAssignedAccountID>
+            <cbc:AdditionalAccountID>{{line.customerDocType}}</cbc:AdditionalAccountID>
         </cac:AccountingCustomerParty>
 {# Serie y Número de la boleta de venta que modifica #}
-{%if item.affectedDocType %}
+{%if line.affectedDocType %}
         <cac:BillingReference>
             <cac:InvoiceDocumentReference>
-                <cbc:ID>{{item.affectedDocSeries}}-{{item.affectedDocNumber}}</cbc:ID>
-                <cbc:DocumentTypeCode>{{item.affectedDocType}}</cbc:DocumentTypeCode>
+                <cbc:ID>{{line.affectedDocSeries}}-{{line.affectedDocNumber}}</cbc:ID>
+                <cbc:DocumentTypeCode>{{line.affectedDocType}}</cbc:DocumentTypeCode>
             </cac:InvoiceDocumentReference>
         </cac:BillingReference>
 {% endif %}
@@ -86,63 +86,63 @@
             - Total a cobrar incluida la percepción
             - Base imponible
 #}
-{%if item.perceptionRegimeType %}
+{%if line.perceptionRegimeType %}
         <sac:SUNATPerceptionSummaryDocumentReference>
-            <sac:SUNATPerceptionSystemCode>{{item.perceptionRegimeType}}</sac:SUNATPerceptionSystemCode>
-            <sac:SUNATPerceptionPercent>{{item.perceptionPercentage}}</sac:SUNATPerceptionPercent>
-            <cbc:TotalInvoiceAmount currencyID="{{currencyCode}}">{{item.perceptionAmount}}</cbc:TotalInvoiceAmount>
-            <sac:SUNATTotalCashed currencyID="{{currencyCode}}">{{item.perceptionIncludedAmount}}</sac:SUNATTotalCashed>
-            <cbc:TaxableAmount currencyID="{{currencyCode}}">{{item.perceptionBaseAmount}}</cbc:TaxableAmount>
+            <sac:SUNATPerceptionSystemCode>{{line.perceptionRegimeType}}</sac:SUNATPerceptionSystemCode>
+            <sac:SUNATPerceptionPercent>{{line.perceptionPercentage}}</sac:SUNATPerceptionPercent>
+            <cbc:TotalInvoiceAmount currencyID="{{line.currencyCode}}">{{line.perceptionAmount}}</cbc:TotalInvoiceAmount>
+            <sac:SUNATTotalCashed currencyID="{{line.currencyCode}}">{{line.perceptionIncludedAmount}}</sac:SUNATTotalCashed>
+            <cbc:TaxableAmount currencyID="{{line.currencyCode}}">{{line.perceptionBaseAmount}}</cbc:TaxableAmount>
         </sac:SUNATPerceptionSummaryDocumentReference>
 {% endif %}
         <cac:Status>
-            {#      Codigo de operacion del item - catalogo No. 19 #}<cbc:ConditionCode>{{item.itemOperation}}</cbc:ConditionCode>
+            {#      Codigo de operacion del item - catalogo No. 19 #}<cbc:ConditionCode>{{line.itemOperation}}</cbc:ConditionCode>
         </cac:Status>
 {#      Importe total de la venta, cesion en uso o del servicio prestado #}
-        <sac:TotalAmount currencyID="{{currencyCode}}">{{item.payableAmount}}</sac:TotalAmount>
+        <sac:TotalAmount currencyID="{{line.currencyCode}}">{{line.payableAmount}}</sac:TotalAmount>
 {#
         1. [?] Total valor de venta - operaciones gravadas (01)
         2. [?] Total valor de venta - operaciones exoneradas (02)
         3. [?] Total valor de venta - operaciones inafectas (03)
         4. [?] Total valor de venta - operaciones gratuitas (05)
 #}
-{%if item.taxableOperations and item.taxableOperations != '0.00' %}
+{%if line.taxableOperations and line.taxableOperations != '0.00' %}
         <sac:BillingPayment>
-            <cbc:PaidAmount currencyID="{{currencyCode}}">{{item.taxableOperations}}</cbc:PaidAmount>
+            <cbc:PaidAmount currencyID="{{line.currencyCode}}">{{line.taxableOperations}}</cbc:PaidAmount>
             <cbc:InstructionID>01</cbc:InstructionID>
         </sac:BillingPayment>
 {% endif %}
-{%if item.exemptedOperations and item.exemptedOperations != '0.00' %}
+{%if line.exemptedOperations and line.exemptedOperations != '0.00' %}
         <sac:BillingPayment>
-            <cbc:PaidAmount currencyID="{{currencyCode}}">{{item.exemptedOperations}}</cbc:PaidAmount>
+            <cbc:PaidAmount currencyID="{{line.currencyCode}}">{{line.exemptedOperations}}</cbc:PaidAmount>
             <cbc:InstructionID>02</cbc:InstructionID>
         </sac:BillingPayment>
 {% endif %}
-{%if item.unaffectedOperations and item.unaffectedOperations != '0.00' %}
+{%if line.unaffectedOperations and line.unaffectedOperations != '0.00' %}
         <sac:BillingPayment>
-            <cbc:PaidAmount currencyID="{{currencyCode}}">{{item.unaffectedOperations}}</cbc:PaidAmount>
+            <cbc:PaidAmount currencyID="{{line.currencyCode}}">{{line.unaffectedOperations}}</cbc:PaidAmount>
             <cbc:InstructionID>03</cbc:InstructionID>
         </sac:BillingPayment>
 {% endif %}
-{%if item.freeOperations and item.freeOperations != '0.00' %}
+{%if line.freeOperations and line.freeOperations != '0.00' %}
         <sac:BillingPayment>
-            <cbc:PaidAmount currencyID="{{currencyCode}}">{{item.freeOperations}}</cbc:PaidAmount>
+            <cbc:PaidAmount currencyID="{{line.currencyCode}}">{{line.freeOperations}}</cbc:PaidAmount>
             <cbc:InstructionID>05</cbc:InstructionID>
         </sac:BillingPayment>
 {% endif %}
 {#      [?] Total Importe total de sumatoria otros cargos d1el item #}
-{%if item.totalCharges and item.totalCharges != '0.00' %}
+{%if line.totalCharges and line.totalCharges != '0.00' %}
         <cac:AllowanceCharge>
             <cbc:ChargeIndicator>true</cbc:ChargeIndicator>
-            <cbc:Amount currencyID="{{currencyCode}}">{{item.totalCharges}}</cbc:Amount>
+            <cbc:Amount currencyID="{{line.currencyCode}}">{{line.totalCharges}}</cbc:Amount>
         </cac:AllowanceCharge>
 {% endif %}
 {#      [?] Total ISC #}
-{%if item.totalIsc and item.totalIsc != '0.00' %}
+{%if line.totalIsc and line.totalIsc != '0.00' %}
         <cac:TaxTotal>
-            <cbc:TaxAmount currencyID="{{currencyCode}}">{{item.totalIsc}}</cbc:TaxAmount>
+            <cbc:TaxAmount currencyID="{{line.currencyCode}}">{{line.totalIsc}}</cbc:TaxAmount>
             <cac:TaxSubtotal>
-                <cbc:TaxAmount currencyID="{{currencyCode}}">{{item.totalIsc}}</cbc:TaxAmount>
+                <cbc:TaxAmount currencyID="{{line.currencyCode}}">{{line.totalIsc}}</cbc:TaxAmount>
                 <cac:TaxCategory>
                     {# Codigo/Nombre/Código internacional de tributo - Catalogo No. 05 #}<cac:TaxScheme>
                         <cbc:ID>2000</cbc:ID>
@@ -155,9 +155,9 @@
 {% endif %}
 {# Total IGV #}
         <cac:TaxTotal>
-            <cbc:TaxAmount currencyID="{{currencyCode}}">{{item.totalIgv}}</cbc:TaxAmount>
+            <cbc:TaxAmount currencyID="{{line.currencyCode}}">{{line.totalIgv}}</cbc:TaxAmount>
             <cac:TaxSubtotal>
-                <cbc:TaxAmount currencyID="{{currencyCode}}">{{item.totalIgv}}</cbc:TaxAmount>
+                <cbc:TaxAmount currencyID="{{line.currencyCode}}">{{line.totalIgv}}</cbc:TaxAmount>
                 <cac:TaxCategory>
                     {# Codigo/Nombre/Código internacional de tributo - Catalogo No. 05 #}<cac:TaxScheme>
                         <cbc:ID>1000</cbc:ID>
@@ -168,11 +168,11 @@
             </cac:TaxSubtotal>
         </cac:TaxTotal>
 {# [?] Total Otros tributos #}
-{%if item.totalOtherTaxes and item.totalOtherTaxes != '0.00' %}
+{%if line.totalOtherTaxes and line.totalOtherTaxes != '0.00' %}
         <cac:TaxTotal>
-            <cbc:TaxAmount currencyID="{{currencyCode}}">{{item.totalOtherTaxes}}</cbc:TaxAmount>
+            <cbc:TaxAmount currencyID="{{line.currencyCode}}">{{line.totalOtherTaxes}}</cbc:TaxAmount>
             <cac:TaxSubtotal>
-                <cbc:TaxAmount currencyID="{{currencyCode}}">{{item.totalOtherTaxes}}</cbc:TaxAmount>
+                <cbc:TaxAmount currencyID="{{line.currencyCode}}">{{line.totalOtherTaxes}}</cbc:TaxAmount>
                 <cac:TaxCategory>
                     {# Codigo/Nombre/Código internacional de tributo - Catalogo No. 05 #}<cac:TaxScheme>
                         <cbc:ID>9999</cbc:ID>

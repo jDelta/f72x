@@ -2,7 +2,6 @@
 
 return [
     'documentNumber' => 1,
-    'currencyCode'   => 'PEN',        // Tipo de moneda (ISO 4217)
     'issueDate'      => '2017-11-18', // Fecha de generación del resumen diario - ISO 8601 date
     'referenceDate'  => '2017-11-18', // Fecha de emisión de los comprobantes - ISO 8601 date
     'items' => [
@@ -11,6 +10,7 @@ return [
             'documentType'   => '03',    // Cátalogo #1: Tipo de comprobante
             'documentSeries' => 'B1A5',  // Serie de la boleta o nota
             'documentNumber' => 1101001, // Numero de la boleta o nota
+            'currencyCode'   => 'PEN',   // Tipo de moneda (ISO 4217)
             'customerDocType'   => '6',           // Tipo de documento Catálogo #6
             'customerDocNumber' => '10098237761', // Numero de documento del cliente
             'taxableOperations'    => 1500, // [?] Total operaciones gravadas
@@ -31,6 +31,7 @@ return [
             'documentType'      => '03',
             'documentSeries'    => 'B1A5',
             'documentNumber'    => 1101002,
+            'currencyCode'      => 'PEN',
             'customerDocType'   => '6',
             'customerDocNumber' => '10401308487',
             'taxableOperations'  => 800,
@@ -43,6 +44,7 @@ return [
             'documentType'      => '07',
             'documentSeries'    => 'BC20',
             'documentNumber'    => 171872,
+            'currencyCode'      => 'PEN',
             'customerDocType'   => '1',
             'customerDocNumber' => '09728737',
             'taxableOperations' => 1200,
@@ -57,6 +59,7 @@ return [
             'documentType'       => '03',
             'documentSeries'     => 'B1A5',
             'documentNumber'     => 1101004,
+            'currencyCode'      => 'PEN',
             'customerDocType'    => '6',
             'customerDocNumber'  => '10304567812',
             'taxableOperations'  => 2000,
@@ -72,6 +75,7 @@ return [
             'documentType'      => '03',
             'documentSeries'    => 'B1A5',
             'documentNumber'    => 1101005,
+            'currencyCode'      => 'PEN',
             'customerDocType'   => '1',
             'customerDocNumber' => '72670972',
             'freeOperations'    => 250,
@@ -82,6 +86,7 @@ return [
             'documentType'      => '03',
             'documentSeries'    => 'BC20',
             'documentNumber'    => 1101007,
+            'currencyCode'      => 'PEN',
             'customerDocType'   => '6',
             'customerDocNumber' => '10676663376',
             'taxableOperations' => 1250,

@@ -20,11 +20,14 @@ final class DocumentGenerationTest extends TestCase {
     }
 
     public function removeBillDocs() {
-        Repository::removeFiles('20100454523-01-F001-00004355', false);
-        Repository::removeFiles('20100454523-03-B001-00003652', false);
-        Repository::removeFiles('20100454523-07-FC01-00000211', false);
-        Repository::removeFiles('20100454523-08-FD01-00000211', false);
+        Repository::removeFiles('20100454523-01-F001-00004355',  false);
+        Repository::removeFiles('20100454523-03-B001-00003652',  false);
+        Repository::removeFiles('20100454523-07-FC01-00000211',  false);
+        Repository::removeFiles('20100454523-08-FD01-00000211',  false);
         Repository::removeFiles('20100454523-RC-20171118-00001', false);
+        Repository::removeFiles('20100454523-RA-20110402-00001', false);
+        Repository::removeFiles('20100454523-P001-00000123',     false);
+        Repository::removeFiles('20100454523-R001-00000123',     false);
     }
 
     public function testGenerateFactura() {
@@ -47,19 +50,34 @@ final class DocumentGenerationTest extends TestCase {
 
     public function testGenerateDebitNote() {
         $data = self::getCaseData('notadebito');
-        $xmlDoc = DocumentGenerator::createDocument('NDE',$data);
+        $xmlDoc = DocumentGenerator::createDocument('NDE', $data);
         DocumentGenerator::generateFiles($xmlDoc);
     }
+
     public function testResumenDiario() {
         $data = self::getCaseData('resumen-diario');
-        $eDocument = DocumentGenerator::createResumenDiario('RC',$data);
-        DocumentGenerator::generateResumenFiles($eDocument);
+        $eDocument = DocumentGenerator::createResumenDiario($data);
+        $eDocument->generateFiles();
     }
+
     public function testComunicacionDeBaja() {
         $data = self::getCaseData('comunicacion-baja');
         $eDocument = DocumentGenerator::createComunicacionBaja($data);
         $eDocument->generateFiles();
     }
+
+    public function testPercepcion() {
+        $data = self::getCaseData('percepcion');
+        $eDocument = DocumentGenerator::createPercepcion($data);
+        $eDocument->generateFiles();
+    }
+
+    public function testRetencion() {
+        $data = self::getCaseData('retencion');
+        $eDocument = DocumentGenerator::createRetencion($data);
+        $eDocument->generateFiles();
+    }
+
     public function testDataMapRightCalcsForFactura() {
         $in = self::getCaseData('factura');
         $Invoice = new DataMap($in, Catalogo::DOCTYPE_FACTURA);

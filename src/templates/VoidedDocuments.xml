@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <VoidedDocuments
     xmlns="urn:sunat:names:specification:ubl:peru:schema:xsd:VoidedDocuments-1"
     xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
@@ -15,9 +15,9 @@
     </ext:UBLExtensions>
     <cbc:UBLVersionID>2.0</cbc:UBLVersionID>
     <cbc:CustomizationID>1.0</cbc:CustomizationID>
-{#  Identificador de la comunicación  de baja #}
-    <cbc:ID>{{documentId}}</cbc:ID>
-{#  Fecha de generación del documento dado de baja #}
+{#  Identificador de la comunicaciÃ³n  de baja #}
+    <cbc:ID>{{id}}</cbc:ID>
+{#  Fecha de generaciÃ³n del documento dado de baja #}
     <cbc:ReferenceDate>{{referenceDate}}</cbc:ReferenceDate>
 {#  Fecha de emision de los documentos #}
     <cbc:IssueDate>{{issueDate}}</cbc:IssueDate>
@@ -29,28 +29,28 @@
         <cbc:ID>SignIMM</cbc:ID>
         <cac:SignatoryParty>
             <cac:PartyIdentification>
-                <cbc:ID>{{accountingSupplierDocNumber}}</cbc:ID>
+                <cbc:ID>{{issuer.idDocNumber}}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name><![CDATA[{{accountingSupplierRegName}}]]></cbc:Name>
+                <cbc:Name><![CDATA[{{issuer.regName}}]]></cbc:Name>
             </cac:PartyName>
         </cac:SignatoryParty>
         <cac:DigitalSignatureAttachment>
             <cac:ExternalReference>
-                <cbc:URI>#{{documentId}}</cbc:URI>
+                <cbc:URI>#{{id}}</cbc:URI>
             </cac:ExternalReference>
         </cac:DigitalSignatureAttachment>
     </cac:Signature>
 {#  - RUC
     - Tipo de documento (1:DNI|6:RUC)
-    - Apellidos y nombres o denominacion o razon social
+    - Apellidos y nombres o denominaciÃ³n o razon social
 #}
     <cac:AccountingSupplierParty>
-        <cbc:CustomerAssignedAccountID>{{accountingSupplierDocNumber}}</cbc:CustomerAssignedAccountID>
-        <cbc:AdditionalAccountID>{{accountingSupplierDocType}}</cbc:AdditionalAccountID>
+        <cbc:CustomerAssignedAccountID>{{issuer.idDocNumber}}</cbc:CustomerAssignedAccountID>
+        <cbc:AdditionalAccountID>{{issuer.idDocType}}</cbc:AdditionalAccountID>
         <cac:Party>
             <cac:PartyLegalEntity>
-                <cbc:RegistrationName><![CDATA[{{accountingSupplierRegName}}]]></cbc:RegistrationName>
+                <cbc:RegistrationName><![CDATA[{{issuer.regName}}]]></cbc:RegistrationName>
             </cac:PartyLegalEntity>
         </cac:Party>
     </cac:AccountingSupplierParty>

@@ -3,27 +3,27 @@
 /**
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.1
+ * Version 1.0
  * 
- * Copyright 2018, Jaime Cruz
+ * Copyright 2019, Jaime Cruz
  */
 
 namespace F72X\Sunat;
 
 use InvalidArgumentException;
-use F72X\F72X;
 use F72X\Tools\XmlDSig;
 use F72X\Tools\PdfGenerator;
 use F72X\Repository;
 use F72X\Sunat\Catalogo;
 use F72X\Tools\XmlService;
-use F72X\Tools\TplRenderer;
 use F72X\Sunat\Document\Factura;
 use F72X\Sunat\Document\Boleta;
 use F72X\Sunat\Document\NotaCredito;
 use F72X\Sunat\Document\NotaDebito;
 use F72X\Sunat\Document\ResumenDiario;
 use F72X\Sunat\Document\ComunicacionBaja;
+use F72X\Sunat\Document\Percepcion;
+use F72X\Sunat\Document\Retencion;
 use F72X\Exception\InvalidInputException;
 
 class DocumentGenerator {
@@ -102,12 +102,11 @@ class DocumentGenerator {
 
     /**
      * 
-     * @param string $summaryType RC|RA
      * @param array $data
      * @return ResumenDiario
      */
-    public static function createResumenDiario($summaryType, $data) {
-        return new ResumenDiario($summaryType, $data);
+    public static function createResumenDiario($data) {
+        return new ResumenDiario($data);
     }
 
     /**
@@ -119,14 +118,26 @@ class DocumentGenerator {
         return new ComunicacionBaja($data);
     }
 
+    /**
+     * 
+     * @param array $data La data
+     * @return Perception
+     */
+    public static function createPercepcion($data) {
+        return new Percepcion($data);
+    }
+
+    /**
+     * 
+     * @param array $data La data
+     * @return Perception
+     */
+    public static function createRetencion($data) {
+        return new Retencion($data);
+    }
+
     public static function generateResumenFiles(ResumenDiario $eDocument) {
-        $docFileName = $eDocument->getDocumentFileName();
-        $tpRenderer = TplRenderer::getRenderer(F72X::getSrcDir() . '/templates');
-        $xmlContent = $tpRenderer->render('SummaryDocuments.xml', $eDocument->getDataForXml());
-        Repository::saveDocumentInput($docFileName, json_encode($eDocument->getRawData(), JSON_PRETTY_PRINT));
-        Repository::saveDocument($docFileName, $xmlContent);
-        XmlDSig::sign($docFileName);
-        Repository::zipDocument($docFileName);
+        $eDocument->generateFiles();
     }
 
     private static function saveDocumentInput($XmlDoc) {
@@ -195,15 +206,15 @@ class DocumentGenerator {
                 break;
         }
         return [
-            $topNamespace                                                                 => '',
-            'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2'    => 'cac',
-            'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2'        => 'cbc',
-            'urn:un:unece:uncefact:documentation:2'                                       => 'ccts',
-            'http://www.w3.org/2000/09/xmldsig#'                                          => 'ds',
-            'urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2'    => 'ext',
-            'urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2'           => 'qdt',
+            $topNamespace => '',
+            'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2' => 'cac',
+            'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2' => 'cbc',
+            'urn:un:unece:uncefact:documentation:2' => 'ccts',
+            'http://www.w3.org/2000/09/xmldsig#' => 'ds',
+            'urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2' => 'ext',
+            'urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2' => 'qdt',
             'urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2' => 'udt',
-            'http://www.w3.org/2001/XMLSchema-instance'                                   => 'xsi'
+            'http://www.w3.org/2001/XMLSchema-instance' => 'xsi'
         ];
     }
 

@@ -49,6 +49,7 @@ final class SunatGatewayTest extends TestCase {
         ];
         self::assertEquals($expected, $actual);
     }
+
     public static function testSendDebitNoteCase1() {
         $expected = [
             'responseCode' => '0',
@@ -61,15 +62,27 @@ final class SunatGatewayTest extends TestCase {
         ];
         self::assertEquals($expected, $actual);
     }
-    
-    public static function testSendSummary() {
+
+    public static function testSendResumenDiario() {
         $ticket = ServiceGateway::sendSummary('20100454523-RC-20171118-00001');
         echo $ticket;
     }
-    public static function testGetStatus() {
+
+    public static function testSendComunicacionBaja() {
+        $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
+        echo $ticket;
+    }
+
+    public static function testGetResumenDiarioStatus() {
         $response = ServiceGateway::getStatus('20100454523-RC-20171118-00001');
         echo json_encode($response);
     }
+
+    public static function testGetComunicacionBajaStatus() {
+        $response = ServiceGateway::getStatus('20100454523-RA-20110402-00001');
+        echo json_encode($response);
+    }
+
     public function testGetTicket() {
         $xmlString = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -83,7 +96,7 @@ final class SunatGatewayTest extends TestCase {
 </soap-env:Envelope>
 XML;
         $xmlObj = simplexml_load_string($xmlString);
-        $ticket = (string)$xmlObj->xpath("//ticket")[0];
+        $ticket = (string) $xmlObj->xpath("//ticket")[0];
         self::assertEquals('1542230447563', $ticket);
     }
 

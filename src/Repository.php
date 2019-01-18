@@ -3,15 +3,14 @@
 /**
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.1
+ * Version 1.0
  * 
- * Copyright 2018, Jaime Cruz
+ * Copyright 2019, Jaime Cruz
  */
 
 namespace F72X;
 
 use ZipArchive;
-use F72X\Company;
 use F72X\Exception\FileException;
 
 class Repository {
