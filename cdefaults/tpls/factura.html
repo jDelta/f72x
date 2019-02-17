@@ -115,19 +115,22 @@
             .keyfields td{
                 white-space: nowrap;
             }
+            .edoc-footer-content, edoc-footer-content{
+                font-size: 7pt;
+            }
         </style>
     </head>
     <body>
         <img class="logo" src="data:image/png;base64,{{logo}}" />
-        <div class="company-location-info">
-            {{companyAddress}} - {{companyCity}}<br>
-            {{companyContactInfo|raw}}
-        </div>
         <div class="invoice-id-area">
             R.U.C. {{companyRuc}}<br>
             FACTURA ELECTRÓNICA<br>
             N° {{documentSeries}}-{{documentNumber}}
         </div>
+        <div class="company-location-info">
+            {{companyAddress}} - {{companyCity}}
+        </div>
+        <div class="edoc-header-content">{{edocHeaderContent|raw}}</div>
         <table class="head-section">
             <tbody>
                 <tr>
@@ -210,6 +213,7 @@
                 </td>
             </tr>
         </table>
+        <div class="edoc-footer-content">{{edocFooterContent|raw}}</div>
         <table class="footer dim-full">
             <tr>
                 <td width="35">&nbsp;</td>

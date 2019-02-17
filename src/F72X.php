@@ -14,11 +14,10 @@ use F72X\Exception\ConfigException;
 
 class F72X {
 
-    private static $production = false;
+    private static $production = null;
     private static $requiredConfigFields = [
         'cconfigPath',
-        'repoPath',
-        'prodMode'
+        'repoPath'
     ];
 
     /**
@@ -28,11 +27,21 @@ class F72X {
      */
     public static function init(array $cfg) {
         self::validateConfig($cfg);
-        self::$production = !!$cfg['prodMode'];
+        // Wrong production mode config
+        if (array_key_exists('prodMode', $cfg) && !is_bool($cfg['prodMode'])) {
+            $vartype = gettype($cfg['prodMode']);
+            throw new ConfigException("F72x::init error: La propiedad [prodMode] debe ser tipo boolean, no $vartype. O puede no indicar esta propiedad si no piensa hacer uso de los webservices de SUNAT");
+        }
+        if (isset($cfg['prodMode'])) {
+            self::$production = $cfg['prodMode'];
+        }
         Company::setConfig($cfg);
     }
 
     public static function isProductionMode() {
+        if (is_null(self::$production)) {
+            throw new ConfigException("F72x::init error: La propiedad [prodMode] no fue definida");
+        }
         return self::$production;
     }
 

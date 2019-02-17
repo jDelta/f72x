@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 final class SunatGatewayTest extends TestCase {
 
     public function __construct() {
-        Util::initF72X();
+        Util::initModule();
     }
 
     public static function testSendFacturaCase1() {
@@ -69,6 +69,11 @@ final class SunatGatewayTest extends TestCase {
     }
 
     public static function testSendComunicacionBaja() {
+        $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
+        echo $ticket;
+    }
+
+    public static function testSendPercepcion() {
         $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
         echo $ticket;
     }

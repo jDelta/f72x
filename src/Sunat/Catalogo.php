@@ -11,25 +11,25 @@
 namespace F72X\Sunat;
 
 use InvalidArgumentException;
-use DOMDocument;
 use F72X\F72X;
 use F72X\Company;
 use F72X\Exception\ConfigException;
-use Sabre\Xml\Reader;
 
 class Catalogo {
 
-    const CAT_TAX_DOCUMENT_TYPE = 1;
-    const CAT_CURRENCY_TYPE = 2;
-    const CAT_MEASUREMENT_UNIT = 3;
-    const CAT_COUNTRY_CODE = 4;
-    const CAT_TAX_TYPE = 5;
-    const CAT_IDENT_DOCUMENT_TYPE = 6;
+    const CAT_TAX_DOCUMENT_TYPE    = 1;
+    const CAT_CURRENCY_TYPE        = 2;
+    const CAT_MEASUREMENT_UNIT     = 3;
+    const CAT_COUNTRY_CODE         = 4;
+    const CAT_TAX_TYPE             = 5;
+    const CAT_IDENT_DOCUMENT_TYPE  = 6;
     const CAT_IGV_AFFECTATION_TYPE = 7;
     const CAT_ISC_CALC_SYSTEM_TYPE = 8;
-    const CAT_NOTA_CREDITO_TYPE = 9;
-    const CAT_NOTA_DEBITO_TYPE = 10;
-    const CAT_FACTURA_TYPE = 51;
+    const CAT_NOTA_CREDITO_TYPE    = 9;
+    const CAT_NOTA_DEBITO_TYPE     = 10;
+    const CAT_PERCEPCION_REGIME    = 22;
+    const CAT_RETENCION_REGIME     = 23;
+    const CAT_FACTURA_TYPE         = 51;
 
     /** @CAT1 Código tipo de documento */
     const DOCTYPE_FACTURA = '01';
@@ -137,6 +137,24 @@ class Catalogo {
         $item = self::getCatItem($catNumber, $itemID);
         if ($item) {
             return $item['value'];
+        }
+        throw new InvalidArgumentException("Catálogo Error, no existe un item con ID='$itemID' en el cátalogo='$catNumber'");
+    }
+
+    /**
+     * Valor de item de catálogo
+     * @param int $catNumber
+     * @param string $itemID
+     * @return string
+     * @throws InvalidArgumentException cuando el item no existe en el catálogo.
+     */
+    public static function getCatItemFieldValue($catNumber, $itemID, $field) {
+        $item = self::getCatItem($catNumber, $itemID);
+        if ($item) {
+            if(isset($item[$field])){
+                return $item[$field];
+            }
+            throw new InvalidArgumentException("Catálogo Error, no existe el campo '$field' en el cátalogo='$catNumber'");
         }
         throw new InvalidArgumentException("Catálogo Error, no existe un item con ID='$itemID' en el cátalogo='$catNumber'");
     }

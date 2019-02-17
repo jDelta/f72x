@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 final class RepositoryTest extends TestCase {
 
     protected function setUp() {
-        Util::initF72X();
+        Util::initModule();
     }
 
     public function testGdrInfo() {

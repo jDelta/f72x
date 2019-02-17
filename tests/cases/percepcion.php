@@ -21,18 +21,35 @@ return [
             'countryCode'           => 'PE'
         ]
     ],
+// Documentos relacionados
     'lines' => [
         [
-            'documentType'   => '01',              // Cátalogo #1: Tipo de comprobante
-            'documentSeries' => 'F001',            // Serie de comprobante
-            'documentNumber' => 1,                 // Número del comprobante
-            'voidReason'     => 'Error en sistema' // Motivo de baja
+            'documentType'       => '01',         // Cátalogo #1: Tipo de comprobante
+            'documentSeries'     => 'F001',       // Serie de comprobante
+            'documentNumber'     => 14,           // Número del comprobante
+            'currencyCode'       => 'USD',        // Tipo de moneda (ISO 4217)
+            'issueDate'          => '2015-12-23', // Fecha emision
+            'totalInvoiceAmount' => 14000,
+            // Pagos
+            'payment'            => [
+                'number'            => 1,
+                'paidAmount'        => 5000,
+                'paidDate'          => '2015-12-23'
+            ],
+            'exchangeRate' => 3.24
         ],
         [
-            'documentType'   => '01',
-            'documentSeries' => 'F001',
-            'documentNumber' => 15,
-            'voidReason'     => 'Cancelación'
+            'documentType'       => '01',
+            'documentSeries'     => 'F001',
+            'documentNumber'     => 540,
+            'currencyCode'       => 'PEN',
+            'issueDate'          => '2015-12-23',
+            'totalInvoiceAmount' => 1000,
+            'payment'            => [
+                'number'            => 1,
+                'paidAmount'        => 1000,
+                'paidDate'          => '2015-12-23'
+            ]
         ]
     ]
 ];

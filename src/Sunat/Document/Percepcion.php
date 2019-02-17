@@ -12,7 +12,9 @@ namespace F72X\Sunat\Document;
 
 class Percepcion extends AbstractPerRet {
 
+    protected $isPercepcion = true;
     protected $seriesPrefix = 'P';
+    protected $regimeCatNumber = 22;
     protected $xmlTplName = 'Perception.xml';
 
 }

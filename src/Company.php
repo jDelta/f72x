@@ -101,6 +101,23 @@ class Company {
     public static function getContactInfo() {
         return self::get('contactInfo');
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    public static function getEdocHeaderContent() {
+        return self::get('edocHeaderContent');
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public static function getEdocFooterContent() {
+        return self::get('edocFooterContent');
+    }
+
     /**
      * 
      * @return string

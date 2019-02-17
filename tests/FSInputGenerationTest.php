@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 final class FSInputGenerationTest extends TestCase {
 
     public function __construct() {
-        Util::initF72X();
+        Util::initModule();
     }
     public function testGenerarTip() {
         self::assertTrue(true);

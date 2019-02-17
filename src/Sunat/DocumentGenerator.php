@@ -124,6 +124,7 @@ class DocumentGenerator {
      * @return Perception
      */
     public static function createPercepcion($data) {
+        self::validateData($data, 'PER');
         return new Percepcion($data);
     }
 

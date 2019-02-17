@@ -123,7 +123,7 @@
         </cac:PartyLegalEntity>
     </cac:ReceiverParty>
 {#
-    Datos de la percepción
+    Datos de la percepción(Catálogo 22)
     - Régimen Description                                                - Tasa
        01   PERCEPCION VENTA INTERNA                                       2.00
        02   PERCEPCION A LA ADQUISICION DE COMBUSTIBLE                     1.00
@@ -135,8 +135,8 @@
     <sac:SUNATPerceptionSystemCode>{{systemCode}}</sac:SUNATPerceptionSystemCode>
     <sac:SUNATPerceptionPercent>{{percent}}</sac:SUNATPerceptionPercent>
     <cbc:Note>{{note}}</cbc:Note>
-    <cbc:TotalInvoiceAmount currencyID="PEN">{{totalInvoicedAmount}}</cbc:TotalInvoiceAmount>
-    <sac:SUNATTotalCashed currencyID="PEN">{{totalCashed}}</sac:SUNATTotalCashed>
+    <cbc:TotalInvoiceAmount currencyID="PEN">{{totalInvoiceAmount}}</cbc:TotalInvoiceAmount>
+    <sac:SUNATTotalCashed currencyID="PEN">{{total}}</sac:SUNATTotalCashed>
 {#  Datos del Comprobante Relacionado #}
 {% for line in lines %}
     <sac:SUNATPerceptionDocumentReference>
@@ -144,20 +144,22 @@
         <cbc:IssueDate>{{line.issueDate}}</cbc:IssueDate>
         <cbc:TotalInvoiceAmount currencyID="{{line.currencyCode}}">{{line.totalInvoiceAmount}}</cbc:TotalInvoiceAmount>
         <cac:Payment>
-            <cbc:ID>1</cbc:ID>
-            <cbc:PaidAmount currencyID="USD">5000.00</cbc:PaidAmount>
-            <cbc:PaidDate>2015-12-23</cbc:PaidDate>
+            <cbc:ID>{{line.payment.number}}</cbc:ID>
+            <cbc:PaidAmount currencyID="{{line.currencyCode}}">{{line.payment.paidAmount}}</cbc:PaidAmount>
+            <cbc:PaidDate>{{line.payment.paidDate}}</cbc:PaidDate>
         </cac:Payment>
         <sac:SUNATPerceptionInformation>
-            <sac:SUNATPerceptionAmount currencyID="PEN">324.00</sac:SUNATPerceptionAmount>
-            <sac:SUNATPerceptionDate>2015-12-23</sac:SUNATPerceptionDate>
-            <sac:SUNATNetTotalCashed currencyID="PEN">16524.00</sac:SUNATNetTotalCashed>
+            <sac:SUNATPerceptionAmount currencyID="PEN">{{line.operationAmount}}</sac:SUNATPerceptionAmount>
+            <sac:SUNATPerceptionDate>{{line.issueDate}}</sac:SUNATPerceptionDate>
+            <sac:SUNATNetTotalCashed currencyID="PEN">{{line.netTotal}}</sac:SUNATNetTotalCashed>
+{%        if line.currencyCode != "PEN" %}
             <cac:ExchangeRate>
-                <cbc:SourceCurrencyCode>USD</cbc:SourceCurrencyCode>
+                <cbc:SourceCurrencyCode>{{line.currencyCode}}</cbc:SourceCurrencyCode>
                 <cbc:TargetCurrencyCode>PEN</cbc:TargetCurrencyCode>
-                <cbc:CalculationRate>3.24</cbc:CalculationRate>
-                <cbc:Date>2015-12-23</cbc:Date>
+                <cbc:CalculationRate>{{line.exchangeRate}}</cbc:CalculationRate>
+                <cbc:Date>{{line.payment.paidDate}}</cbc:Date>
             </cac:ExchangeRate>
+{%        endif %}
         </sac:SUNATPerceptionInformation>
     </sac:SUNATPerceptionDocumentReference>
 {% endfor %}

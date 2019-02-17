@@ -13,13 +13,10 @@ use PHPUnit\Framework\TestCase;
 final class DocumentGenerationTest extends TestCase {
 
     public function __construct() {
-        Util::initF72X();
-        $this->removeBillDocs();
-//        $this->generateDetailMatrix('boleta');
-//        $this->generateDetailMatrix('factura');
+        Util::initModule();
     }
 
-    public function removeBillDocs() {
+    public function xtestRemoveBillDocs() {
         Repository::removeFiles('20100454523-01-F001-00004355',  false);
         Repository::removeFiles('20100454523-03-B001-00003652',  false);
         Repository::removeFiles('20100454523-07-FC01-00000211',  false);
@@ -31,48 +28,56 @@ final class DocumentGenerationTest extends TestCase {
     }
 
     public function testGenerateFactura() {
+        Repository::removeFiles('20100454523-01-F001-00004355',  false);
         $data = self::getCaseData('factura');
         $xmlInvice = DocumentGenerator::createDocument('FAC', $data);
         DocumentGenerator::generateFiles($xmlInvice);
     }
 
     public function testGeneratBoleta() {
+        Repository::removeFiles('20100454523-03-B001-00003652',  false);
         $data = self::getCaseData('boleta');
         $xmlInvice = DocumentGenerator::createDocument('BOL', $data);
         DocumentGenerator::generateFiles($xmlInvice);
     }
 
     public function testGenerateCreditNote() {
+        Repository::removeFiles('20100454523-07-FC01-00000211',  false);
         $data = self::getCaseData('notacredito');
         $xmlDoc = DocumentGenerator::createDocument('NCR', $data);
         DocumentGenerator::generateFiles($xmlDoc);
     }
 
     public function testGenerateDebitNote() {
+        Repository::removeFiles('20100454523-08-FD01-00000211',  false);
         $data = self::getCaseData('notadebito');
         $xmlDoc = DocumentGenerator::createDocument('NDE', $data);
         DocumentGenerator::generateFiles($xmlDoc);
     }
 
     public function testResumenDiario() {
+        Repository::removeFiles('20100454523-RC-20171118-00001', false);
         $data = self::getCaseData('resumen-diario');
         $eDocument = DocumentGenerator::createResumenDiario($data);
         $eDocument->generateFiles();
     }
 
     public function testComunicacionDeBaja() {
+        Repository::removeFiles('20100454523-RA-20110402-00001', false);
         $data = self::getCaseData('comunicacion-baja');
         $eDocument = DocumentGenerator::createComunicacionBaja($data);
         $eDocument->generateFiles();
     }
 
     public function testPercepcion() {
+        Repository::removeFiles('20100454523-P001-00000123',     false);
         $data = self::getCaseData('percepcion');
         $eDocument = DocumentGenerator::createPercepcion($data);
         $eDocument->generateFiles();
     }
 
     public function testRetencion() {
+        Repository::removeFiles('20100454523-R001-00000123',     false);
         $data = self::getCaseData('retencion');
         $eDocument = DocumentGenerator::createRetencion($data);
         $eDocument->generateFiles();

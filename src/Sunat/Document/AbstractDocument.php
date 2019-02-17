@@ -35,6 +35,11 @@ abstract class AbstractDocument implements DocumentInterface {
     const SIGNATURE_ID = 'SignIMM';
 
     /**
+     * The Peruvian currency code
+     */
+    const LOCAL_CURRENCY_CODE = 'PEN';
+
+    /**
      * The document's id.
      * 
      * @var string 
@@ -203,9 +208,9 @@ abstract class AbstractDocument implements DocumentInterface {
     }
 
     private function processInput(array $in) {
+        $this->rawData = $in;
         $out1 = $this->parseCommonFields($in);
         $out2 = $this->parseInput($out1);
-        $this->rawData = $in;
         $this->parsedData = $out2;
     }
 
@@ -231,8 +236,13 @@ abstract class AbstractDocument implements DocumentInterface {
         return $parsedLines;
     }
 
-    public function parseInputLine(array $rawInputLine) {
-        return $rawInputLine;
+    /**
+     * 
+     * @param array $in The raw input line
+     * @return array
+     */
+    public function parseInputLine(array $in) {
+        return $in;
     }
 
     public function setIssuerFields() {
@@ -241,7 +251,7 @@ abstract class AbstractDocument implements DocumentInterface {
     }
 
     /**
-     * Returns the base fields for an XMl file rendering.
+     * Returns the base fields for an XML file rendering.
      * @return array
      */
     protected function getBaseFieldsForXml() {
@@ -254,8 +264,32 @@ abstract class AbstractDocument implements DocumentInterface {
                 'idDocNumber' => $issuer->getIdDocNumber(),
                 'regName' => $issuer->getRegName(),
             ],
-            'lines' => $this->lines
+            'lines' => $this->getLinesForXml($this->lines)
         ];
+    }
+
+    /**
+     * Returns the parsed lines for the XML file rendering.
+     * 
+     * @param array $in The input data
+     * @return array
+     */
+    protected function getLinesForXml(array $in) {
+        $out = [];
+        foreach ($in as $line) {
+            $out[] = $this->getLineForXml($line);
+        }
+        return $out;
+    }
+
+    /**
+     * Returns the parsed line for the XML file rendering.
+     * 
+     * @param array $in The input data
+     * @return array
+     */
+    protected function getLineForXml(array $in) {
+        return $in;
     }
 
     /**

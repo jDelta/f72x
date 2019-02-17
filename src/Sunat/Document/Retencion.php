@@ -12,7 +12,9 @@ namespace F72X\Sunat\Document;
 
 class Retencion extends AbstractPerRet {
 
+    protected $isRetencion = true;
     protected $seriesPrefix = 'R';
+    protected $regimeCatNumber = 23;
     protected $xmlTplName = 'Retention.xml';
 
 }

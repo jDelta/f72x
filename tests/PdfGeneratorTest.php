@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 final class PdfGeneratorTest extends TestCase {
 
     protected function setUp() {
-        Util::initF72X();
+        Util::initModule();
     }
 
     public function testGen() {
