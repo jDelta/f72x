@@ -149,7 +149,13 @@ class Company {
     public static function getRepositoryPath() {
         return self::get('repoPath');
     }
-
+    /**
+     * 
+     * @return string
+     */
+    public static function getTempPath() {
+        return self::get('tempPath');
+    }
     /**
      * 
      * @return string

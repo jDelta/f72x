@@ -19,7 +19,8 @@ F72X::init([
     'claveSol'              => 'moddatos',
     'cconfigPath'           => __DIR__ . '/tests/companyconfig',
     'repoPath'              => __DIR__ . '/tests/edocs',
-    'certificate'           => '20100454523_2018_09_27',
+    'tempPath'              => __DIR__ . '/tests/temp',
+    'certificate'           => 'activecert',
     'prodMode'              => false
 ]);
 

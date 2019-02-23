@@ -14,6 +14,10 @@ use F72X\Exception\ConfigException;
 
 class F72X {
 
+    const RUNNING_ENV_GAE = 1;
+    const RUNNING_ENV_GAE_DEV_SERVER = 2;
+    const RUNNING_ENV_X = 3;
+
     private static $production = null;
     private static $requiredConfigFields = [
         'cconfigPath',
@@ -68,8 +72,12 @@ class F72X {
         return __DIR__ . '/..';
     }
 
+    public static function getCatalogoSunatDir() {
+        return __DIR__ . '/Sunat/catalogo';
+    }
+
     public static function getTempDir() {
-        return self::getModuleDir() . '/temp';
+        return Company::getTempPath();
     }
 
     public static function getDefaultPdfTemplatesPath() {
@@ -82,6 +90,21 @@ class F72X {
 
     public static function getSrcDir() {
         return __DIR__;
+    }
+
+    /**
+     * Return the environment code where this module is running.
+     * @return int
+     */
+    public static function getRunningEnvironment() {
+        $serverSofware = getenv('SERVER_SOFTWARE');
+        if (strpos($serverSofware, 'Google App Engine') === 0) {
+            return self::RUNNING_ENV_GAE;
+        }
+        if (strpos($serverSofware, 'Development') === 0) {
+            return self::RUNNING_ENV_GAE_DEV_SERVER;
+        }
+        return self::RUNNING_ENV_X;
     }
 
 }

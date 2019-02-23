@@ -11,6 +11,8 @@
 namespace F72X;
 
 use ZipArchive;
+use F72X\F72X;
+use F72X\Tools\ZipFile;
 use F72X\Exception\FileException;
 
 class Repository {
@@ -57,10 +59,20 @@ class Repository {
 
     public static function zipDocument($documentName) {
         $rp = self::getRepositoryPath();
-        $zip = new ZipArchive();
-        if ($zip->open("$rp/zip/$documentName.zip", ZipArchive::CREATE) === TRUE) {
-            $zip->addFile("$rp/sxml/S-$documentName.xml", "$documentName.xml");
-            $zip->close();
+        $re = F72X::getRunningEnvironment();
+        $zipPath = "$rp/zip/$documentName.zip";
+        $xmlPath = "$rp/sxml/S-$documentName.xml";
+        $xmlFileName = "$documentName.xml";
+        if ($re === F72X::RUNNING_ENV_GAE || $re === F72X::RUNNING_ENV_GAE_DEV_SERVER) {
+            $zip = new ZipFile();
+            $zip->addFile(file_get_contents($xmlPath), $xmlFileName);
+            file_put_contents($zipPath, $zip->file());
+        } else {
+            $zip = new ZipArchive();
+            if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+                $zip->addFile($xmlPath, $xmlFileName);
+                $zip->close();
+            }
         }
     }
 

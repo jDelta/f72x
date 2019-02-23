@@ -13,11 +13,14 @@ final class Util {
         'codigoDomicilioFiscal' => '0000',
         'address'               => 'AV. FCO. BOLOGNESI 854',
         'city'                  => 'LIMA',
-        'contactInfo'           => 'Email: ventas@miweb.com',
+        'edocHeaderContent'     => '<i>Email: ventas@miweb.com</i>',
+        'edocFooterContent'     => '<small>Lo que hacemos, lo hacemos bien!</small>',
         'usuarioSol'            => 'MODDATOS',
         'claveSol'              => 'moddatos',
         'cconfigPath'           => __DIR__.'/companyconfig',
         'repoPath'              => __DIR__.'/edocs',
+        'tempPath'              => __DIR__.'/temp',
+        'certificate'           => 'activecert',
         'prodMode'              => false
     ];
 

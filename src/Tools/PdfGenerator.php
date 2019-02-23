@@ -22,6 +22,7 @@ use Twig_Loader_Filesystem;
 use Twig_Extensions_Extension_Intl;
 use Twig_Extension_Escaper;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class PdfGenerator {
 
@@ -40,7 +41,11 @@ class PdfGenerator {
      * @return string The PDF stream
      */
     public static function buildPdf(DataMap $Invoice) {
-        $dompdf = new Dompdf();
+        // Dompdf Options
+        $options = new Options();
+        $options->set('tempDir', F72X::getTempDir() . '/');
+        // Dompdf
+        $dompdf = new Dompdf($options);
         $docType = self::getTplFor($Invoice->getDocumentType());
         $html = self::getRenderedHtml($Invoice, $docType);
         // Render the HTML as PDF

@@ -1,7 +1,3 @@
-MÓDULO F72X
- [x] Iniciar sin definir el modo de operaración [prodMode]: No se espera errores
- [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException
- [x] Llamada a F72X::isProductionMode() sin haber definido el modo de operaración [prodMode]: Se espera una ecepción tipo \F72X\Exception\ConfigException
- [x] Iniciar con [prodMode] = true
- [x] Iniciar con [prodMode] = false
+s\DocumentGeneration
+ [x] Generate factura
 

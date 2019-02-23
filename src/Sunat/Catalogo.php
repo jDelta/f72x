@@ -176,7 +176,7 @@ class Catalogo {
         }
         // Load from file
         $fileName = strtoupper(self::getCatFileName($catNumber));
-        $items = require SunatVars::DIR_CATS . "/$fileName.php";
+        $items = require F72X::getCatalogoSunatDir() . "/$fileName.php";
         self::$_CAT['CAT_' . $catNumber] = $items;
         return $items;
     }
