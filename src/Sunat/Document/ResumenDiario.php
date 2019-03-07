@@ -10,6 +10,7 @@
 
 namespace F72X\Sunat\Document;
 
+use F72X\Sunat\InputValidator;
 use F72X\Sunat\Operations;
 
 class ResumenDiario extends AbstractSummary {
@@ -36,6 +37,10 @@ class ResumenDiario extends AbstractSummary {
         'perceptionIncludedAmount' => null
     ];
 
+    protected $validations = [
+        'legalValidity' => ['required' => true]
+    ];
+
     public function parseInputLine(array $rawInputLine) {
         $parsedFields = [
             'payableAmount'            => Operations::formatAmount($rawInputLine['payableAmount']),
@@ -53,6 +58,14 @@ class ResumenDiario extends AbstractSummary {
             'perceptionIncludedAmount' => Operations::formatAmount($rawInputLine['perceptionIncludedAmount']),
         ];
         return array_merge($rawInputLine, $parsedFields);
+    }
+
+    public function validateInput(array $inputData) {
+        $validator = new InputValidator($inputData, $this->validations);
+        if (!$validator->isValid()) {
+            $msg = $validator->getErrosString();
+            throw new \Exception("Invalid Document Input: [$msg]");
+        }
     }
 
 }

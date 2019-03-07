@@ -33,7 +33,7 @@ class Repository {
         self::removeFile("$rp/sxml/S-$documentName.xml", $throwEx);
         self::removeFile("$rp/zip/$documentName.zip", $throwEx);
         self::removeFile("$rp/pdf/$documentName.pdf", $throwEx);
-        self::removeFile("$rp/ticket/$documentName.zip", $throwEx);
+        self::removeFile("$rp/ticket/$documentName.txt", $throwEx);
         self::removeFile("$rp/cdr/R$documentName.zip", $throwEx);
     }
 
@@ -46,7 +46,7 @@ class Repository {
     }
 
     public static function saveTicket($documentName, $ticket) {
-        self::saveFile("ticket/$documentName.json", json_encode(['ticket' => $ticket]), true);
+        self::saveFile("ticket/$documentName.txt", $ticket, true);
     }
 
     public static function saveCdr($documentName, $billContent) {
@@ -59,11 +59,10 @@ class Repository {
 
     public static function zipDocument($documentName) {
         $rp = self::getRepositoryPath();
-        $re = F72X::getRunningEnvironment();
         $zipPath = "$rp/zip/$documentName.zip";
         $xmlPath = "$rp/sxml/S-$documentName.xml";
         $xmlFileName = "$documentName.xml";
-        if ($re === F72X::RUNNING_ENV_GAE || $re === F72X::RUNNING_ENV_GAE_DEV_SERVER) {
+        if (F72X::isRunninOnGAE()) {
             $zip = new ZipFile();
             $zip->addFile(file_get_contents($xmlPath), $xmlFileName);
             file_put_contents($zipPath, $zip->file());
@@ -112,7 +111,7 @@ class Repository {
 
     public static function getDocumentTicketPath($documentName) {
         $rp = self::getRepositoryPath();
-        return "$rp/ticket/$documentName.json";
+        return "$rp/ticket/$documentName.txr";
     }
 
     public static function getZipContent($documentName) {
@@ -144,21 +143,29 @@ class Repository {
     }
 
     public static function getTicketInfo($documentName) {
-        $ticketContent = self::getDocumentTicketContent($documentName);
-        return json_decode($ticketContent, true);
+        return self::getDocumentTicketContent($documentName);
     }
 
     public static function getCdrInfo($documentName) {
         $rp = self::getRepositoryPath();
-        $zip = new ZipArchive();
-        if ($zip->open("$rp/cdr/R$documentName.zip") === true) {
-            $xmlString = $zip->getFromName("R-$documentName.xml");
-            $info = self::getMapCdr($xmlString);
-            $zip->close();
-            return $info;
+        $zipPath = "$rp/cdr/R$documentName.zip";
+        $xmlFile = "R-$documentName.xml";
+        if (F72X::isRunninOnGAE()) {
+            $xmlString = ZipFile::getEntry($zipPath, $xmlFile);
+            if ($xmlString === 0) {
+                throw new FileException("No se encontró el archivo $zipPath");
+            }
         } else {
-            throw new FileException("No se encontró el archivo R$documentName.zip");
+            $zip = new ZipArchive();
+            if ($zip->open($zipPath) === true) {
+                $xmlString = $zip->getFromName($xmlFile);
+                $zip->close();
+            } else {
+                throw new FileException("No se encontró el archivo $zipPath");
+            }
         }
+        $info = self::getMapCdr($xmlString);
+        return $info;
     }
 
     private static function getMapCdr($xmlString) {

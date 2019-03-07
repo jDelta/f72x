@@ -30,7 +30,7 @@
                 <cbc:ID>20100454523</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name>Soporte Tecnológicos EIRL</cbc:Name>
+                <cbc:Name><![CDATA[Soporte Tecnológicos EIRL]]></cbc:Name>
             </cac:PartyName>
         </cac:SignatoryParty>
         <cac:DigitalSignatureAttachment>

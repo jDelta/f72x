@@ -5,7 +5,7 @@
                 <cbc:ID>{{ruc}}</cbc:ID>
             </cac:PartyIdentification>
             <cac:PartyName>
-                <cbc:Name>{{companyName}}</cbc:Name>
+                <cbc:Name><![CDATA[{{companyName}}]]></cbc:Name>
             </cac:PartyName>
         </cac:SignatoryParty>
         <cac:DigitalSignatureAttachment>

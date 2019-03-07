@@ -55,6 +55,14 @@ abstract class AbstractSummary extends AbstractDocument {
         return $data;
     }
 
+    /**
+     * Returns the prefix that is added at the beginning of the document ID
+     * @return string RA|RC
+     */
+    public function getIdPrefix() {
+        return $this->idPrefix;
+    }
+
     public function getReferenceDate() {
         return $this->referenceDate;
     }

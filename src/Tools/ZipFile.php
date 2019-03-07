@@ -186,6 +186,41 @@ class ZipFile {
         }
     }
 
+    /**
+     * 
+     * @param string $zipPath the zip file path
+     * @param string $entryName the entry file name
+     * @return string|int The entry content or:
+     *  0 If the zip isn't found
+     *  1 If the entry isn't found
+     */
+    public static function getEntry($zipPath, $entryName) {
+        $zip = zip_open($zipPath);
+        if (is_resource($zip)) {
+            // find entry
+            do {
+                $entry = zip_read($zip);
+            } while ($entry && zip_entry_name($entry) != $entryName);
+            // Not found
+            if (!$entry) {
+                // close zip
+                zip_close($zip);
+                return -1;
+            }
+            // open entry
+            zip_entry_open($zip, $entry, "r");
+            // read entry
+            $content = zip_entry_read($entry, zip_entry_filesize($entry));
+            // close entry
+            zip_entry_close($entry);
+            // close zip
+            zip_close($zip);
+            return $content;
+        } else {
+            return 0;
+        }
+    }
+
 // end of the 'file()' method
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'legalValidity'  => true,
     'documentNumber' => 1,            // Número correlativo de la comunicación de baja
     'issueDate'      => '2011-04-02', // Fecha de generación del documento - ISO 8601 date
     'referenceDate'  => '2011-04-01', // Fecha de emisión de los comprobantes - ISO 8601 date

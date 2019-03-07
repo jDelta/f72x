@@ -58,10 +58,10 @@ class ServiceGateway {
     }
 
     public static function getStatus($documentName) {
-        $ticketInfo = Repository::getTicketInfo($documentName);
+        $ticket = Repository::getTicketInfo($documentName);
         try {
             $soapService = SunatSoapClient::getService();
-            $soapService->__soapCall('getStatus', [['ticket' =>$ticketInfo['ticket']]]);
+            $soapService->__soapCall('getStatus', [['ticket' =>$ticket]]);
             $serverResponse = $soapService->__getLastResponse();
         } catch (Exception $exc) {
             throw new SunatException($exc->getMessage(), $exc->getCode());

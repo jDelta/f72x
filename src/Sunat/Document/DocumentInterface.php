@@ -26,6 +26,14 @@ interface DocumentInterface {
     public function setBodyFields();
 
     /**
+     * Validates if the document input is the correct
+     * 
+     * @param array $inputData
+     * @throws Exception
+     */
+    public function validateInput(array $inputData);
+
+    /**
      * Parses the raw input lines, is should be implemented using an each
      * function and calling to *parseInputLine* for each line in order to reduce
      * complexity.
@@ -68,4 +76,9 @@ interface DocumentInterface {
      * Signs an existent XML file
      */
     public function signXmlFile();
+
+    /**
+     * Indicated whether or not the document has legal validity.
+     */
+    public function hasLegalValidity();
 }

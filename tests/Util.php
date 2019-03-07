@@ -19,7 +19,7 @@ final class Util {
         'claveSol'              => 'moddatos',
         'cconfigPath'           => __DIR__.'/companyconfig',
         'repoPath'              => __DIR__.'/edocs',
-        'tempPath'              => __DIR__.'/temp',
+        'tempPath'              => __DIR__.'/_temp',
         'certificate'           => 'activecert',
         'prodMode'              => false
     ];

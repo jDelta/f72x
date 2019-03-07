@@ -107,4 +107,13 @@ class F72X {
         return self::RUNNING_ENV_X;
     }
 
+    /**
+     * Return the environment code where this module is running.
+     * @return int
+     */
+    public static function isRunninOnGAE() {
+        $re = self::getRunningEnvironment();
+        return ($re == self::RUNNING_ENV_GAE || $re == self::RUNNING_ENV_GAE_DEV_SERVER);
+    }
+
 }

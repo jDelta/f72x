@@ -79,7 +79,7 @@ class DocumentGenerator {
         $validator = new InputValidator($data, $type);
         // Input validation
         if (!$validator->isValid()) {
-            throw new InvalidInputException($validator->getErrors());
+            $validator->throwExc();
         }
     }
 

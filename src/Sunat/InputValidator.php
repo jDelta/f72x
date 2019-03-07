@@ -19,10 +19,14 @@ class InputValidator {
     private $data;
     private $type;
     private $errors = [];
+    private $validations = null;
 
     public function __construct(array $data, $type) {
         $this->data = $data;
         $this->type = $type;
+        if(is_array($type)){
+            $this->validations = $type;
+        }
         $this->validate();
     }
 
@@ -35,8 +39,10 @@ class InputValidator {
     }
 
     private function validate() {
-        $validations = $this->getValidations();
-        foreach ($validations as $field => $item) {
+        if(!$this->validations){
+            $this->validations = $this->getValidations();
+        }
+        foreach ($this->validations as $field => $item) {
             $defauls = [
                 'required' => false,
                 'type' => null,
@@ -89,6 +95,18 @@ class InputValidator {
             default:
                 break;
         }
+    }
+
+    public function throwExc() {
+        throw new \F72X\Exception\InvalidInputException($this->getErrors());
+    }
+
+    public function getErrosString() {
+        $errs = [];
+        foreach ($this->errors as $field => $fErrors) {
+            $errs[] = $field . ': (' . implode(',', $fErrors) . ')';
+        }
+        return implode(',', $errs);
     }
 
 }

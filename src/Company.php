@@ -94,6 +94,7 @@ class Company {
     public static function getCity() {
         return self::get('city');
     }
+
     /**
      * 
      * @return string
@@ -101,13 +102,14 @@ class Company {
     public static function getContactInfo() {
         return self::get('contactInfo');
     }
-    
+
     /**
      * 
      * @return string
      */
     public static function getEdocHeaderContent() {
-        return self::get('edocHeaderContent');
+        $content = self::get('edocHeaderContent', false);
+        return $content ? $content : '';
     }
 
     /**
@@ -115,7 +117,8 @@ class Company {
      * @return string
      */
     public static function getEdocFooterContent() {
-        return self::get('edocFooterContent');
+        $content = self::get('edocFooterContent', false);
+        return $content ? $content : '';
     }
 
     /**
@@ -149,6 +152,7 @@ class Company {
     public static function getRepositoryPath() {
         return self::get('repoPath');
     }
+
     /**
      * 
      * @return string
@@ -156,6 +160,7 @@ class Company {
     public static function getTempPath() {
         return self::get('tempPath');
     }
+
     /**
      * 
      * @return string

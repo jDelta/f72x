@@ -100,6 +100,13 @@ abstract class AbstractDocument implements DocumentInterface {
     protected $issueDate;
 
     /**
+     * Saves the legal validity of the document
+     * 
+     * @var DateTime 
+     */
+    protected $legalValidity;
+
+    /**
      * The document's filename.
      * 
      * @var string 
@@ -153,6 +160,9 @@ abstract class AbstractDocument implements DocumentInterface {
      * @param array $inputData
      */
     public function __construct(array $inputData) {
+        // Input validation
+        $this->validateInput($inputData);
+        // Input process
         $this->processInput($inputData);
         // Set Number
         $this->setNumber();
@@ -200,6 +210,7 @@ abstract class AbstractDocument implements DocumentInterface {
 
     private function setCommonFields() {
         $this->issueDate = $this->parsedData['issueDate'];
+        $this->legalValidity = $this->parsedData['legalValidity'];
     }
 
     protected function setFileName() {
@@ -354,6 +365,10 @@ abstract class AbstractDocument implements DocumentInterface {
 
     public function getFileName() {
         return $this->fileName;
+    }
+
+    public function hasLegalValidity() {
+        return $this->legalValidity;
     }
 
     public function getIssuer() {
