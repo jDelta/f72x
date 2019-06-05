@@ -98,7 +98,7 @@ class InputValidator {
     }
 
     public function throwExc() {
-        throw new \F72X\Exception\InvalidInputException($this->getErrors());
+        throw new \F72X\Exception\InvalidInputException($this->getErrosString(), $this->getErrors());
     }
 
     public function getErrosString() {

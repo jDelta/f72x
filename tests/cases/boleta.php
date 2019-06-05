@@ -15,6 +15,11 @@ return [
             'isCharge'         => false,
             'reasonCode'       => '00', // Código de descuento Cátalogo #53
             'multiplierFactor' => 0.05
+        ],
+        [
+            'isCharge'         => true,
+            'reasonCode'       => '00', // Código de descuento Cátalogo #53
+            'multiplierFactor' => 0.05
         ]
     ],
     'items' => [

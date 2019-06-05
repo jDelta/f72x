@@ -95,7 +95,7 @@ class InvoiceItems extends XMatrix {
             $this->set(self::COL_UNPSC,               $idx, $item['unspsc']);
             $this->set(self::COL_UNIT_CODE,           $idx, $item['unitCode']);
             $this->set(self::COL_QUANTITY,            $idx, $quantity);
-            $this->set(self::COL_DESCRIPTION,         $idx, $item['description']);
+            $this->set(self::COL_DESCRIPTION,         $idx, trim($item['description']));
             $this->set(self::COL_CURRENCY_CODE,       $idx, $currencyCode);
             // Códigos de catálogos predefinidos
             $this->set(self::COL_PRICE_TYPE,          $idx, $priceType);
@@ -352,7 +352,7 @@ class InvoiceItems extends XMatrix {
     }
 
     /**
-     * Todos de los descuentos.
+     * Todos de los cargos.
      * @return float
      */
     public function getTotalCharges() {

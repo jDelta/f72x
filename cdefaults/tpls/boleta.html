@@ -18,10 +18,19 @@
             .dim-total-col {
                 width: 70px;
             }
+            .conpany-info-area{
+                padding: 2px 0;
+                border-bottom: 1px solid;
+            }
+            .company-name{
+                text-transform: uppercase;
+            }
             .company-location-info {
                 font-size: 7pt;
-                margin: 5px 0;
                 vertical-align: top;
+            }
+            .edoc-header-content{
+                padding-top: 4px;
             }
             body {
                 font-family: arial, sans-serif;
@@ -37,7 +46,7 @@
             }
             .logo {
                 vertical-align: top;
-                height: 100px;
+                height: 75px;
             }
             .head-section {
                 width: 100%;
@@ -127,10 +136,13 @@
             BOLETA DE VENTA ELECTRÓNICA<br>
             N° {{documentSeries}}-{{documentNumber}}
         </div>
-        <div class="company-location-info">
+        <div class="conpany-info-area">
+            <div class="company-name">{{companyName}}</div>
+            <div class="company-location-info">
             {{companyAddress}} - {{companyCity}}
+            </div>
+            <div class="edoc-header-content">{{edocHeaderContent|raw}}</div>
         </div>
-        <div class="edoc-header-content">{{edocHeaderContent|raw}}</div>
         <table class="head-section">
             <tbody>
                 <tr>
@@ -206,7 +218,7 @@
                                 <td class="align-r">{% if exemptedOperations %}{{exemptedOperations|number_format(2)}}{% endif %}</td>
                                 <td class="align-r">{% if totalAllowances %}{{totalAllowances|number_format(2)}}{% endif %}</td>
                                 <td class="align-r">{% if igvAmount %}{{igvAmount|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{% if payableAmount %}{{payableAmount|number_format(2)}}{% endif %}</td>
+                                <td class="align-r">{{payableAmount|number_format(2)}}</td>
                             </tr>
                         </tbody>
                     </table>

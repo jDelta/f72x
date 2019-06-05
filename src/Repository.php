@@ -37,6 +37,18 @@ class Repository {
         self::removeFile("$rp/cdr/R$documentName.zip", $throwEx);
     }
 
+    /**
+     * 
+     * @param string $documentName
+     */
+    public static function removeInputBasedFiles($documentName) {
+        $rp = self::getRepositoryPath();
+        self::removeFile("$rp/xml/$documentName.xml", false);
+        self::removeFile("$rp/sxml/S-$documentName.xml", false);
+        self::removeFile("$rp/zip/$documentName.zip", false);
+        self::removeFile("$rp/pdf/$documentName.pdf", false);
+    }
+
     public static function saveDocumentInput($documentName, $billContent) {
         self::saveFile("input/$documentName.json", $billContent);
     }
@@ -111,7 +123,15 @@ class Repository {
 
     public static function getDocumentTicketPath($documentName) {
         $rp = self::getRepositoryPath();
-        return "$rp/ticket/$documentName.txr";
+        return "$rp/ticket/$documentName.txt";
+    }
+
+    public static function getBillInputContent($documentName) {
+        $filePath = self::getBillInputPath($documentName);
+        if (file_exists($filePath)) {
+            return file_get_contents($filePath);
+        }
+        throw new FileException("El archivo: $filePath no existe.");
     }
 
     public static function getZipContent($documentName) {

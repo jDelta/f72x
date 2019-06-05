@@ -368,8 +368,21 @@ class DataMap {
     public function getTotalAllowances() {
         $totalItems = $this->_items->getTotalAllowances();
         $totalBillableAmount = $this->getBillableAmount();
-        $globalAllowancesAmount = Operations::getTotalAllowances($totalBillableAmount, $this->allowancesAndCharges);
-        return $totalItems + $globalAllowancesAmount;
+        $totalGlobal = Operations::getTotalAllowances($totalBillableAmount, $this->allowancesAndCharges);
+        return $totalItems + $totalGlobal;
+    }
+
+    /**
+     * Total cargos
+     * 
+     * Formula: SUM(CARGOS_X_ITEM) + CARGOS_GLOBALES
+     * @return float
+     */
+    public function getTotalCharges() {
+        $totalItems = $this->_items->getTotalCharges();
+        $totalBillableAmount = $this->getBillableAmount();
+        $totalGlobal = Operations::getTotalCharges($totalBillableAmount, $this->allowancesAndCharges);
+        return $totalItems + $totalGlobal;
     }
 
     /**

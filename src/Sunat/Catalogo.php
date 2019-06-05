@@ -118,7 +118,22 @@ class Catalogo {
             case self::DOCTYPE_SC_NOTA_CREDITO: return self::DOCTYPE_NOTA_CREDITO;
             case self::DOCTYPE_SC_NOTA_DEBITO: return self::DOCTYPE_NOTA_DEBITO;
         }
-        throw new InvalidArgumentException("Error: $shortCode isn't valid short code");
+        throw new InvalidArgumentException("Error: $shortCode isn't valid short code use (BOL|FAC|NCR|NDE)");
+    }
+
+    /**
+     * 
+     * @param string $docType 01|03|07|08
+     * @return string BOL|FAC|NCR|NDE
+     */
+    public static function getDocumentShortCode($docType) {
+        switch ($docType) {
+            case self::DOCTYPE_FACTURA:      return self::DOCTYPE_SC_FACTURA;
+            case self::DOCTYPE_BOLETA:       return self::DOCTYPE_SC_BOLETA;
+            case self::DOCTYPE_NOTA_CREDITO: return self::DOCTYPE_SC_NOTA_CREDITO;
+            case self::DOCTYPE_NOTA_DEBITO:  return self::DOCTYPE_SC_NOTA_DEBITO;
+        }
+        throw new InvalidArgumentException("Error: $docType isn't valid document type use (01|03|07|08)");
     }
 
     public static function itemExist($catNumber, $itemID) {

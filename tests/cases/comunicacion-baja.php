@@ -7,6 +7,12 @@ return [
     'referenceDate'  => '2011-04-01', // Fecha de emisión de los comprobantes - ISO 8601 date
     'items' => [
         [
+            'documentType'   => '03',              // Cátalogo #1: Tipo de comprobante
+            'documentSeries' => 'B001',            // Serie de comprobante
+            'documentNumber' => 1,                 // Número del comprobante
+            'voidReason'     => 'Error en sistema' // Motivo de baja
+        ],
+        [
             'documentType'   => '01',              // Cátalogo #1: Tipo de comprobante
             'documentSeries' => 'F001',            // Serie de comprobante
             'documentNumber' => 1,                 // Número del comprobante

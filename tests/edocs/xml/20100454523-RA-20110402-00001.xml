@@ -45,13 +45,20 @@
     </cac:AccountingSupplierParty>
     <sac:VoidedDocumentsLine>
         <cbc:LineID>1</cbc:LineID>
+        <cbc:DocumentTypeCode>03</cbc:DocumentTypeCode>
+        <sac:DocumentSerialID>B001</sac:DocumentSerialID>
+        <sac:DocumentNumberID>1</sac:DocumentNumberID>
+        <sac:VoidReasonDescription><![CDATA[Error en sistema]]></sac:VoidReasonDescription>
+    </sac:VoidedDocumentsLine>
+    <sac:VoidedDocumentsLine>
+        <cbc:LineID>2</cbc:LineID>
         <cbc:DocumentTypeCode>01</cbc:DocumentTypeCode>
         <sac:DocumentSerialID>F001</sac:DocumentSerialID>
         <sac:DocumentNumberID>1</sac:DocumentNumberID>
         <sac:VoidReasonDescription><![CDATA[Error en sistema]]></sac:VoidReasonDescription>
     </sac:VoidedDocumentsLine>
     <sac:VoidedDocumentsLine>
-        <cbc:LineID>2</cbc:LineID>
+        <cbc:LineID>3</cbc:LineID>
         <cbc:DocumentTypeCode>01</cbc:DocumentTypeCode>
         <sac:DocumentSerialID>F001</sac:DocumentSerialID>
         <sac:DocumentNumberID>15</sac:DocumentNumberID>

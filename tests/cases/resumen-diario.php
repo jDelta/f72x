@@ -52,8 +52,7 @@ return [
             'totalIgv'          => 216,
             'payableAmount'     => 1416,
             'affectedDocType'   => '03',
-            'affectedDocSeries' => 'B1A5',
-            'affectedDocNumber' => '1100992'
+            'affectedDocId'     => 'B1A5-1100992'
         ],
         [
             'itemOperation'      => 1,

@@ -42,5 +42,15 @@ final class CatalogoTest extends TestCase {
         $actual = Catalogo::getCatItem(16, '01');
         self::assertEquals($expected, $actual);
     }
+    
+    public function testMethodGetDocumentShortCode() {
+        self::assertEquals('FAC', Catalogo::getDocumentShortCode('01'));
+        self::assertEquals('BOL', Catalogo::getDocumentShortCode('03'));
+        self::assertEquals('NCR', Catalogo::getDocumentShortCode('07'));
+        self::assertEquals('NDE', Catalogo::getDocumentShortCode('08'));
+
+        self::expectException(InvalidArgumentException::class);
+        Catalogo::getDocumentShortCode('09');
+    }
 
 }

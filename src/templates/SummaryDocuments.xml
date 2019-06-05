@@ -73,7 +73,7 @@
 {%if line.affectedDocType %}
         <cac:BillingReference>
             <cac:InvoiceDocumentReference>
-                <cbc:ID>{{line.affectedDocSeries}}-{{line.affectedDocNumber}}</cbc:ID>
+                <cbc:ID>{{line.affectedDocId}}</cbc:ID>
                 <cbc:DocumentTypeCode>{{line.affectedDocType}}</cbc:DocumentTypeCode>
             </cac:InvoiceDocumentReference>
         </cac:BillingReference>

@@ -14,11 +14,12 @@ use Exception;
 
 class InvalidInputException extends Exception {
 
-    private $errors = [];
-    protected $message = 'Verifica los tus datos provistos usa getErrors para obtener los errores detectados';
+    private $errors;
 
-    public function __construct(array $errors) {
+    public function __construct($message, array $errors = []) {
+        $this->message = $message;
         $this->errors = $errors;
+        parent::__construct($message);
     }
 
     public function getErrors() {

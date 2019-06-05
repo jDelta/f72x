@@ -86,6 +86,7 @@ class PdfGenerator {
         // has dueDate =
         $dueDate = $inv->getDueDate();
         $data = [
+            'companyName'           => Company::getCompanyName(),
             'companyRuc'           => Company::getRUC(),
             'companyAddress'       => Company::getAddress(),
             'companyCity'          => Company::getCity(),

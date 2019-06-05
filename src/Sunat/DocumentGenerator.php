@@ -24,7 +24,6 @@ use F72X\Sunat\Document\ResumenDiario;
 use F72X\Sunat\Document\ComunicacionBaja;
 use F72X\Sunat\Document\Percepcion;
 use F72X\Sunat\Document\Retencion;
-use F72X\Exception\InvalidInputException;
 
 class DocumentGenerator {
 
@@ -90,6 +89,21 @@ class DocumentGenerator {
     public static function generateFiles($XmlDoc) {
         // Save Input
         self::saveDocumentInput($XmlDoc);
+        // Save Document
+        self::saveDocument($XmlDoc);
+        // Sign Document
+        self::signDocument($XmlDoc);
+        // Compress Document
+        self::zipDocument($XmlDoc);
+        // Generate PDF
+        self::generatePdf($XmlDoc);
+    }
+
+    /**
+     * 
+     * @param Factura|Boleta|NotaCredito|NotaDebito $XmlDoc
+     */
+    public static function regenerateFiles($XmlDoc) {
         // Save Document
         self::saveDocument($XmlDoc);
         // Sign Document
