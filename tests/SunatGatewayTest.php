@@ -63,28 +63,28 @@ final class SunatGatewayTest extends TestCase {
         self::assertEquals($expected, $actual);
     }
 
-    public static function testSendResumenDiario() {
-        $ticket = ServiceGateway::sendSummary('20100454523-RC-20171118-00001');
-        echo $ticket;
-    }
-
-    public static function testSendComunicacionBaja() {
-        $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
-        echo $ticket;
-    }
-
-    public static function testSendPercepcion() {
-        $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
-        echo $ticket;
-    }
+//    public static function testSendResumenDiario() {
+//        $ticket = ServiceGateway::sendSummary('20100454523-RC-20171118-00001');
+//        echo $ticket;
+//    }
+//
+//    public static function testSendComunicacionBaja() {
+//        $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
+//        echo $ticket;
+//    }
+//
+//    public static function testSendPercepcion() {
+//        $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
+//        echo $ticket;
+//    }
+//
+//    public static function testGetComunicacionBajaStatus() {
+//        $response = ServiceGateway::getStatus('20100454523-RA-20110402-00001');
+//        echo json_encode($response);
+//    }
 
     public static function testGetResumenDiarioStatus() {
         $response = ServiceGateway::getStatus('20100454523-RC-20171118-00001');
-        echo json_encode($response);
-    }
-
-    public static function testGetComunicacionBajaStatus() {
-        $response = ServiceGateway::getStatus('20100454523-RA-20110402-00001');
         echo json_encode($response);
     }
 

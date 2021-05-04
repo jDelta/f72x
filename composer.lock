@@ -155,16 +155,16 @@
         },
         {
             "name": "jdelta/php-string-max",
-            "version": "v1.1",
+            "version": "v1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jDelta/php-string-max.git",
-                "reference": "d9ec0b9cd7229465142b511341bfb14e988a3122"
+                "reference": "967bd0372f251eea18c6c274c04aa74171f96fbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jDelta/php-string-max/zipball/d9ec0b9cd7229465142b511341bfb14e988a3122",
-                "reference": "d9ec0b9cd7229465142b511341bfb14e988a3122",
+                "url": "https://api.github.com/repos/jDelta/php-string-max/zipball/967bd0372f251eea18c6c274c04aa74171f96fbd",
+                "reference": "967bd0372f251eea18c6c274c04aa74171f96fbd",
                 "shasum": ""
             },
             "require": {
@@ -173,7 +173,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "jDelta\\": "src"
+                    "Jdelta\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -194,7 +194,7 @@
                 "string",
                 "template"
             ],
-            "time": "2018-09-04 16:02:58"
+            "time": "2019-07-24 05:38:31"
         },
         {
             "name": "kwn/number-to-words",

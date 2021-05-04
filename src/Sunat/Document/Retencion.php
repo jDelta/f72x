@@ -16,5 +16,8 @@ class Retencion extends AbstractPerRet {
     protected $seriesPrefix = 'R';
     protected $regimeCatNumber = 23;
     protected $xmlTplName = 'Retention.xml';
+    public function validateInput(array $inputData) {
+        
+    }
 
 }

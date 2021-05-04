@@ -5,6 +5,9 @@
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/jDelta/F72X/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 Modulo de facturación electrónica SUNAT UBL 2.1
+# Referencias:
+Manuales SUNAT
+[https://cpe.sunat.gob.pe/node/88](https://cpe.sunat.gob.pe/node/88)
 
 # Instalación:
 ```ruby
