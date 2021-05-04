@@ -16,5 +16,8 @@ class Percepcion extends AbstractPerRet {
     protected $seriesPrefix = 'P';
     protected $regimeCatNumber = 22;
     protected $xmlTplName = 'Perception.xml';
+    public function validateInput(array $inputData) {
+        
+    }
 
 }

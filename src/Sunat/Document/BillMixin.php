@@ -319,7 +319,9 @@ trait BillMixin {
                                 ->setRegistrationAddress($RegistrationAddress
                                         ->setAddressTypeCode($addressRegCode)))
                         ->setPartyLegalEntity($PartyLegalEntity
-                                ->setRegistrationName($regName)));
+                                ->setRegistrationName($regName)
+                                ->setRegistrationAddress($RegistrationAddress
+                                        ->setAddressTypeCode($addressRegCode))));
         // Add to Document
         parent::setAccountingSupplierParty($AccountingSupplierParty);
     }

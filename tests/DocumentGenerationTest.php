@@ -69,19 +69,19 @@ final class DocumentGenerationTest extends TestCase {
         $eDocument->generateFiles();
     }
 
-    public function testPercepcion() {
-        Repository::removeFiles('20100454523-P001-00000123',     false);
-        $data = self::getCaseData('percepcion');
-        $eDocument = DocumentGenerator::createPercepcion($data);
-        $eDocument->generateFiles();
-    }
-
-    public function testRetencion() {
-        Repository::removeFiles('20100454523-R001-00000123',     false);
-        $data = self::getCaseData('retencion');
-        $eDocument = DocumentGenerator::createRetencion($data);
-        $eDocument->generateFiles();
-    }
+//    public function testPercepcion() {
+//        Repository::removeFiles('20100454523-P001-00000123',     false);
+//        $data = self::getCaseData('percepcion');
+//        $eDocument = DocumentGenerator::createPercepcion($data);
+//        $eDocument->generateFiles();
+//    }
+//
+//    public function testRetencion() {
+//        Repository::removeFiles('20100454523-R001-00000123',     false);
+//        $data = self::getCaseData('retencion');
+//        $eDocument = DocumentGenerator::createRetencion($data);
+//        $eDocument->generateFiles();
+//    }
 
     public function testDataMapRightCalcsForFactura() {
         $in = self::getCaseData('factura');
