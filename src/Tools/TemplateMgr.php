@@ -10,7 +10,7 @@
 
 namespace F72X\Tools;
 
-use Jdelta\StringMax;
+use jDelta\StringMax;
 
 class TemplateMgr {
 
