@@ -1,8 +1,8 @@
 # Modulo F72X
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jDelta/F72X/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jDelta/F72X/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/jDelta/F72X/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jDelta/F72X/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/jDelta/F72X/badges/build.png?b=master)](https://scrutinizer-ci.com/g/jDelta/F72X/build-status/master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/jDelta/F72X/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jxcodes/F72X/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jxcodes/F72X/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/jxcodes/F72X/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jxcodes/F72X/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/jxcodes/F72X/badges/build.png?b=master)](https://scrutinizer-ci.com/g/jxcodes/F72X/build-status/master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/jxcodes/F72X/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 Modulo de facturación electrónica SUNAT UBL 2.1
 # Referencias:
@@ -11,7 +11,7 @@ Manuales SUNAT
 
 # Instalación:
 ```ruby
-composer require jdelta/f72x
+composer require jxcodes/f72x
 ````
 # Uso:
 ```ruby
