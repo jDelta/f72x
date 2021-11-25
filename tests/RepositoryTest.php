@@ -3,9 +3,8 @@
 namespace Tests;
 
 use F72X\Repository;
-use PHPUnit\Framework\TestCase;
 
-final class RepositoryTest extends TestCase {
+final class RepositoryTest extends \PHPUnit_Framework_TestCase {
 
     protected function setUp() {
         Util::initModule();

@@ -6,16 +6,15 @@ use F72X\Tools\PdfGenerator;
 use F72X\Sunat\DataMap;
 use F72X\Sunat\Catalogo;
 use F72X\Repository;
-use PHPUnit\Framework\TestCase;
 
-final class PdfGeneratorTest extends TestCase {
+final class PdfGeneratorTest extends \PHPUnit_Framework_TestCase {
 
     protected function setUp() {
         Util::initModule();
     }
 
     public function testGen() {
-        $data = Util::getCaseData('factura');
+        $data = Util::getCaseData('facturas/factura-pago-contado');
         $Invoice = new DataMap($data, Catalogo::DOCTYPE_FACTURA);
         $documentName = $Invoice->getDocumentName();
         Repository::removeFile(Repository::getPdfPath($documentName), false);
@@ -23,17 +22,17 @@ final class PdfGeneratorTest extends TestCase {
     }
 
     /**
-     * 
+     *
      * @param type $param
      */
     public function XtestPrintInvoiceHTMLInput() {
-        $input = Util::getCaseData('factura');
+        $input = Util::getCaseData('facturas/factura-pago-contado');
         $dataMap = new DataMap($input, Catalogo::DOCTYPE_FACTURA);
         $out = PdfGenerator::getRenderedHtml($dataMap, 'factura.html');
         file_put_contents(__DIR__.'/factura.html', $out);
     }
     /**
-     * 
+     *
      * @param type $param
      */
     public function XtestPrintCreditNoteHTMLInput() {

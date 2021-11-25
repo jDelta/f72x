@@ -1,6 +1,6 @@
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.6/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/4.8/phpunit.xsd"
     backupGlobals="true"
     backupStaticAttributes="false"
     bootstrap="vendor/autoload.php">
@@ -11,5 +11,11 @@
     </testsuites>
     <logging>
         <log type="testdox-text" target="tests/testdox.txt"/>
+        <log type="coverage-text" target="tests/coverage.txt"></log>
     </logging>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
 </phpunit>

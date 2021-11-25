@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -15,15 +15,17 @@ use InvalidArgumentException;
 use F72X\Company;
 use F72X\Sunat\Catalogo;
 use F72X\Sunat\DocumentGenerator;
+
 /**
  * DataMap
- * 
+ *
  * Esta clase es una representación interna de una factura o boleta, la cual se
  * encarga de aplicar toda la logica de negocio en cuanto a cálculos de tributos
  * y totales
- * 
+ *
  */
-class DataMap {
+class DataMap
+{
 
     private $_rawData;
     private $documentType;
@@ -45,6 +47,10 @@ class DataMap {
     private $customerAddress;
     private $purchaseOrder;
 
+    private $formOfPayment;
+    private $creditInstallments = [];
+    private $amountToPayOnCredit = 0;
+
     /** @var InvoiceItems */
     private $_items;
     private $_rawItems;
@@ -56,15 +62,17 @@ class DataMap {
     private $noteAffectedDocType;
     private $noteAffectedDocId;
     /**
-     * 
+     *
      * @param array $data
      * @param string $type 01|03|07|08 The document type
      */
-    public function __construct(array $data, $type) {
+    public function __construct(array $data, $type)
+    {
         // Type validation
         if (!in_array($type, ['01', '03', '07', '08'])) {
             throw new InvalidArgumentException("DataMap Error, el tipo de documento '$type', no es válido use 01|03|07|08");
         }
+
         // Items
         $items = new InvoiceItems();
         $items->populate($data['items'], $data['currencyCode']);
@@ -88,11 +96,57 @@ class DataMap {
         $this->customerAddress      = mb_strtoupper($data['customerAddress']);
         $this->_items               = $items;
         $this->allowancesAndCharges = $data['allowancesCharges'];
-        $this->note                 = $data['note'];
+        // Facturas y notas de crédito deben establecer explicitamnte la forma de pago.
+        if ($type == Catalogo::DOCTYPE_FACTURA || $type == Catalogo::DOCTYPE_NOTA_CREDITO) {
+            $this->setFormOfPaymentField($data);
+        }
+        // Note
+        $this->note = $data['note'];
         $this->setSpecificFields($data, $type);
     }
+    private function setFormOfPaymentField(&$data)
+    {
+        if (!isset($data['payment'])) {
+            throw new InvalidArgumentException("El campo 'payment', es obligatorio para facturas y notas de crédito");
+        }
+        $payment = $data['payment'];
+        if (!isset($payment['formOfPayment'])) {
+            throw new InvalidArgumentException("El campo 'formOfPayment', es obligatorio para facturas y notas de crédito");
+        }
+        $formOfPayment = $payment['formOfPayment'];
+        if (!in_array($formOfPayment, Catalogo::$FAC_FORMS_OF_PAYMENT)) {
+            throw new InvalidArgumentException("El campo 'formOfPayment', no es válido use " . implode(', ', Catalogo::$FAC_FORMS_OF_PAYMENT));
+        }
+        $this->formOfPayment = $formOfPayment;
+        // Caso crédito
+        if ($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CREDITO) {
+            if (!isset($payment['amountToPayOnCredit']) || is_nan($payment['amountToPayOnCredit']) || $payment['amountToPayOnCredit'] <= 0) {
+                throw new InvalidArgumentException("El campo 'amountToPayOnCredit', es obligatorio y debe ser mayor que cero para facturas y notas de crédito con forma de pago '" . Catalogo::FAC_FORM_OF_PAYMENT_CREDITO . "'");
+            }
+            if (!isset($payment['creditInstallments']) || !is_array($payment['creditInstallments']) || count($payment['creditInstallments']) == 0) {
+                throw new InvalidArgumentException("El campo 'creditInstallments', es obligatorio para facturas y notas de crédito con forma de pago '" . Catalogo::FAC_FORM_OF_PAYMENT_CREDITO . "'");
+            }
+            $this->amountToPayOnCredit = $payment['amountToPayOnCredit'];
+            $this->creditInstallments = $this->parseCreditInstallments($payment['creditInstallments']);
+        }
+    }
+    private function parseCreditInstallments($data)
+    {
+        $out = [];
+        foreach ($data as $key => $item) {
+            $inst = new CreditInstallment();
+            $id = "Cuota" . str_pad($key + 1, 3, '0', STR_PAD_LEFT);
+            $inst
+                ->setId($id)
+                ->setAmount($item['amount'])
+                ->setPaymentDueDate(new DateTime($item['paymentDueDate']));
+            $out[] = $inst;
+        }
+        return $out;
+    }
 
-    private function setSpecificFields(array $data, $type) {
+    private function setSpecificFields(array $data, $type)
+    {
         if (in_array($type, [Catalogo::DOCTYPE_FACTURA, Catalogo::DOCTYPE_BOLETA])) {
             $this->operationType = $data['operationType'];
             $this->purchaseOrder = $data['purchaseOrder'];
@@ -106,39 +160,48 @@ class DataMap {
         }
     }
 
-    private function setDefaults(array &$data) {
+    private function setDefaults(array &$data)
+    {
         $data['allowancesCharges'] = isset($data['allowancesCharges']) ? $data['allowancesCharges'] : [];
         $data['purchaseOrder'] = isset($data['purchaseOrder']) ? $data['purchaseOrder'] : null;
         $data['affectedDocType'] = isset($data['affectedDocType']) ? $data['affectedDocType'] : null;
         $data['note'] = isset($data['note']) ? $data['note'] : '';
     }
-    public function getNoteType() {
+    public function getNoteType()
+    {
         return $this->noteType;
     }
 
-    public function getDiscrepancyResponseReason() {
+    public function getDiscrepancyResponseReason()
+    {
         return $this->discrepancyResponseReason;
     }
 
-    public function getNoteDescription() {
+    public function getNoteDescription()
+    {
         return $this->note;
     }
-    public function getNote() {
+    public function getNote()
+    {
         return $this->note;
     }
-    public function getNoteAffectedDocType() {
+    public function getNoteAffectedDocType()
+    {
         return $this->noteAffectedDocType;
     }
 
-    public function getNoteAffectedDocId() {
+    public function getNoteAffectedDocId()
+    {
         return $this->noteAffectedDocId;
     }
 
-    public function getDocumentId() {
+    public function getDocumentId()
+    {
         return $this->documentId;
     }
 
-    public function getRawData() {
+    public function getRawData()
+    {
         return $this->_rawData;
     }
 
@@ -146,167 +209,214 @@ class DataMap {
      * Boleta o Factura @CAT1
      * @return string
      */
-    public function getDocumentType() {
+    public function getDocumentType()
+    {
         return $this->documentType;
     }
 
-    public function getCurrencyCode() {
+    public function getCurrencyCode()
+    {
         return $this->currencyCode;
     }
 
-    public function getOfficialDocumentName() {
+    public function getOfficialDocumentName()
+    {
         return $this->officialDocumentName;
     }
 
-    public function getDocumentSeries() {
+    public function getDocumentSeries()
+    {
         return $this->documentSeries;
     }
 
-    public function setDocumentSeries($documentSeries) {
+    public function setDocumentSeries($documentSeries)
+    {
         $this->documentSeries = $documentSeries;
         return $this;
     }
 
-    public function getDocumentNumber() {
+    public function getDocumentNumber()
+    {
         return $this->documentNumber;
     }
 
-    public function setDocumentNumber($documentNumber) {
+    public function setDocumentNumber($documentNumber)
+    {
         $this->documentNumber = $documentNumber;
         return $this;
     }
 
-    public function getIssueDate() {
+    public function getIssueDate()
+    {
         return $this->issueDate;
     }
 
-    public function setIssueDate(DateTime $IssueDate) {
+    public function setIssueDate(DateTime $IssueDate)
+    {
         $this->issueDate = $IssueDate;
         return $this;
     }
 
-    public function getDueDate() {
+    public function getDueDate()
+    {
         return $this->dueDate;
     }
 
-    public function setDueDate(DateTime $DueDate) {
+    public function setDueDate(DateTime $DueDate)
+    {
         $this->dueDate = $DueDate;
         return $this;
     }
 
-    public function getOperationType() {
+    public function getOperationType()
+    {
         return $this->operationType;
     }
 
-    public function setOperationType($operationType) {
+    public function setOperationType($operationType)
+    {
         $this->operationType = $operationType;
         return $this;
     }
 
-    public function getCustomerDocType() {
+    public function getCustomerDocType()
+    {
         return $this->customerDocType;
     }
 
-    public function setCustomerDocType($customerDocType) {
+    public function setCustomerDocType($customerDocType)
+    {
         $this->customerDocType = $customerDocType;
         return $this;
     }
 
-    public function getCustomerDocNumber() {
+    public function getCustomerDocNumber()
+    {
         return $this->customerDocNumber;
     }
 
-    public function setCustomerDocNumber($customerDocNumber) {
+    public function setCustomerDocNumber($customerDocNumber)
+    {
         $this->customerDocNumber = $customerDocNumber;
         return $this;
     }
 
-    public function getCustomerRegName() {
+    public function getCustomerRegName()
+    {
         return $this->customerRegName;
     }
 
-    public function setCustomerRegName($customerRegName) {
+    public function setCustomerRegName($customerRegName)
+    {
         $this->customerRegName = $customerRegName;
         return $this;
     }
-    public function getCustomerAddress() {
+    public function getCustomerAddress()
+    {
         return $this->customerAddress;
     }
 
-    public function setCustomerAddress($customerAddress) {
+    public function setCustomerAddress($customerAddress)
+    {
         $this->customerAddress = $customerAddress;
         return $this;
     }
 
-    public function getPurchaseOrder() {
+    public function getPurchaseOrder()
+    {
         return $this->purchaseOrder;
     }
 
-    public function setPurchaseOrder($purchaseOrder) {
+    public function setPurchaseOrder($purchaseOrder)
+    {
         $this->purchaseOrder = $purchaseOrder;
         return $this;
     }
 
-    /**
-     * 
-     * @return InvoiceItems
-     */
-    public function getItems() {
-        return $this->_items;
+    public function getFormOfPayment()
+    {
+        return $this->formOfPayment;
     }
 
+    /**
+     *
+     * @return InvoiceItems
+     */
+    public function getItems()
+    {
+        return $this->_items;
+    }
+    /**
+     *
+     * @return CreditInstallment[]
+     */
+    public function getCrditInstallments()
+    {
+        return $this->creditInstallments;
+    }
+    public function getAmountToPayOnCredit()
+    {
+        return $this->amountToPayOnCredit;
+    }
     /**
      * Numero de items del documento
      * @return int
      */
-    public function getTotalItems() {
+    public function getTotalItems()
+    {
         return $this->_items->getCount();
     }
 
-    public function getRawItems() {
+    public function getRawItems()
+    {
         return $this->_rawItems;
     }
 
-    public function getAllowancesAndCharges() {
+    public function getAllowancesAndCharges()
+    {
         return $this->allowancesAndCharges;
     }
 
-    public function setAllowancesAndCharges($allowancesAndCharges) {
+    public function setAllowancesAndCharges($allowancesAndCharges)
+    {
         $this->allowancesAndCharges = $allowancesAndCharges;
         return $this;
     }
 
     /**
      * Monto facturable (Valor de venta)
-     * 
+     *
      * Formula = SUM(BASE_FACTURABLE_X_ITEM)
-     * 
+     *
      * @return float
      */
-    public function getBillableAmount() {
+    public function getBillableAmount()
+    {
         return $this->_items->getTotalBillableAmount();
     }
 
     /**
      * Base imponible
-     * 
+     *
      * Formula = SUM(BASE_IMPONIBLE_X_ITEM) - DESCUENTOS_GLOBALES + CARGOS_GLOBALES
-     * 
+     *
      * @return float
      */
-    public function getTaxableAmount() {
+    public function getTaxableAmount()
+    {
         $totalItems = $this->_items->getTotalTaxableOperations();
         return $this->applyAllowancesAndCharges($totalItems);
     }
 
     /**
      * Monto con impuestos
-     * 
+     *
      * Formula = BASE_IMPONIBLE + IGV
-     * 
+     *
      * @return float
      */
-    public function getTaxedAmount() {
+    public function getTaxedAmount()
+    {
         $totalTaxableAmount = $this->getTaxableAmount();
         $totalIgv = $this->getIGV();
         return $totalTaxableAmount + $totalIgv;
@@ -316,7 +426,8 @@ class DataMap {
      * Total operaciones gravadas
      * @return float
      */
-    public function getTotalTaxableOperations() {
+    public function getTotalTaxableOperations()
+    {
         return $this->getTaxableAmount();
     }
 
@@ -324,18 +435,20 @@ class DataMap {
      * Total operaciones gratuitas
      * @return float
      */
-    public function getTotalFreeOperations() {
+    public function getTotalFreeOperations()
+    {
         return $this->_items->getTotalFreeOperations();
     }
 
     /**
      * Total operationes exoneradas
-     * 
+     *
      * Formula = SUM(EXEMPTED_OPERATIONS_X_ITEM) - DESCUENTOS_GLOBALES + CARGOS_GLOBALES
-     * 
+     *
      * @return float
      */
-    public function getTotalExemptedOperations() {
+    public function getTotalExemptedOperations()
+    {
         $totalItems = $this->_items->getTotalExemptedOperations();
         return $this->applyAllowancesAndCharges($totalItems);
     }
@@ -344,28 +457,31 @@ class DataMap {
      * Total operaciones inafectas
      * @return float
      */
-    public function getTotalUnaffectedOperations() {
+    public function getTotalUnaffectedOperations()
+    {
         $totalItems = $this->_items->getTotalUnaffectedOperations();
         return $this->applyAllowancesAndCharges($totalItems);
     }
 
     /**
      * Valor de venta
-     * 
+     *
      * Valor total de la factura sin considerar descuentos impuestos u otros tributos
      * @return float
      */
-    public function getBillableValue() {
+    public function getBillableValue()
+    {
         return $this->_items->getTotalBillableValue();
     }
 
     /**
      * Total descuentos
-     * 
+     *
      * Formula: SUM(DESCUENTOS_X_ITEM) + DESCUENTOS_GLOBALES
      * @return float
      */
-    public function getTotalAllowances() {
+    public function getTotalAllowances()
+    {
         $totalItems = $this->_items->getTotalAllowances();
         $totalBillableAmount = $this->getBillableAmount();
         $totalGlobal = Operations::getTotalAllowances($totalBillableAmount, $this->allowancesAndCharges);
@@ -374,11 +490,12 @@ class DataMap {
 
     /**
      * Total cargos
-     * 
+     *
      * Formula: SUM(CARGOS_X_ITEM) + CARGOS_GLOBALES
      * @return float
      */
-    public function getTotalCharges() {
+    public function getTotalCharges()
+    {
         $totalItems = $this->_items->getTotalCharges();
         $totalBillableAmount = $this->getBillableAmount();
         $totalGlobal = Operations::getTotalCharges($totalBillableAmount, $this->allowancesAndCharges);
@@ -387,14 +504,15 @@ class DataMap {
 
     /**
      * Total a pagar
-     * 
+     *
      * El importe que el usuario está obligado a pagar
-     * 
+     *
      * Formula = OPERACIONES_GRAVADAS + IGV + OPERACIONES_EXONERADAS + OPERACIONES_INAFECTAS
-     * 
+     *
      * @return float
      */
-    public function getPayableAmount() {
+    public function getPayableAmount()
+    {
         // Totals
         $totalTaxableOperations = $this->getTotalTaxableOperations();
         $totalIGV = $this->getIGV();
@@ -403,14 +521,15 @@ class DataMap {
     }
 
     /**
-     * 
+     *
      * Total impuestos
-     * 
+     *
      * Fórmula: IGV + ISC + IVAP
-     * 
+     *
      * @return float
      */
-    public function getTotalTaxes() {
+    public function getTotalTaxes()
+    {
         $IGV = $this->getIGV();
         $ISC = $this->getISC();
         $IVAP = $this->getIVAP();
@@ -421,7 +540,8 @@ class DataMap {
      * IGV
      * @return float
      */
-    public function getIGV() {
+    public function getIGV()
+    {
         $baseAmount = $this->getTaxableAmount();
         return Operations::calcIGV($baseAmount);
     }
@@ -431,7 +551,8 @@ class DataMap {
      * @IMP
      * @return float
      */
-    public function getISC() {
+    public function getISC()
+    {
         return Operations::calcISC();
     }
 
@@ -440,21 +561,23 @@ class DataMap {
      * @IMP
      * @return float
      */
-    public function getIVAP() {
+    public function getIVAP()
+    {
         return Operations::calcIVAP();
     }
 
     /**
-     * 
+     *
      * @param float $amount
      * @return float
      */
-    private function applyAllowancesAndCharges($amount) {
+    private function applyAllowancesAndCharges($amount)
+    {
         return Operations::applyAllowancesAndCharges($amount, $this->allowancesAndCharges);
     }
 
-    public function getDocumentName() {
+    public function getDocumentName()
+    {
         return Company::getRUC() . '-' . $this->documentType . '-' . $this->documentId;
     }
-
 }

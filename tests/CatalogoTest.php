@@ -4,9 +4,8 @@ namespace Tests;
 
 use InvalidArgumentException;
 use F72X\Sunat\Catalogo;
-use PHPUnit\Framework\TestCase;
 
-final class CatalogoTest extends TestCase {
+final class CatalogoTest extends \PHPUnit_Framework_TestCase {
 
     public function testMethodGetdocumentname() {
         self::assertEquals('NOTA DE DÉBITO', Catalogo::getOfficialDocumentName(Catalogo::DOCTYPE_NOTA_DEBITO));
@@ -42,14 +41,14 @@ final class CatalogoTest extends TestCase {
         $actual = Catalogo::getCatItem(16, '01');
         self::assertEquals($expected, $actual);
     }
-    
+
     public function testMethodGetDocumentShortCode() {
         self::assertEquals('FAC', Catalogo::getDocumentShortCode('01'));
         self::assertEquals('BOL', Catalogo::getDocumentShortCode('03'));
         self::assertEquals('NCR', Catalogo::getDocumentShortCode('07'));
         self::assertEquals('NDE', Catalogo::getDocumentShortCode('08'));
-
-        self::expectException(InvalidArgumentException::class);
+        
+        self::setExpectedException('InvalidArgumentException');
         Catalogo::getDocumentShortCode('09');
     }
 

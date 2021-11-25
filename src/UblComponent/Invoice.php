@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 namespace F72X\UblComponent;
@@ -49,6 +49,9 @@ abstract class Invoice extends BaseComponent {
 
     /** @var AllowanceCharge[] */
     protected $AllowanceCharges = [];
+
+    /** @var PaymentTerms[] */
+    protected $PaymentTerms = [];
 
     /** @var TaxTotal */
     protected $TaxTotal;
@@ -121,7 +124,7 @@ abstract class Invoice extends BaseComponent {
     }
 
     /**
-     * 
+     *
      * @param Note $Note
      * @return $this
      */
@@ -200,12 +203,21 @@ abstract class Invoice extends BaseComponent {
     }
 
     /**
-     * 
+     *
      * @param AllowanceCharge $AllowanceCharge
      * @return $this
      */
     public function addAllowanceCharge(AllowanceCharge $AllowanceCharge) {
         $this->AllowanceCharges[] = $AllowanceCharge;
+        return $this;
+    }
+
+    public function getPaymentTerms() {
+        return $this->PaymentTerms;
+    }
+
+    public function setPaymentTerms($PaymentTerms) {
+        $this->PaymentTerms = $PaymentTerms;
         return $this;
     }
 

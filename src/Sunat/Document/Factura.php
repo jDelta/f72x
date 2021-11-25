@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -21,6 +21,7 @@ class Factura extends SunatInvoice {
     protected $CustomizationID = '2.0';
 
     public function xmlSerialize(Writer $writer) {
+        $dataMap     = $this->getDataMap();
         $companyRUC  = Company::getRUC();
         $companyName = Company::getCompanyName();
         // SchemaNS::EXT . 'UBLExtensions'
@@ -31,7 +32,7 @@ class Factura extends SunatInvoice {
         ]);
         $this->writeLineJump($writer);
         $writer->writeRaw($UBLExtensions);
-        
+
         $writer->write([
             SchemaNS::CBC . 'UBLVersionID'         => $this->UBLVersionID,
             SchemaNS::CBC . 'CustomizationID'      => $this->CustomizationID,
@@ -101,6 +102,7 @@ class Factura extends SunatInvoice {
         }
         // cac:Signature
         $writer->writeRaw($Signature);
+        // cac:AccountingSupplierParty/AccountingCustomerParty
         $writer->write([
             SchemaNS::CAC . 'AccountingSupplierParty'   => $this->AccountingSupplierParty,
             SchemaNS::CAC . 'AccountingCustomerParty'   => $this->AccountingCustomerParty
@@ -111,6 +113,13 @@ class Factura extends SunatInvoice {
                 SchemaNS::CAC . 'AllowanceCharge' => $AllowanceCharge
             ]);
         }
+        // Información de forma de pago
+        foreach ($this->PaymentTerms as $item) {
+            $writer->write([
+                SchemaNS::CAC . 'PaymentTerms' => $item
+            ]);
+        }
+
         $writer->write([
             SchemaNS::CAC . 'TaxTotal' => $this->TaxTotal
         ]);

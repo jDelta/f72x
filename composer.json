@@ -2,18 +2,31 @@
     "name": "jxcodes/f72x",
     "type": "library",
     "description": "Modulo de facturación electrónica SUNAT UBL 2.1",
-    "keywords": ["SUNAT", "UBL 2.1", "Integración", "Factura Elctrónica PHP", "Firma digital", "XML"],
+    "keywords": [
+        "SUNAT",
+        "UBL 2.1",
+        "Integración",
+        "Factura Elctrónica PHP",
+        "Firma digital",
+        "XML"
+    ],
     "homepage": "https://jxcodes.github.io/F72X",
+    "scripts": {
+        "test": "vendor/bin/phpunit --configuration phpunit.xml"
+    },
     "license": "MIT",
     "support": {
         "issues": "https://github.com/jxcodes/F72X/issues",
         "source": "https://github.com/jxcodes/F72X"
     },
     "authors": [
-        {"name": "Jaime Cruz", "email": "jaime@atlantis.pe"}
+        {
+            "name": "Jaime Cruz",
+            "email": "jaime@atlantis.pe"
+        }
     ],
     "require": {
-        "php": ">=5.6|^7.2",
+        "php": ">=5.5",
         "sabre/xml": "^1.5",
         "greenter/xmldsig": "^5.0",
         "twig/twig": "^1.35",
@@ -30,6 +43,6 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7"
+        "phpunit/phpunit": "^4"
     }
 }

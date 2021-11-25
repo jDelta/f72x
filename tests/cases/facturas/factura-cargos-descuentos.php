@@ -1,5 +1,5 @@
 <?php
-
+// Antes funcionaba con el ejemplo de sunat ahora tiene algunos problemas
 return [
     'documentSeries'    => '001',                 // Serie de la factura
     'documentNumber'    => 4355,                  // Número correlativo de la factura
@@ -12,13 +12,13 @@ return [
     'issueDate'         => '2017-05-14T13:25:51', // Fecha de emisión - ISO 8601 date
     'dueDate'           => '2017-06-14T13:25:51', // (Opcional) Fecha de venimiento - ISO 8601 date
     'purchaseOrder'     => 7852166,               // Numero de orden de commpra,
-    'allowancesCharges' => [
-        [
-            'isCharge'         => false,
-            'reasonCode'       => '00', // Código de descuento Cátalogo #53
-            'multiplierFactor' => 0.05
-        ]
-    ],
+    //'allowancesCharges' => [
+    //    [
+    //        'isCharge'         => false,
+    //        'reasonCode'       => '00', // Código de descuento Cátalogo #53
+    //        'multiplierFactor' => 0.05
+    //    ]
+    //],
     'items' => [
         [
             'productCode'        => 'GLG199',    // Código
@@ -30,7 +30,7 @@ return [
             'taxType'            => '1000',      // Catálogo #5
             'igvAffectationType' => '10',        // Catálogo #7
             'unitPrice'          => 98.00,       // Precio Unitario/Valor refencial
-            'igvIncluded'        => true,        // true si Precio Unitario incluye IGV
+            'igvIncluded'        => false,       // true si Precio Unitario incluye IGV
             'allowancesCharges'  => [
                 [
                     'isCharge'         => false,
@@ -49,14 +49,14 @@ return [
             'taxType'            => '1000',
             'igvAffectationType' => '10',
             'unitPrice'          => 620.00,
-            'igvIncluded'        => true,
-            'allowancesCharges'  => [
-                [
-                    'isCharge'         => false,
-                    'reasonCode'       => '00',
-                    'multiplierFactor' => 0.15
-                ]
-            ]
+            'igvIncluded'        => false
+            //'allowancesCharges'  => [
+            //    [
+            //        'isCharge'         => false,
+            //        'reasonCode'       => '00',
+            //        'multiplierFactor' => 0.15
+            //    ]
+            //]
         ],
         [
             'productCode'        => 'MPC35',

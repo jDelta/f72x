@@ -8,16 +8,15 @@ use F72X\Sunat\Catalogo;
 use F72X\Sunat\DocumentGenerator;
 use F72X\Sunat\DataMap;
 use F72X\Sunat\InvoiceItems;
-use PHPUnit\Framework\TestCase;
 
-final class DocumentGenerationTest extends TestCase {
+final class DocumentGenerationTest extends \PHPUnit_Framework_TestCase {
 
     public function __construct() {
+        date_default_timezone_set('America/Lima');
         Util::initModule();
     }
 
     public function testRemoveBillDocs() {
-        Repository::removeFiles('20100454523-01-F001-00004355',  false);
         Repository::removeFiles('20100454523-03-B001-00003652',  false);
         Repository::removeFiles('20100454523-07-FC01-00000211',  false);
         Repository::removeFiles('20100454523-08-FD01-00000211',  false);
@@ -25,13 +24,6 @@ final class DocumentGenerationTest extends TestCase {
         Repository::removeFiles('20100454523-RA-20110402-00001', false);
         Repository::removeFiles('20100454523-P001-00000123',     false);
         Repository::removeFiles('20100454523-R001-00000123',     false);
-    }
-
-    public function testGenerateFactura() {
-        Repository::removeFiles('20100454523-01-F001-00004355',  false);
-        $data = self::getCaseData('factura');
-        $xmlInvice = DocumentGenerator::createDocument('FAC', $data);
-        DocumentGenerator::generateFiles($xmlInvice);
     }
 
     public function testGeneratBoleta() {
@@ -83,8 +75,8 @@ final class DocumentGenerationTest extends TestCase {
 //        $eDocument->generateFiles();
 //    }
 
-    public function testDataMapRightCalcsForFactura() {
-        $in = self::getCaseData('factura');
+    public function xtestDataMapRightCalcsForFactura() {
+        $in = self::getCaseData('facturas/factura-pago-contado');
         $Invoice = new DataMap($in, Catalogo::DOCTYPE_FACTURA);
         $out = [
             'currencyCode'      => $Invoice->getCurrencyCode(),

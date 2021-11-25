@@ -83,7 +83,7 @@ var_dump($response);
 ### BOLETA DE VENTA
 ```php
 // Data
-$data = require 'tests/cases/factura.php';
+$data = require 'tests/cases/factura/factura-pago-contado.php';
 // Procesar Data
 $XML = DocumentGenerator::createDocument('BOL', $data);
 // Generar Documentos

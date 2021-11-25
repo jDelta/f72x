@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -13,7 +13,7 @@ namespace F72X\Sunat;
 use F72X\Tools\XMatrix;
 
 class InvoiceItems extends XMatrix {
-    
+
     const COL_PRODUCT_CODE          = 0;
     const COL_UNPSC                 = 1;
     const COL_UNIT_CODE             = 2;
@@ -75,7 +75,7 @@ class InvoiceItems extends XMatrix {
             $priceType      = $item['priceType']; // Tipo de precio
             $grossUnitValue = $item['unitPrice'];
             $igvIncluded    = $item['igvIncluded'];
-            
+
             $unitValue         = $this->calcUnitValue($igvAffectCode, $grossUnitValue, $igvIncluded);      // Valor unitario
             $unitTaxedValue    = $this->calcUnitTaxedValue($igvAffectCode, $grossUnitValue, $igvIncluded); // Valor unitario incluyendo impuestos si son aplicables
             $unitBillableValue = $this->calcUnitBillableValue($unitValue, $priceType);                     // Valor unitario facturable
@@ -88,9 +88,9 @@ class InvoiceItems extends XMatrix {
             $itemBillableAmount   = $this->calcItemBillableAmount($itemValue, $priceType, $ac);         // Valor de venta del ítem = (Valor del item - Descuentos + Cargos), 0 si el valor del item es referencial!
             $itemTaxableAmount    = $this->calcItemTaxableAmount($itemValue, $priceType, $ac);         // Valor de venta del ítem = (Valor del item - Descuentos + Cargos), 0 si el valor del item es referencial!
             $igvAmount            = $this->calcIgvAmount($igvAffectCode, $itemTaxableAmount); // Afectación al IGV por item
-            
+
             $itemPayableAmount    = $itemBillableValue + $igvAmount;
-            
+
             $this->set(self::COL_PRODUCT_CODE,        $idx, $item['productCode']);
             $this->set(self::COL_UNPSC,               $idx, $item['unspsc']);
             $this->set(self::COL_UNIT_CODE,           $idx, $item['unitCode']);
@@ -124,7 +124,7 @@ class InvoiceItems extends XMatrix {
     /**
      * Valor unitario: se extrae el IGV si el valor es afectado por este y si se
      * encuentra incluido en el monto que se recibe como segundo parametro.
-     * 
+     *
      * @param string $igvAffectCode
      * @param float $baseAmount
      * @param boolean $igvIncluded
@@ -141,7 +141,7 @@ class InvoiceItems extends XMatrix {
     /**
      * Valor unitario pagable: se aplica el IGV si este es aplicable y si aún no
      * ha sido incluido en el monto que se recibe como segundo parametro.
-     * 
+     *
      * @param string $igvAffectCode
      * @param float $baseAmount
      * @param boolean $igvIncluded
@@ -156,11 +156,11 @@ class InvoiceItems extends XMatrix {
     }
 
     /**
-     * 
+     *
      * Valor facturable
-     * 
+     *
      * El valor que figurará en el comprobante como valor unitario a pagar
-     * 
+     *
      * @param float $baseAmount
      * @param boolean $priceType
      * @return float
@@ -199,7 +199,7 @@ class InvoiceItems extends XMatrix {
 
     /**
      * Codigo de producto
-     * 
+     *
      * @param int $rowIndex
      * @return string
      */

@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -45,6 +45,8 @@ abstract class SunatInvoice extends Invoice {
         $this->addInvoiceAccountingSupplierParty();
         // Información del cliente
         $this->addInvoiceAccountingCustomerParty();
+        // Información de pago
+        $this->addPaymentTerms();
         // Total items
         $this->setLineCountNumeric($DataMap->getTotalItems());
         // Detalle

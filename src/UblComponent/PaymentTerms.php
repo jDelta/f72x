@@ -3,33 +3,55 @@
 /**
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
- * Version 1.0
- * 
- * Copyright 2019, Jaime Cruz
+ * Version 1.1
+ *
+ * Copyright 2021, Jaime Cruz
  */
 
 namespace F72X\UblComponent;
 
 use Sabre\Xml\Writer;
-use Sabre\Xml\Element\Cdata;
 
-class PartyName extends BaseComponent {
+class PaymentTerms extends BaseComponent
+{
 
-    protected $Name;
-
-    function xmlSerialize(Writer $writer) {
+    protected $ID;
+    protected $PaymentMeansID;
+    /** @var Amount */
+    protected $Amount;
+    protected $PaymentDueDate;
+    public function __construct($ID, $PaymentMeansID)
+    {
+        $this->ID             = $ID;
+        $this->PaymentMeansID = $PaymentMeansID;
+    }
+    function xmlSerialize(Writer $writer)
+    {
         $writer->write([
-            SchemaNS::CBC . 'Name' => new Cdata($this->Name)
+            SchemaNS::CBC . 'ID'             => $this->ID,
+            SchemaNS::CBC . 'PaymentMeansID' => $this->PaymentMeansID
         ]);
+        if ($this->Amount) {
+            $writer->write([
+                $this->Amount
+            ]);
+        }
+        if ($this->PaymentDueDate) {
+            $writer->write([
+                SchemaNS::CBC . 'PaymentDueDate' => $this->PaymentDueDate->format('Y-m-d')
+            ]);
+        }
     }
 
-    public function getName() {
-        return $this->Name;
-    }
-
-    public function setName($Name) {
-        $this->Name = $Name;
+    public function setAmount($Amount)
+    {
+        $this->Amount = $Amount;
         return $this;
     }
 
+    public function setPaymentDueDate($PaymentDueDate)
+    {
+        $this->PaymentDueDate = $PaymentDueDate;
+        return $this;
+    }
 }

@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -35,35 +35,65 @@ use F72X\UblComponent\CreditNoteLine;
 use F72X\UblComponent\DebitNoteLine;
 use F72X\UblComponent\PricingReference;
 use F72X\UblComponent\AlternativeConditionPrice;
+use F72X\UblComponent\Amount;
 use F72X\UblComponent\Item;
 use F72X\UblComponent\SellersItemIdentification;
 use F72X\UblComponent\CommodityClassification;
+use F72X\UblComponent\PaymentTerms;
 use F72X\UblComponent\Price;
 
-trait BillMixin {
+trait BillMixin
+{
 
-    
+
 
     /** @var DataMap */
     private $dataMap;
 
-    public function getDataMap() {
+    public function getDataMap()
+    {
         return $this->dataMap;
     }
 
     /**
-     * 
+     *
      * @return InvoiceItems
      */
-    public function getItems() {
+    public function getItems()
+    {
         return $this->dataMap->getItems();
     }
 
+    public function addPaymentTerms()
+    {
+        $invoice = $this->getDataMap();
+        $currencyCode = $invoice->getCurrencyCode();
+        $formOfPayment = $invoice->getFormOfPayment();
+        $terms = [];
+        // Contado
+        if ($formOfPayment == 'Contado') {
+            $terms[] = new PaymentTerms('FormaPago', 'Contado');
+        }
+        // Crédito
+        elseif ($formOfPayment == 'Credito') {
+            $paymentTerms = new PaymentTerms('FormaPago', 'Credito');
+            $paymentTerms->setAmount(new Amount($invoice->getAmountToPayOnCredit(), $currencyCode));
+            $terms[] = $paymentTerms;
+            foreach ($invoice->getCrditInstallments() as $installement) {
+                $paymentTerms = new PaymentTerms('FormaPago', $installement->getId());
+                $paymentTerms->setAmount(new Amount($installement->getAmmount(), $currencyCode));
+                $paymentTerms->setPaymentDueDate($installement->getPaymentDueDate());
+                $terms[] = $paymentTerms;
+            }
+        }
+        parent::setPaymentTerms($terms);
+    }
     /**
-     * 
+     *
      * @param string $lineType InvoiceLine|CreditNoteLine|DebitNoteLine
      */
-    private function addDocumentItems($lineType) {
+    private function addDocumentItems($lineType)
+    {
         $ln = $this->dataMap->getTotalItems();
         // Loop
         for ($i = 0; $i < $ln; $i++) {
@@ -71,7 +101,8 @@ trait BillMixin {
         }
     }
 
-    private function addInvoiceOrderReference() {
+    private function addInvoiceOrderReference()
+    {
         $orderNumer = $this->dataMap->getPurchaseOrder();
         if ($orderNumer) {
             // Xml Node
@@ -82,7 +113,8 @@ trait BillMixin {
         }
     }
 
-    private function addDocumentTaxes() {
+    private function addDocumentTaxes()
+    {
         $Invoice                   = $this->dataMap;
         $currencyID                = $Invoice->getCurrencyCode();              // Tipo de moneda
         $totalTaxableOperations    = $Invoice->getTotalTaxableOperations();    // Total operaciones gravadas
@@ -114,19 +146,20 @@ trait BillMixin {
 
         // Total impuestos
         $TaxTotal
-                ->setCurrencyID($currencyID)
-                ->setTaxAmount($totalTaxes);
+            ->setCurrencyID($currencyID)
+            ->setTaxAmount($totalTaxes);
         // Anadir al documento
         parent::setTaxTotal($TaxTotal);
     }
 
     /**
-     * 
+     *
      * @param int $itemIndex Index del item
      * @param string $lineType InvoiceLine|CreditNoteLine|DebitNoteLine
      */
-    
-    private function addDocumentItem($itemIndex, $lineType) {
+
+    private function addDocumentItem($itemIndex, $lineType)
+    {
         $docLineClassName = "\F72X\UblComponent\\$lineType";
         // XML Nodes
         $DocumentLine     = new $docLineClassName();
@@ -135,21 +168,24 @@ trait BillMixin {
         $TaxSubTotal      = new TaxSubTotal();
         $TaxCategory      = new TaxCategory();
         $TaxCategory
-                ->setElementAttributes('ID', [
-                    'schemeID'         => 'UN/ECE 5305',
-                    'schemeName'       => 'Tax Category Identifier',
-                    'schemeAgencyName' => 'United Nations Economic Commission for Europe'])
-                ->setElementAttributes('TaxExemptionReasonCode', [
-                    'listAgencyName'   => 'PE:SUNAT',
-                    'listName'         => 'SUNAT:Codigo de Tipo de Afectación del IGV',
-                    'listURI'          => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo07']);
+            ->setElementAttributes('ID', [
+                'schemeID'         => 'UN/ECE 5305',
+                'schemeName'       => 'Tax Category Identifier',
+                'schemeAgencyName' => 'United Nations Economic Commission for Europe'
+            ])
+            ->setElementAttributes('TaxExemptionReasonCode', [
+                'listAgencyName'   => 'PE:SUNAT',
+                'listName'         => 'SUNAT:Codigo de Tipo de Afectación del IGV',
+                'listURI'          => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo07'
+            ]);
 
         $TaxScheme = new TaxScheme();
         $TaxScheme
-                ->setElementAttributes('ID', [
-                    'schemeID'         => 'UN/ECE 5153',
-                    'schemeName'       => 'Tax Scheme Identifier',
-                    'schemeAgencyName' => 'United Nations Economic Commission for Europe']);
+            ->setElementAttributes('ID', [
+                'schemeID'         => 'UN/ECE 5153',
+                'schemeName'       => 'Tax Scheme Identifier',
+                'schemeAgencyName' => 'United Nations Economic Commission for Europe'
+            ]);
 
         $AlternativeConditionPrice  = new AlternativeConditionPrice();
         $Item                       = new Item();
@@ -194,35 +230,36 @@ trait BillMixin {
             $Item->setCommodityClassification($CommodityClassification->setItemClassificationCode($sunatProductCode));
         }
         $DocumentLine
-                ->setCurrencyID($currencyCode)                    // Tipo de moneda
-                ->setID($itemIndex + 1)                         // Número de orden
-                ->setUnitCode($unitCode)                        // Codigo de unidad de medida
-                ->setLineExtensionAmount($itemTaxableAmount)    // Valor de venta del ítem, sin impuestos
-                ->setPricingReference($PricingReference
-                        ->setAlternativeConditionPrice($AlternativeConditionPrice
-                                ->setCurrencyID($currencyCode)            // Tipo de moneda
-                                ->setPriceAmount($unitPrice)            // Precio de venta unitario
-                                ->setPriceTypeCode($priceTypeCode)))    // Price
-                ->setTaxTotal($TaxTotal
-                        ->setCurrencyID($currencyCode)
-                        ->setTaxAmount($itemTaxAmount)
-                        ->addTaxSubTotal($TaxSubTotal
-                                ->setCurrencyID($currencyCode)          // Tipo de moneda
-                                ->setTaxableAmount($itemTaxableAmount)  // Valor de venta del item sin impuestos
-                                ->setTaxAmount($itemTaxAmount)          // IGV
-                                ->setTaxCategory($TaxCategory
-                                        ->setID($cat5Item['categoria'])                     // Codigo de categoria de immpuestos @CAT5
-                                        ->setPercent($taxCategoryPercent)                // Porcentaje de IGV (18.00)
-                                        ->setTaxExemptionReasonCode($igvAffectationType)    // Código de afectación del IGV
-                                        ->setTaxScheme($TaxScheme
-                                                ->setID($taxTypeCode)                       // Codigo de categoria de impuesto
-                                                ->setName($cat5Item['name'])
-                                                ->setTaxTypeCode($cat5Item['UN_ECE_5153'])))))
-                ->setItem($Item)
-                ->setPrice($Price
-                        ->setCurrencyID($currencyCode)    // Tipo de moneda
-                        ->setPriceAmount($unitBillableValue)    // Precio unitario del item
-        );
+            ->setCurrencyID($currencyCode)                    // Tipo de moneda
+            ->setID($itemIndex + 1)                         // Número de orden
+            ->setUnitCode($unitCode)                        // Codigo de unidad de medida
+            ->setLineExtensionAmount($itemTaxableAmount)    // Valor de venta del ítem, sin impuestos
+            ->setPricingReference($PricingReference
+                ->setAlternativeConditionPrice($AlternativeConditionPrice
+                    ->setCurrencyID($currencyCode)            // Tipo de moneda
+                    ->setPriceAmount($unitPrice)            // Precio de venta unitario
+                    ->setPriceTypeCode($priceTypeCode)))    // Price
+            ->setTaxTotal($TaxTotal
+                ->setCurrencyID($currencyCode)
+                ->setTaxAmount($itemTaxAmount)
+                ->addTaxSubTotal($TaxSubTotal
+                    ->setCurrencyID($currencyCode)          // Tipo de moneda
+                    ->setTaxableAmount($itemTaxableAmount)  // Valor de venta del item sin impuestos
+                    ->setTaxAmount($itemTaxAmount)          // IGV
+                    ->setTaxCategory($TaxCategory
+                        ->setID($cat5Item['categoria'])                     // Codigo de categoria de immpuestos @CAT5
+                        ->setPercent($taxCategoryPercent)                // Porcentaje de IGV (18.00)
+                        ->setTaxExemptionReasonCode($igvAffectationType)    // Código de afectación del IGV
+                        ->setTaxScheme($TaxScheme
+                            ->setID($taxTypeCode)                       // Codigo de categoria de impuesto
+                            ->setName($cat5Item['name'])
+                            ->setTaxTypeCode($cat5Item['UN_ECE_5153'])))))
+            ->setItem($Item)
+            ->setPrice(
+                $Price
+                    ->setCurrencyID($currencyCode)    // Tipo de moneda
+                    ->setPriceAmount($unitBillableValue)    // Precio unitario del item
+            );
         // Set Quantity
         $this->setDocumentLineQuantity($DocumentLine, $lineType, $quantity);
         // Añade item
@@ -230,45 +267,48 @@ trait BillMixin {
     }
 
     /**
-     * 
+     *
      * @param InvoiceLine|CreditNoteLine|DebitNoteLine $DocumentLine
      * @param string $lineType InvoiceLine|CreditNoteLine|DebitNoteLine
      * @param int $quantity
      */
-    private function addDocumentLine($DocumentLine, $lineType) {
+    private function addDocumentLine($DocumentLine, $lineType)
+    {
         switch ($lineType) {
-            case 'InvoiceLine' :
+            case 'InvoiceLine':
                 parent::addInvoiceLine($DocumentLine);
                 break;
-            case 'CreditNoteLine' :
+            case 'CreditNoteLine':
                 parent::addCreditNoteLine($DocumentLine);
                 break;
-            case 'DebitNoteLine' :
+            case 'DebitNoteLine':
                 parent::addDebitNoteLine($DocumentLine);
                 break;
         }
     }
     /**
-     * 
+     *
      * @param InvoiceLine|CreditNoteLine|DebitNoteLine $DocumentLine
      * @param string $lineType InvoiceLine|CreditNoteLine|DebitNoteLine
      * @param int $quantity
      */
-    private function setDocumentLineQuantity($DocumentLine, $lineType, $quantity) {
+    private function setDocumentLineQuantity($DocumentLine, $lineType, $quantity)
+    {
         switch ($lineType) {
-            case 'InvoiceLine' :
+            case 'InvoiceLine':
                 $DocumentLine->setInvoicedQuantity($quantity);
                 break;
-            case 'CreditNoteLine' :
+            case 'CreditNoteLine':
                 $DocumentLine->setCreditedQuantity($quantity);
                 break;
-            case 'DebitNoteLine' :
+            case 'DebitNoteLine':
                 $DocumentLine->setDebitedQuantity($quantity);
                 break;
         }
     }
 
-    private function addInvoiceLegalMonetaryTotal() {
+    private function addInvoiceLegalMonetaryTotal()
+    {
         $Invoice            = $this->dataMap;
         $currencyID         = $this->getDocumentCurrencyCode(); // Tipo de moneda
         $totalAllowances    = $Invoice->getTotalAllowances();   // Total descuentos
@@ -277,16 +317,17 @@ trait BillMixin {
         // LegalMonetaryTotal
         $LegalMonetaryTotal = new LegalMonetaryTotal();
         $LegalMonetaryTotal
-                ->setCurrencyID($currencyID)
-                ->setLineExtensionAmount($billableAmount)
-                ->setTaxInclusiveAmount($payableAmount)
-                ->setAllowanceTotalAmount($totalAllowances)
-                ->setPayableAmount($payableAmount);
+            ->setCurrencyID($currencyID)
+            ->setLineExtensionAmount($billableAmount)
+            ->setTaxInclusiveAmount($payableAmount)
+            ->setAllowanceTotalAmount($totalAllowances)
+            ->setPayableAmount($payableAmount);
 
         parent::setLegalMonetaryTotal($LegalMonetaryTotal);
     }
 
-    private function addInvoiceAccountingSupplierParty() {
+    private function addInvoiceAccountingSupplierParty()
+    {
         // Info
         $partyName  = Company::getBusinessName();
         $regName    = Company::getCompanyName();
@@ -301,32 +342,34 @@ trait BillMixin {
         $PartyTaxScheme             = new PartyTaxScheme();
         $RegistrationAddress        = new RegistrationAddress();
         $PartyIdentification
-                ->setElementAttributes('ID', [
-                    'schemeAgencyName'  => 'PE:SUNAT',
-                    'schemeID'          => $docType,
-                    'schemeName'        => 'Documento de Identidad',
-                    'schemeURI'         => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06']);
+            ->setElementAttributes('ID', [
+                'schemeAgencyName'  => 'PE:SUNAT',
+                'schemeID'          => $docType,
+                'schemeName'        => 'Documento de Identidad',
+                'schemeURI'         => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06'
+            ]);
         $PartyName                  = new PartyName();
         $PartyLegalEntity           = new PartyLegalEntity();
 
         $AccountingSupplierParty
-                ->setParty($Party
-                        ->setPartyIdentification($PartyIdentification
-                                ->setID($docNumber))
-                        ->setPartyName($PartyName
-                                ->setName($partyName))
-                        ->setPartyTaxScheme($PartyTaxScheme
-                                ->setRegistrationAddress($RegistrationAddress
-                                        ->setAddressTypeCode($addressRegCode)))
-                        ->setPartyLegalEntity($PartyLegalEntity
-                                ->setRegistrationName($regName)
-                                ->setRegistrationAddress($RegistrationAddress
-                                        ->setAddressTypeCode($addressRegCode))));
+            ->setParty($Party
+                ->setPartyIdentification($PartyIdentification
+                    ->setID($docNumber))
+                ->setPartyName($PartyName
+                    ->setName($partyName))
+                ->setPartyTaxScheme($PartyTaxScheme
+                    ->setRegistrationAddress($RegistrationAddress
+                        ->setAddressTypeCode($addressRegCode)))
+                ->setPartyLegalEntity($PartyLegalEntity
+                    ->setRegistrationName($regName)
+                    ->setRegistrationAddress($RegistrationAddress
+                        ->setAddressTypeCode($addressRegCode))));
         // Add to Document
         parent::setAccountingSupplierParty($AccountingSupplierParty);
     }
 
-    private function addInvoiceAccountingCustomerParty() {
+    private function addInvoiceAccountingCustomerParty()
+    {
         $Invoice   = $this->dataMap;
         // Info
         $regName   = $Invoice->getCustomerRegName();
@@ -339,28 +382,29 @@ trait BillMixin {
         $PartyIdentification        = new PartyIdentification();
         $PartyLegalEntity           = new PartyLegalEntity();
         $PartyIdentification
-                ->setElementAttributes('ID', [
-                    'schemeAgencyName'  => 'PE:SUNAT',
-                    'schemeID'          => $docType,
-                    'schemeName'        => 'Documento de Identidad',
-                    'schemeURI'         => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06']);
+            ->setElementAttributes('ID', [
+                'schemeAgencyName'  => 'PE:SUNAT',
+                'schemeID'          => $docType,
+                'schemeName'        => 'Documento de Identidad',
+                'schemeURI'         => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06'
+            ]);
 
         $AccountingCustomerParty
-                ->setParty($Party
-                        ->setPartyIdentification($PartyIdentification
-                                ->setID($docNumber))
-                        ->setPartyLegalEntity($PartyLegalEntity
-                                ->setRegistrationName($regName)));
+            ->setParty($Party
+                ->setPartyIdentification($PartyIdentification
+                    ->setID($docNumber))
+                ->setPartyLegalEntity($PartyLegalEntity
+                    ->setRegistrationName($regName)));
         // Add to Document
         parent::setAccountingCustomerParty($AccountingCustomerParty);
     }
 
     /**
-     *    
+     *
      * @return string Nombre del comprobante de acuerdo con las especificaciones de la SUNAT
      */
-    public function getDocumentName() {
+    public function getDocumentName()
+    {
         return $this->dataMap->getDocumentName();
     }
-
 }

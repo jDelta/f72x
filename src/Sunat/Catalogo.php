@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -15,7 +15,8 @@ use F72X\F72X;
 use F72X\Company;
 use F72X\Exception\ConfigException;
 
-class Catalogo {
+class Catalogo
+{
 
     const CAT_TAX_DOCUMENT_TYPE    = 1;
     const CAT_CURRENCY_TYPE        = 2;
@@ -63,16 +64,20 @@ class Catalogo {
     const IDENTIFICATION_DOC_DNI = '1';
     const IDENTIFICATION_DOC_RUC = '6';
 
+    // Formas de pago
+    public static $FAC_FORMS_OF_PAYMENT = ['Contado', 'Credito'];
+    const FAC_FORM_OF_PAYMENT_CONTADO = 'Contado';
+    const FAC_FORM_OF_PAYMENT_CREDITO = 'Credito';
     private static $_CAT = [];
     private static $_LIST = [];
-
     /**
-     * 
+     *
      * @param string $documentType 01|03|07|08
      * @param string $affectedDocumentType 01|03
      * @return string F|B
      */
-    public static function getDocumentSeriesPrefix($documentType, $affectedDocumentType = null) {
+    public static function getDocumentSeriesPrefix($documentType, $affectedDocumentType = null)
+    {
         if ($documentType == self::DOCTYPE_FACTURA) {
             return 'F';
         }
@@ -92,51 +97,67 @@ class Catalogo {
     }
 
     /**
-     * 
+     *
      * @param string $documentType 01|03|07|08
      * @return string FACTURA|BOLETA|NOTA DE CRÉDITO|NOTA DE DÉBITO
      */
-    public static function getOfficialDocumentName($documentType) {
+    public static function getOfficialDocumentName($documentType)
+    {
         switch ($documentType) {
-            case self::DOCTYPE_FACTURA : return 'FACTURA';
-            case self::DOCTYPE_BOLETA : return 'BOLETA DE VENTA';
-            case self::DOCTYPE_NOTA_CREDITO : return 'NOTA DE CRÉDITO';
-            case self::DOCTYPE_NOTA_DEBITO : return 'NOTA DE DÉBITO';
+            case self::DOCTYPE_FACTURA:
+                return 'FACTURA';
+            case self::DOCTYPE_BOLETA:
+                return 'BOLETA DE VENTA';
+            case self::DOCTYPE_NOTA_CREDITO:
+                return 'NOTA DE CRÉDITO';
+            case self::DOCTYPE_NOTA_DEBITO:
+                return 'NOTA DE DÉBITO';
         }
         throw new InvalidArgumentException("Error: $documentType isn't a valid document type");
     }
 
     /**
-     * 
+     *
      * @param string $shortCode BOL|FAC|NCR|NDE
      * @return string 01|03|07|08
      */
-    public static function getDocumentType($shortCode) {
+    public static function getDocumentType($shortCode)
+    {
         switch ($shortCode) {
-            case self::DOCTYPE_SC_FACTURA: return self::DOCTYPE_FACTURA;
-            case self::DOCTYPE_SC_BOLETA: return self::DOCTYPE_BOLETA;
-            case self::DOCTYPE_SC_NOTA_CREDITO: return self::DOCTYPE_NOTA_CREDITO;
-            case self::DOCTYPE_SC_NOTA_DEBITO: return self::DOCTYPE_NOTA_DEBITO;
+            case self::DOCTYPE_SC_FACTURA:
+                return self::DOCTYPE_FACTURA;
+            case self::DOCTYPE_SC_BOLETA:
+                return self::DOCTYPE_BOLETA;
+            case self::DOCTYPE_SC_NOTA_CREDITO:
+                return self::DOCTYPE_NOTA_CREDITO;
+            case self::DOCTYPE_SC_NOTA_DEBITO:
+                return self::DOCTYPE_NOTA_DEBITO;
         }
         throw new InvalidArgumentException("Error: $shortCode isn't valid short code use (BOL|FAC|NCR|NDE)");
     }
 
     /**
-     * 
+     *
      * @param string $docType 01|03|07|08
      * @return string BOL|FAC|NCR|NDE
      */
-    public static function getDocumentShortCode($docType) {
+    public static function getDocumentShortCode($docType)
+    {
         switch ($docType) {
-            case self::DOCTYPE_FACTURA:      return self::DOCTYPE_SC_FACTURA;
-            case self::DOCTYPE_BOLETA:       return self::DOCTYPE_SC_BOLETA;
-            case self::DOCTYPE_NOTA_CREDITO: return self::DOCTYPE_SC_NOTA_CREDITO;
-            case self::DOCTYPE_NOTA_DEBITO:  return self::DOCTYPE_SC_NOTA_DEBITO;
+            case self::DOCTYPE_FACTURA:
+                return self::DOCTYPE_SC_FACTURA;
+            case self::DOCTYPE_BOLETA:
+                return self::DOCTYPE_SC_BOLETA;
+            case self::DOCTYPE_NOTA_CREDITO:
+                return self::DOCTYPE_SC_NOTA_CREDITO;
+            case self::DOCTYPE_NOTA_DEBITO:
+                return self::DOCTYPE_SC_NOTA_DEBITO;
         }
         throw new InvalidArgumentException("Error: $docType isn't valid document type use (01|03|07|08)");
     }
 
-    public static function itemExist($catNumber, $itemID) {
+    public static function itemExist($catNumber, $itemID)
+    {
         $items = self::getCatItems($catNumber);
         return key_exists($itemID, $items);
     }
@@ -148,7 +169,8 @@ class Catalogo {
      * @return string
      * @throws InvalidArgumentException cuando el item no existe en el catálogo.
      */
-    public static function getCatItemValue($catNumber, $itemID) {
+    public static function getCatItemValue($catNumber, $itemID)
+    {
         $item = self::getCatItem($catNumber, $itemID);
         if ($item) {
             return $item['value'];
@@ -163,10 +185,11 @@ class Catalogo {
      * @return string
      * @throws InvalidArgumentException cuando el item no existe en el catálogo.
      */
-    public static function getCatItemFieldValue($catNumber, $itemID, $field) {
+    public static function getCatItemFieldValue($catNumber, $itemID, $field)
+    {
         $item = self::getCatItem($catNumber, $itemID);
         if ($item) {
-            if(isset($item[$field])){
+            if (isset($item[$field])) {
                 return $item[$field];
             }
             throw new InvalidArgumentException("Catálogo Error, no existe el campo '$field' en el cátalogo='$catNumber'");
@@ -174,7 +197,8 @@ class Catalogo {
         throw new InvalidArgumentException("Catálogo Error, no existe un item con ID='$itemID' en el cátalogo='$catNumber'");
     }
 
-    public static function getCatItem($catNumber, $itemID, $key = 'id') {
+    public static function getCatItem($catNumber, $itemID, $key = 'id')
+    {
         $items = self::getCatItems($catNumber);
         foreach ($items as $item) {
             if ($item[$key] === strval($itemID)) {
@@ -184,7 +208,8 @@ class Catalogo {
         return null;
     }
 
-    public static function getCatItems($catNumber, $useXmlFiles = false) {
+    public static function getCatItems($catNumber, $useXmlFiles = false)
+    {
         // returns from cache
         if (isset(self::$_CAT['CAT_' . $catNumber])) {
             return self::$_CAT['CAT_' . $catNumber];
@@ -196,11 +221,13 @@ class Catalogo {
         return $items;
     }
 
-    private static function getCatFileName($catNumeber) {
+    private static function getCatFileName($catNumeber)
+    {
         return 'cat_' . str_pad($catNumeber, 2, '0', STR_PAD_LEFT);
     }
 
-    public static function getCurrencyPlural($currencyCode) {
+    public static function getCurrencyPlural($currencyCode)
+    {
         $currencies = self::getCustomList('currencies');
         if (isset($currencies[$currencyCode])) {
             return $currencies[$currencyCode];
@@ -208,11 +235,13 @@ class Catalogo {
         throw new ConfigException("El código de moneda $currencyCode aún no ha sido configurado para su uso.");
     }
 
-    public static function getUnitName($unitCode) {
+    public static function getUnitName($unitCode)
+    {
         return self::getCustomListItem('unitcode', $unitCode);
     }
 
-    public static function getCustomListItem($listName, $itemId) {
+    public static function getCustomListItem($listName, $itemId)
+    {
         $customList = self::getCustomList($listName);
         if (isset($customList[$itemId])) {
             return $customList[$itemId];
@@ -220,7 +249,8 @@ class Catalogo {
         throw new ConfigException("El codigó de item '$itemId' no existe en la lista $listName");
     }
 
-    public static function getCustomList($listName) {
+    public static function getCustomList($listName)
+    {
         // returns from cache
         if (isset(self::$_LIST['LIST_' . $listName])) {
             return self::$_LIST['LIST_' . $listName];
@@ -244,7 +274,8 @@ class Catalogo {
         return $list;
     }
 
-    public static function getAllCatNumbers() {
+    public static function getAllCatNumbers()
+    {
         $catNumbers = [];
         for ($i = 1; $i <= 3; $i++) {
             $catNumbers[] = $i;
@@ -263,5 +294,4 @@ class Catalogo {
         }
         return $catNumbers;
     }
-
 }

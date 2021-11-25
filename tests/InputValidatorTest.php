@@ -3,9 +3,8 @@
 namespace Tests;
 
 use F72X\Sunat\InputValidator;
-use PHPUnit\Framework\TestCase;
 
-final class InputValidatorTest extends TestCase {
+final class InputValidatorTest extends \PHPUnit_Framework_TestCase {
 
     public function testValidateBase() {
         $expected = [];
