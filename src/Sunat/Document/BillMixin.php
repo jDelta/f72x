@@ -77,9 +77,9 @@ trait BillMixin
         // Crédito
         elseif ($formOfPayment == 'Credito') {
             $paymentTerms = new PaymentTerms('FormaPago', 'Credito');
-            $paymentTerms->setAmount(new Amount($invoice->getAmountToPayOnCredit(), $currencyCode));
+            $paymentTerms->setAmount(new Amount($invoice->getPendingAmount(), $currencyCode));
             $terms[] = $paymentTerms;
-            foreach ($invoice->getCrditInstallments() as $installement) {
+            foreach ($invoice->getInstallments() as $installement) {
                 $paymentTerms = new PaymentTerms('FormaPago', $installement->getId());
                 $paymentTerms->setAmount(new Amount($installement->getAmmount(), $currencyCode));
                 $paymentTerms->setPaymentDueDate($installement->getPaymentDueDate());

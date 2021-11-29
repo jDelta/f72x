@@ -48,8 +48,8 @@ class DataMap
     private $purchaseOrder;
 
     private $formOfPayment;
-    private $creditInstallments = [];
-    private $amountToPayOnCredit = 0;
+    private $installments = [];
+    private $pendingAmount = 0;
 
     /** @var InvoiceItems */
     private $_items;
@@ -121,17 +121,17 @@ class DataMap
         $this->formOfPayment = $formOfPayment;
         // Caso crédito
         if ($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CREDITO) {
-            if (!isset($payment['amountToPayOnCredit']) || is_nan($payment['amountToPayOnCredit']) || $payment['amountToPayOnCredit'] <= 0) {
-                throw new InvalidArgumentException("El campo 'amountToPayOnCredit', es obligatorio y debe ser mayor que cero para facturas y notas de crédito con forma de pago '" . Catalogo::FAC_FORM_OF_PAYMENT_CREDITO . "'");
+            if (!isset($payment['pendingAmount']) || is_nan($payment['pendingAmount']) || $payment['pendingAmount'] <= 0) {
+                throw new InvalidArgumentException("El campo 'pendingAmount', es obligatorio y debe ser mayor que cero para facturas y notas de crédito con forma de pago '" . Catalogo::FAC_FORM_OF_PAYMENT_CREDITO . "'");
             }
-            if (!isset($payment['creditInstallments']) || !is_array($payment['creditInstallments']) || count($payment['creditInstallments']) == 0) {
-                throw new InvalidArgumentException("El campo 'creditInstallments', es obligatorio para facturas y notas de crédito con forma de pago '" . Catalogo::FAC_FORM_OF_PAYMENT_CREDITO . "'");
+            if (!isset($payment['installments']) || !is_array($payment['installments']) || count($payment['installments']) == 0) {
+                throw new InvalidArgumentException("El campo 'installments', es obligatorio para facturas y notas de crédito con forma de pago '" . Catalogo::FAC_FORM_OF_PAYMENT_CREDITO . "'");
             }
-            $this->amountToPayOnCredit = $payment['amountToPayOnCredit'];
-            $this->creditInstallments = $this->parseCreditInstallments($payment['creditInstallments']);
+            $this->pendingAmount = $payment['pendingAmount'];
+            $this->installments = $this->parseInstallments($payment['installments']);
         }
     }
-    private function parseCreditInstallments($data)
+    private function parseInstallments($data)
     {
         $out = [];
         foreach ($data as $key => $item) {
@@ -351,13 +351,13 @@ class DataMap
      *
      * @return CreditInstallment[]
      */
-    public function getCrditInstallments()
+    public function getInstallments()
     {
-        return $this->creditInstallments;
+        return $this->installments;
     }
-    public function getAmountToPayOnCredit()
+    public function getPendingAmount()
     {
-        return $this->amountToPayOnCredit;
+        return $this->pendingAmount;
     }
     /**
      * Numero de items del documento

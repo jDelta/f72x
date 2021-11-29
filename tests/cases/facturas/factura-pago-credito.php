@@ -14,8 +14,8 @@ return [
     'purchaseOrder'     => 7852166,               // Numero de orden de commpra,
     'payment'   => [
         'formOfPayment'       => 'Credito',     // Contado/Credito https://www.sunat.gob.pe/legislacion/superin/2020/anexo4-193-2020.pdf
-        'amountToPayOnCredit' => 400,           // Monto a pagar en el caso de ser credito
-        'creditInstallments'  => [
+        'pendingAmount' => 400,                 // Monto pendiente de pago
+        'installments'  => [
             ['amount' => 200, 'paymentDueDate' => '2025/02/15'],
             ['amount' => 200, 'paymentDueDate' => '2025/03/15']
         ]
