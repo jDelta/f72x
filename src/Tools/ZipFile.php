@@ -1,6 +1,7 @@
 <?php
 
 /* vim: set expandtab sw=4 ts=4 sts=4: */
+
 /**
  * Zip file creation
  *
@@ -17,7 +18,8 @@ namespace F72X\Tools;
  * @package PhpMyAdmin
  * @see     Official ZIP file format: http://www.pkware.com/support/zip-app-note
  */
-class ZipFile {
+class ZipFile
+{
 
     /**
      * Whether to echo zip as it's built or return as string from -> file
@@ -67,11 +69,12 @@ class ZipFile {
      *
      * @return void
      */
-    function setDoWrite() {
+    function setDoWrite()
+    {
         $this->doWrite = true;
     }
 
-// end of the 'setDoWrite()' method
+    // end of the 'setDoWrite()' method
     /**
      * Converts an Unix timestamp to a four byte DOS date and time format (date
      * in high two bytes, time in low two bytes allowing magnitude comparison).
@@ -82,7 +85,8 @@ class ZipFile {
      *
      * @access private
      */
-    function unix2DosTime($unixtime = 0) {
+    function unix2DosTime($unixtime = 0)
+    {
         $timearray = ($unixtime == 0) ? getdate() : getdate($unixtime);
         if ($timearray['year'] < 1980) {
             $timearray['year'] = 1980;
@@ -95,7 +99,7 @@ class ZipFile {
         return (($timearray['year'] - 1980) << 25) | ($timearray['mon'] << 21) | ($timearray['mday'] << 16) | ($timearray['hours'] << 11) | ($timearray['minutes'] << 5) | ($timearray['seconds'] >> 1);
     }
 
-// end of the 'unix2DosTime()' method
+    // end of the 'unix2DosTime()' method
     /**
      * Adds "file" to archive
      *
@@ -107,7 +111,8 @@ class ZipFile {
      *
      * @return void
      */
-    function addFile($data, $name, $time = 0) {
+    function addFile($data, $name, $time = 0)
+    {
         $name = str_replace('\\', '/', $name);
         $hexdtime = pack('V', $this->unix2DosTime($time));
         $fr = "\x50\x4b\x03\x04";
@@ -160,7 +165,7 @@ class ZipFile {
         $this->ctrl_dir[] = $cdrec;
     }
 
-// end of the 'addFile()' method
+    // end of the 'addFile()' method
     /**
      * Echo central dir if ->doWrite==true, else build string to return
      *
@@ -168,15 +173,16 @@ class ZipFile {
      *
      * @access public
      */
-    function file() {
+    function file()
+    {
         $ctrldir = implode('', $this->ctrl_dir);
         $header = $ctrldir .
-                $this->eof_ctrl_dir .
-                pack('v', sizeof($this->ctrl_dir)) . //total #of entries "on this disk"
-                pack('v', sizeof($this->ctrl_dir)) . //total #of entries overall
-                pack('V', strlen($ctrldir)) . //size of central dir
-                pack('V', $this->old_offset) . //offset to start of central dir
-                "\x00\x00";                            //.zip file comment length
+            $this->eof_ctrl_dir .
+            pack('v', sizeof($this->ctrl_dir)) . //total #of entries "on this disk"
+            pack('v', sizeof($this->ctrl_dir)) . //total #of entries overall
+            pack('V', strlen($ctrldir)) . //size of central dir
+            pack('V', $this->old_offset) . //offset to start of central dir
+            "\x00\x00";                            //.zip file comment length
         if ($this->doWrite) { // Send central directory & end ctrl dir to STDOUT
             echo $header;
             return "";            // Return empty string
@@ -187,14 +193,15 @@ class ZipFile {
     }
 
     /**
-     * 
+     *
      * @param string $zipPath the zip file path
      * @param string $entryName the entry file name
      * @return string|int The entry content or:
      *  0 If the zip isn't found
      *  1 If the entry isn't found
      */
-    public static function getEntry($zipPath, $entryName) {
+    public static function getEntry($zipPath, $entryName)
+    {
         $zip = zip_open($zipPath);
         if (is_resource($zip)) {
             // find entry
@@ -221,7 +228,7 @@ class ZipFile {
         }
     }
 
-// end of the 'file()' method
+    // end of the 'file()' method
 }
 
 // end of the 'ZipFile' class

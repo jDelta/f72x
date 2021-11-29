@@ -57,6 +57,7 @@ class DataMap
     private $allowancesAndCharges = [];
 
     /** NOTES FIELDS */
+    private $note;
     private $noteType;
     private $discrepancyResponseReason;
     private $noteAffectedDocType;

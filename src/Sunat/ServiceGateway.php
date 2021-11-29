@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -14,14 +14,16 @@ use Exception;
 use F72X\Repository;
 use F72X\Exception\SunatException;
 
-class ServiceGateway {
+class ServiceGateway
+{
 
     /**
-     * 
+     *
      * @param string $documentName El nombre del documento electrónico.
      * @return array
      */
-    public static function sendBill($documentName) {
+    public static function sendBill($documentName)
+    {
         $contentFile = Repository::getZipContent($documentName);
         try {
             $soapService = SunatSoapClient::getService();
@@ -38,11 +40,12 @@ class ServiceGateway {
     }
 
     /**
-     * 
+     *
      * @param string $documentName El nombre del documento electrónico.
      * @return array
      */
-    public static function sendSummary($documentName) {
+    public static function sendSummary($documentName)
+    {
         $contentFile = Repository::getZipContent($documentName);
         try {
             $soapService = SunatSoapClient::getService();
@@ -57,11 +60,12 @@ class ServiceGateway {
         return $ticket;
     }
 
-    public static function getStatus($documentName) {
+    public static function getStatus($documentName)
+    {
         $ticket = Repository::getTicketInfo($documentName);
         try {
             $soapService = SunatSoapClient::getService();
-            $soapService->__soapCall('getStatus', [['ticket' =>$ticket]]);
+            $soapService->__soapCall('getStatus', [['ticket' => $ticket]]);
             $serverResponse = $soapService->__getLastResponse();
         } catch (Exception $exc) {
             throw new SunatException($exc->getMessage(), $exc->getCode());
@@ -70,7 +74,8 @@ class ServiceGateway {
         return self::saveStatusResponse($serverResponse, $documentName);
     }
 
-    private static function saveCdr($response, $documentName) {
+    private static function saveCdr($response, $documentName)
+    {
         $xml = simplexml_load_string($response);
         $appResp = $xml->xpath("//applicationResponse")[0];
         // CDR
@@ -78,18 +83,19 @@ class ServiceGateway {
         Repository::saveCdr($documentName, $cdr);
     }
 
-    private static function saveStatusResponse($response, $documentName) {
+    private static function saveStatusResponse($response, $documentName)
+    {
         $xml = simplexml_load_string($response);
         $status = (array)$xml->xpath("//status")[0];
-        
+
         // Status code only 0 and 99
-        if($status['statusCode'] == '0' || $status['statusCode'] == '99') {
+        if ($status['statusCode'] == '0' || $status['statusCode'] == '99') {
             $statusContent = $status['content'];
             $cdr = base64_decode($statusContent);
             Repository::saveCdr($documentName, $cdr);
             $status['cdr'] = Repository::getCdrInfo($documentName);
             $status['message'] = null;
-        }else{
+        } else {
             $status['cdr'] = null;
             $status['message'] = $status['content'];
         }
@@ -97,12 +103,12 @@ class ServiceGateway {
         return $status;
     }
 
-    private static function saveTicket($response, $documentName) {
+    private static function saveTicket($response, $documentName)
+    {
         $xmlObj = simplexml_load_string($response);
         // Ticket
         $ticket = (string) $xmlObj->xpath("//ticket")[0];
         Repository::saveTicket($documentName, $ticket);
         return $ticket;
     }
-
 }
