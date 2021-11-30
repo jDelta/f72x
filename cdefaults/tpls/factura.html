@@ -1,241 +1,333 @@
 <html>
-    <head>
-        <style>
-            @page {
-                size: A4 portrait; 
-                margin: 1.5cm 1cm;
-            }
-            /**
+
+<head>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 1.5cm 1cm;
+        }
+
+        /**
             * DIMENSIONS
             */
-            /*QR code width*/
-            .dim-qr {
-                width: 64px;
-            }
-            .dim-full {
-                width: 100%;
-            }
-            .dim-total-col {
-                width: 70px;
-            }
-            .conpany-info-area{
-                padding: 2px 0;
-                border-bottom: 1px solid;
-            }
-            .company-name{
-                text-transform: uppercase;
-            }
-            .company-location-info {
-                font-size: 7pt;
-                vertical-align: top;
-            }
-            .edoc-header-content{
-                padding-top: 4px;
-            }
-            body {
-                font-family: arial, sans-serif;
-                font-size: 8.5pt;
-                line-height: 1.1;
-                font-weight: 400;
-                font-style: normal;
-                margin: 0;
-                padding: 0;
-            }
-            * {
-                border-collapse: collapse;
-            }
-            .logo {
-                vertical-align: top;
-                height: 75px;
-            }
-            .head-section {
-                width: 100%;
-                margin: 10px 0;
-            }
-            .head-section td {
-                vertical-align: top;
-            }
-            .detail-table {
-                border: solid 1px;
-                border-collapse: collapse;
-                text-transform: uppercase;
-                margin: 10px 0;
-            }
-            .detail-table th {
-                font-weight: normal;
-                padding: 3px 4px;
-                vertical-align: middle;
-                border: solid 1px;
-            }
-            .detail-table thead tr {
-                background: #e2e2e2;
-            }
-            .detail-table tr td {
-                color: #333333;
-                height: 23px;
-                padding: 1px 3px;
-                vertical-align: middle;
-            }
-            .detail-table td, .detail-table th {
-                border-right: solid 1px;
-            }
-            .totals-table {
-                width: 100%;
-            }
-            .invoice-id-area {
-                position: absolute;
-                top: 0;
-                right: 0;
-                padding: 5px 15px;
-                border: 1px solid;
-                text-align: center;
-                font-size: 10pt;
-                font-weight: 700;
-                line-height: 1.5;
-            }
-            .align-l {
-                text-align: left;
-            }
-            .align-c {
-                text-align: center;
-            }
-            .align-r {
-                text-align: right;
-            }
-            .no-wrap{
-                white-space: nowrap;
-            }
-            .words-amount {
-                font-weight: bold;
-            }
-            .qr {
-                float: left;
-                margin: 10px 10px 10px 50px;
-            }
-            .repo-link {
-                text-decoration: none;
-            }
-            .footer{
-                margin: 60px 0 0 0;
-            }
-            .keyfields-wrapper{
-                padding: 1px 3px 1px 10px;
-            }
-            .keyfields td{
-                white-space: nowrap;
-            }
-            .edoc-footer-content, edoc-footer-content{
-                font-size: 7pt;
-            }
-        </style>
-    </head>
-    <body>
-        <img class="logo" src="data:image/png;base64,{{logo}}" />
-        <div class="invoice-id-area">
-            R.U.C. {{companyRuc}}<br>
-            FACTURA ELECTRÓNICA<br>
-            N° {{documentSeries}}-{{documentNumber}}
-        </div>
-        <div class="conpany-info-area">
-            <div class="company-name">{{companyName}}</div>
-            <div class="company-location-info">
+        /*QR code width*/
+        .dim-qr {
+            width: 64px;
+        }
+
+        .dim-full {
+            width: 100%;
+        }
+
+        .dim-total-col {
+            width: 70px;
+        }
+
+        .conpany-info-area {
+            padding: 2px 0;
+            border-bottom: 1px solid;
+        }
+
+        .company-name {
+            text-transform: uppercase;
+        }
+
+        .company-location-info {
+            font-size: 7pt;
+            vertical-align: top;
+        }
+
+        .edoc-header-content {
+            padding-top: 4px;
+        }
+
+        body {
+            font-family: arial, sans-serif;
+            font-size: 8.5pt;
+            line-height: 1.1;
+            font-weight: 400;
+            font-style: normal;
+            margin: 0;
+            padding: 0;
+        }
+
+        * {
+            border-collapse: collapse;
+        }
+
+        .logo {
+            vertical-align: top;
+            height: 75px;
+        }
+
+        .head-section {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .head-section td {
+            vertical-align: top;
+        }
+
+        .detail-table {
+            border: solid 1px;
+            border-collapse: collapse;
+            text-transform: uppercase;
+            margin: 10px 0;
+        }
+
+        .detail-table th {
+            font-weight: normal;
+            padding: 3px 4px;
+            vertical-align: middle;
+            border: solid 1px;
+        }
+
+        .detail-table thead tr {
+            background: #e2e2e2;
+        }
+
+        .detail-table tr td {
+            color: #333333;
+            height: 23px;
+            padding: 1px 3px;
+            vertical-align: middle;
+        }
+
+        .detail-table td,
+        .detail-table th {
+            border-right: solid 1px;
+        }
+
+        .totals-table {
+            width: 100%;
+        }
+
+        .invoice-id-area {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px 15px;
+            border: 1px solid;
+            text-align: center;
+            font-size: 10pt;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .align-l {
+            text-align: left;
+        }
+
+        .align-c {
+            text-align: center;
+        }
+
+        .align-r {
+            text-align: right;
+        }
+
+        .no-wrap {
+            white-space: nowrap;
+        }
+
+        .words-amount {
+            font-weight: bold;
+        }
+
+        .qr {
+            float: left;
+            margin: 10px 10px 10px 50px;
+        }
+
+        .repo-link {
+            text-decoration: none;
+        }
+
+        .footer {
+            margin: 60px 0 0 0;
+        }
+
+        .keyfields-wrapper {
+            padding: 1px 3px 1px 10px;
+        }
+
+        .keyfields td {
+            white-space: nowrap;
+        }
+
+        .edoc-footer-content,
+        edoc-footer-content {
+            font-size: 7pt;
+        }
+    </style>
+</head>
+
+<body>
+    <img class="logo" src="data:image/png;base64,{{logo}}" />
+    <div class="invoice-id-area">
+        R.U.C. {{companyRuc}}<br>
+        FACTURA ELECTRÓNICA<br>
+        N° {{documentSeries}}-{{documentNumber}}
+    </div>
+    <div class="conpany-info-area">
+        <div class="company-name">{{companyName}}</div>
+        <div class="company-location-info">
             {{companyAddress}} - {{companyCity}}
-            </div>
-            <div class="edoc-header-content">{{edocHeaderContent|raw}}</div>
         </div>
-        <table class="head-section">
-            <tbody>
-                <tr>
-                    <td width="50">SEÑOR(ES)</td>
-                    <td width="6">:</td>
-                    <td>{{customerRegName}}</td>
-                    <td rowspan="3" width="100" class="keyfields-wrapper">
-                        <table class="keyfields">
-                            <tr><td>FEC. EMISIÓN</td><td width="6">:</td><td>{{issueDate}}</td></tr>
-                            {% if dueDate %}<tr><td>FEC. VENCIMIENTO</td><td>:</td><td>{{dueDate}}</td></tr>{% endif %}
-                            <tr><td>MONEDA</td><td>:</td><td class="ws-normal">{{currency}}</td></tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td>R.U.C.</td>
-                    <td>:</td>
-                    <td>{{customerDocNumber}}</td>
-                </tr>
-                <tr>
-                    <td>DIRECCIÓN</td>
-                    <td>:</td>
-                    <td>{{customerAddress}}</td>
-                </tr>
-            </tbody>
+        <div class="edoc-header-content">{{edocHeaderContent|raw}}</div>
+    </div>
+    <table class="head-section">
+        <tbody>
+            <tr>
+                <td width="50">SEÑOR(ES)</td>
+                <td width="6">:</td>
+                <td>{{customerRegName}}</td>
+                <td rowspan="3" width="100" class="keyfields-wrapper">
+                    <table class="keyfields">
+                        <tr>
+                            <td>FEC. EMISIÓN</td>
+                            <td width="6">:</td>
+                            <td>{{issueDate}}</td>
+                        </tr>
+                        {% if dueDate %}<tr>
+                            <td>FEC. VENCIMIENTO</td>
+                            <td>:</td>
+                            <td>{{dueDate}}</td>
+                        </tr>{% endif %}
+                        <tr>
+                            <td>MONEDA</td>
+                            <td>:</td>
+                            <td class="ws-normal">{{currency}}</td>
+                        </tr>
+                        <tr>
+                            <td>FORMA DE PAGO</td>
+                            <td>:</td>
+                            <td class="ws-normal">{{formOfPaymentStr}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>R.U.C.</td>
+                <td>:</td>
+                <td>{{customerDocNumber}}</td>
+            </tr>
+            <tr>
+                <td>DIRECCIÓN</td>
+                <td>:</td>
+                <td>{{customerAddress}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="detail-table dim-full">
+        <thead>
+            <tr>
+                <th width="30" class="align-c">ITEM</th>
+                <th width="30" class="align-c">CANT.</th>
+                <th width="30" class="align-c">UND.</th>
+                <th class="align-l">DESCRIPCIÓN</th>
+                <th width="60" class="align-c">PRECIO UNIT.</th>
+                <th width="60" class="align-c">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="align-c">{{loop.index}}</td>
+                <td class="align-c">{{item.quantity}}</td>
+                <td class="align-c">{{item.unitName}}</td>
+                <td>{{item.description}}</td>
+                <td class="align-r">{{item.unitBillableValue|number_format(2)}}</td>
+                <td class="align-r">{{item.itemPayableAmount|number_format(2)}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="words-amount">SON: {{payableInWords}}</div>
+    <table class="dim-full">
+        <tr>
+            <td width="35">&nbsp;</td>
+            <td>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th class="dim-total-col align-c">OP. GRABADAS</th>
+                            <th class="dim-total-col align-c">OP. GRATUITAS</th>
+                            <th class="dim-total-col align-c">OP. INAFECTAS</th>
+                            <th class="dim-total-col align-c">OP. EXONERADAS</th>
+                            <th class="dim-total-col align-c">DESCUENTOS</th>
+                            <th class="dim-total-col align-c">I.G.V. ({{igvPercent|number_format(2)}}%)</th>
+                            <th class="dim-total-col align-c">IMPORTE TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="align-r">{% if taxableOperations %}{{taxableOperations|number_format(2)}}{% endif
+                                %}</td>
+                            <td class="align-r">{% if freeOperations %}{{freeOperations|number_format(2)}}{% endif %}
+                            </td>
+                            <td class="align-r">{% if unaffectedOperations %}{{unaffectedOperations|number_format(2)}}{%
+                                endif %}</td>
+                            <td class="align-r">{% if exemptedOperations %}{{exemptedOperations|number_format(2)}}{%
+                                endif %}</td>
+                            <td class="align-r">{% if totalAllowances %}{{totalAllowances|number_format(2)}}{% endif %}
+                            </td>
+                            <td class="align-r">{% if igvAmount %}{{igvAmount|number_format(2)}}{% endif %}</td>
+                            <td class="align-r">{{payableAmount|number_format(2)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <!-- CRÉDITO -->
+    {% if installments|length %}
+        <div style="margin-top: 24px;"><strong>INFORMACIÓN DEL CRÉDITO</strong></div>
+        <table>
+            <tr>
+                <td>Monto neto pendiente de pago</td>
+                <td width="6">:</td>
+                <td>{{pendingAmount|number_format(2)}}</td>
+            </tr>
+            <tr>
+                <td>Nº de cuotas</td>
+                <td>:</td>
+                <td>{{installments|length}}</td>
+            </tr>
         </table>
-        <table class="detail-table dim-full">
+        <table class="detail-table" aria-label="Cuotas">
             <thead>
                 <tr>
-                    <th width="30" class="align-c">ITEM</th>
-                    <th width="30" class="align-c">CANT.</th>
-                    <th width="30" class="align-c">UND.</th>
-                    <th class="align-l">DESCRIPCIÓN</th>
-                    <th width="60" class="align-c">PRECIO UNIT.</th>
-                    <th width="60" class="align-c">TOTAL</th>
+                    <th scope="col" class="align-c">Nº CUOTA</th>
+                    <th scope="col" class="align-c">FECHA VENCIMIENTO</th>
+                    <th scope="col" class="align-c">MONTO</th>
                 </tr>
             </thead>
             <tbody>
-                {% for item in items %}
+                {% for item in installments %}
                 <tr>
                     <td class="align-c">{{loop.index}}</td>
-                    <td class="align-c">{{item.quantity}}</td>
-                    <td class="align-c">{{item.unitName}}</td>
-                    <td>{{item.description}}</td>
-                    <td class="align-r">{{item.unitBillableValue|number_format(2)}}</td>
-                    <td class="align-r">{{item.itemPayableAmount|number_format(2)}}</td>
+                    <td class="align-c">{{item.paymentDueDate}}</td>
+                    <td class="align-r">{{item.amount|number_format(2)}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <div class="words-amount">SON: {{payableInWords}}</div>
-        <table class="dim-full">
-            <tr>
-                <td width="35">&nbsp;</td>
-                <td>
-                    <table class="detail-table">
-                        <thead>
-                            <tr>
-                                <th class="dim-total-col align-c">OP. GRABADAS</th>
-                                <th class="dim-total-col align-c">OP. GRATUITAS</th>
-                                <th class="dim-total-col align-c">OP. INAFECTAS</th>
-                                <th class="dim-total-col align-c">OP. EXONERADAS</th>
-                                <th class="dim-total-col align-c">DESCUENTOS</th>
-                                <th class="dim-total-col align-c">I.G.V. ({{igvPercent|number_format(2)}}%)</th>
-                                <th class="dim-total-col align-c">IMPORTE TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="align-r">{% if taxableOperations %}{{taxableOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{% if freeOperations %}{{freeOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{% if unaffectedOperations %}{{unaffectedOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{% if exemptedOperations %}{{exemptedOperations|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{% if totalAllowances %}{{totalAllowances|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{% if igvAmount %}{{igvAmount|number_format(2)}}{% endif %}</td>
-                                <td class="align-r">{{payableAmount|number_format(2)}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <div class="edoc-footer-content">{{edocFooterContent|raw}}</div>
-        <table class="footer dim-full">
-            <tr>
-                <td width="35">&nbsp;</td>
-                <td width="64"><img class="dim-qr" src="data:image/png;base64,{{qr}}" /></td>
-                <td>
-                    Representación impresa - Comprobante de Pago Electrónico<br><br>
-                    Siempre podrá consultar sus comprobantes electrónicos en:<br>
-                    <a class="repo-link" href="https://consultar.comprobante.pe" target="_blank">https://consultar.comprobante.pe</a>
-                </td>
-            </tr>
-        </table>
-    </body>
+    {% endif %}
+    <div class="edoc-footer-content">{{edocFooterContent|raw}}</div>
+    <table class="footer dim-full">
+        <tr>
+            <td width="35">&nbsp;</td>
+            <td width="64"><img class="dim-qr" src="data:image/png;base64,{{qr}}" /></td>
+            <td>
+                Representación impresa - Comprobante de Pago Electrónico<br><br>
+                Siempre podrá consultar sus comprobantes electrónicos en:<br>
+                <a class="repo-link" href="https://consultar.comprobante.pe"
+                    target="_blank">https://consultar.comprobante.pe</a>
+            </td>
+        </tr>
+    </table>
+</body>
+
 </html>

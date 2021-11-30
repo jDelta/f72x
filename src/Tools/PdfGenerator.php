@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -53,7 +53,7 @@ class PdfGenerator {
         $dompdf->render();
         return $dompdf->output();
     }
-    
+
     private static function getTplFor($docType) {
         if ($docType == Catalogo::DOCTYPE_FACTURA) {
             return 'factura.html';
@@ -85,6 +85,13 @@ class PdfGenerator {
         $payableInWords = Operations::getAmountInWords($payableAmount, $currency);
         // has dueDate =
         $dueDate = $inv->getDueDate();
+        $formOfPayment = $inv->getFormOfPayment();
+        $formOfPaymentSrt = "";
+        if($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CONTADO) {
+            $formOfPaymentSrt = "CONTADO";
+        }elseif($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CREDITO) {
+            $formOfPaymentSrt = "CRÉDITO";
+        }
         $data = [
             'companyName'           => Company::getCompanyName(),
             'companyRuc'           => Company::getRUC(),
@@ -109,10 +116,13 @@ class PdfGenerator {
             'unaffectedOperations' => $inv->getTotalUnaffectedOperations(), // Total operaciones inafectas
             'exemptedOperations'   => $inv->getTotalExemptedOperations(),   // Total operaciones exoneradas
             'totalAllowances'      => $inv->getTotalAllowances(),           // Total operaciones exoneradas
-            'igvAmount'            => $inv->getIGV(),                       // Total a pagar
+            'igvAmount'            => $inv->getIGV(),                       // IGV
             'payableAmount'        => $payableAmount,                       // Total a pagar
+            'formOfPaymentStr'     => $formOfPaymentSrt,             // Forma de pago
+            'pendingAmount'        => $inv->getPendingAmount(),             // Forma de pago
             'payableInWords'       => $payableInWords,                      // Monto en palabras
-            'items'                => self::getDocumentDataItems($inv)     // Items
+            'items'                => self::getDocumentDataItems($inv),     // Items
+            'installments'         => self::getDocumentInstallments($inv),              // Cuotas
         ];
         // For credit and debit notes
         if (in_array($inv->getDocumentType(), [Catalogo::DOCTYPE_NOTA_CREDITO, Catalogo::DOCTYPE_NOTA_DEBITO])) {
@@ -145,7 +155,17 @@ class PdfGenerator {
         }
         return $items2;
     }
-
+    private static function getDocumentInstallments(DataMap $inv) {
+        $installments = $inv->getInstallments();
+        $out = [];
+        foreach ($installments as $installment) {
+            $out[] = [
+                'amount'          => $installment->getAmmount(),
+                'paymentDueDate'  => $installment->getPaymentDueDate()->format('d-m-Y'),
+            ];
+        }
+        return $out;
+    }
     private static function getRenderer() {
         $loader = new Twig_Loader_Filesystem();
         // Custom

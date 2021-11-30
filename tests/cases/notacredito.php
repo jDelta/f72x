@@ -15,9 +15,8 @@ return [
     'issueDate'         => '2017-06-25T20:25:41', // Fecha de emisión - ISO 8601 date
     'note'              => 'Unidades defectuosas, no leen CD que contengan archivos MP3. --- ADDITIONAL TEXT IN ORDER TO TEST LONG DESC BEHAVIOUR---',
                                                   // Motivo de emisión de la Nota de Crédito
-    'payment'           => [
-        'formOfPayment' => 'Contado',             // Contado/Credito https://www.sunat.gob.pe/legislacion/superin/2020/anexo4-193-2020.pdf
-    ],
+    'formOfPayment'     => 'Contado',             // Contado/Credito https://www.sunat.gob.pe/legislacion/superin/2020/anexo4-193-2020.pdf
+
     'items' => [
         [
             'productCode'        => 'GLG199',    // Código

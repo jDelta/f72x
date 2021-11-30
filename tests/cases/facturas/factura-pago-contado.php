@@ -12,9 +12,7 @@ return [
     'issueDate'         => '2017-05-14T13:25:51', // Fecha de emisión - ISO 8601 date
     'dueDate'           => '2017-06-14T13:25:51', // (Opcional) Fecha de venimiento - ISO 8601 date
     'purchaseOrder'     => 7852166,               // Numero de orden de commpra,
-    'payment'           => [
-        'formOfPayment' => 'Contado',             // Contado/Credito https://www.sunat.gob.pe/legislacion/superin/2020/anexo4-193-2020.pdf
-    ],
+    'formOfPayment'     => 'Contado',             // Contado/Credito https://www.sunat.gob.pe/legislacion/superin/2020/anexo4-193-2020.pdf
     'items' => [
         [
             'productCode'        => 'GLG199',    // Código

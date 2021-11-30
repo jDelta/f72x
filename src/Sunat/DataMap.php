@@ -107,28 +107,24 @@ class DataMap
     }
     private function setFormOfPaymentField(&$data)
     {
-        if (!isset($data['payment'])) {
-            throw new InvalidArgumentException("El campo 'payment', es obligatorio para facturas y notas de crédito");
-        }
-        $payment = $data['payment'];
-        if (!isset($payment['formOfPayment'])) {
+        if (!isset($data['formOfPayment'])) {
             throw new InvalidArgumentException("El campo 'formOfPayment', es obligatorio para facturas y notas de crédito");
         }
-        $formOfPayment = $payment['formOfPayment'];
+        $formOfPayment = $data['formOfPayment'];
         if (!in_array($formOfPayment, Catalogo::$FAC_FORMS_OF_PAYMENT)) {
             throw new InvalidArgumentException("El campo 'formOfPayment', no es válido use " . implode(', ', Catalogo::$FAC_FORMS_OF_PAYMENT));
         }
         $this->formOfPayment = $formOfPayment;
         // Caso crédito
         if ($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CREDITO) {
-            if (!isset($payment['pendingAmount']) || is_nan($payment['pendingAmount']) || $payment['pendingAmount'] <= 0) {
+            if (!isset($data['pendingAmount']) || is_nan($data['pendingAmount']) || $data['pendingAmount'] <= 0) {
                 throw new InvalidArgumentException("El campo 'pendingAmount', es obligatorio y debe ser mayor que cero para facturas y notas de crédito con forma de pago '" . Catalogo::FAC_FORM_OF_PAYMENT_CREDITO . "'");
             }
-            if (!isset($payment['installments']) || !is_array($payment['installments']) || count($payment['installments']) == 0) {
+            if (!isset($data['installments']) || !is_array($data['installments']) || count($data['installments']) == 0) {
                 throw new InvalidArgumentException("El campo 'installments', es obligatorio para facturas y notas de crédito con forma de pago '" . Catalogo::FAC_FORM_OF_PAYMENT_CREDITO . "'");
             }
-            $this->pendingAmount = $payment['pendingAmount'];
-            $this->installments = $this->parseInstallments($payment['installments']);
+            $this->pendingAmount = $data['pendingAmount'];
+            $this->installments = $this->parseInstallments($data['installments']);
         }
     }
     private function parseInstallments($data)

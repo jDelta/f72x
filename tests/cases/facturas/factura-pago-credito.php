@@ -12,13 +12,11 @@ return [
     'issueDate'         => '2017-05-14T13:25:51', // Fecha de emisión - ISO 8601 date
     'dueDate'           => '2017-06-14T13:25:51', // (Opcional) Fecha de venimiento - ISO 8601 date
     'purchaseOrder'     => 7852166,               // Numero de orden de commpra,
-    'payment'   => [
-        'formOfPayment'       => 'Credito',     // Contado/Credito https://www.sunat.gob.pe/legislacion/superin/2020/anexo4-193-2020.pdf
-        'pendingAmount' => 400,                 // Monto pendiente de pago
-        'installments'  => [
-            ['amount' => 200, 'paymentDueDate' => '2025/02/15'],
-            ['amount' => 200, 'paymentDueDate' => '2025/03/15']
-        ]
+    'formOfPayment'     => 'Credito',             // Contado/Credito https://www.sunat.gob.pe/legislacion/superin/2020/anexo4-193-2020.pdf
+    'pendingAmount'     => 400,                   // Monto pendiente de pago
+    'installments'  => [
+        ['amount' => 200, 'paymentDueDate' => '2025/02/15'],
+        ['amount' => 200, 'paymentDueDate' => '2025/03/15']
     ],
     'items' => [
         [
