@@ -230,13 +230,13 @@ trait BillMixin
             $Item->setCommodityClassification($CommodityClassification->setItemClassificationCode($sunatProductCode));
         }
         $DocumentLine
-            ->setCurrencyID($currencyCode)                    // Tipo de moneda
+            ->setCurrencyID($currencyCode)                  // Tipo de moneda
             ->setID($itemIndex + 1)                         // Número de orden
             ->setUnitCode($unitCode)                        // Codigo de unidad de medida
             ->setLineExtensionAmount($itemTaxableAmount)    // Valor de venta del ítem, sin impuestos
             ->setPricingReference($PricingReference
                 ->setAlternativeConditionPrice($AlternativeConditionPrice
-                    ->setCurrencyID($currencyCode)            // Tipo de moneda
+                    ->setCurrencyID($currencyCode)          // Tipo de moneda
                     ->setPriceAmount($unitPrice)            // Precio de venta unitario
                     ->setPriceTypeCode($priceTypeCode)))    // Price
             ->setTaxTotal($TaxTotal
@@ -247,17 +247,17 @@ trait BillMixin
                     ->setTaxableAmount($itemTaxableAmount)  // Valor de venta del item sin impuestos
                     ->setTaxAmount($itemTaxAmount)          // IGV
                     ->setTaxCategory($TaxCategory
-                        ->setID($cat5Item['categoria'])                     // Codigo de categoria de immpuestos @CAT5
+                        ->setID($cat5Item['categoria'])                  // Codigo de categoria de immpuestos @CAT5
                         ->setPercent($taxCategoryPercent)                // Porcentaje de IGV (18.00)
-                        ->setTaxExemptionReasonCode($igvAffectationType)    // Código de afectación del IGV
+                        ->setTaxExemptionReasonCode($igvAffectationType) // Código de afectación del IGV
                         ->setTaxScheme($TaxScheme
-                            ->setID($taxTypeCode)                       // Codigo de categoria de impuesto
+                            ->setID($taxTypeCode)                        // Codigo de categoria de impuesto
                             ->setName($cat5Item['name'])
                             ->setTaxTypeCode($cat5Item['UN_ECE_5153'])))))
             ->setItem($Item)
             ->setPrice(
                 $Price
-                    ->setCurrencyID($currencyCode)    // Tipo de moneda
+                    ->setCurrencyID($currencyCode)          // Tipo de moneda
                     ->setPriceAmount($unitBillableValue)    // Precio unitario del item
             );
         // Set Quantity
