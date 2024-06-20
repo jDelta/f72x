@@ -1,6 +1,6 @@
 <?php
 
-require 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 use F72X\F72X;
 use F72X\Sunat\DocumentGenerator;
@@ -25,7 +25,7 @@ F72X::init([
 ]);
 
 // FACTURA
-$dataFAC = require 'tests/cases/factura.php';
+$dataFAC = require_once 'tests/cases/factura.php';
 $xmlFAC = DocumentGenerator::createDocument('FAC', $dataFAC);
 DocumentGenerator::generateFiles($xmlFAC);
 $documentName = $xmlFAC->getDocumentName();
@@ -33,7 +33,7 @@ $resFAC = ServiceGateway::sendBill($documentName);
 var_dump($resFAC);
 
 // BOLETA DE VENTA
-$dataBOL = require 'tests/cases/boleta.php';
+$dataBOL = require_once 'tests/cases/boleta.php';
 $xmlBOL = DocumentGenerator::createDocument('BOL', $dataBOL);
 DocumentGenerator::generateFiles($xmlBOL);
 $documentName = $xmlBOL->getDocumentName();
@@ -41,7 +41,7 @@ $resBOL = ServiceGateway::sendBill($documentName);
 var_dump($resBOL);
 
 // NOTA DE CRÉDITO
-$dataNCR = require 'tests/cases/notacredito.php';
+$dataNCR = require_once 'tests/cases/notacredito.php';
 $xmlNCR = DocumentGenerator::createDocument('NCR', $dataNCR);
 DocumentGenerator::generateFiles($xmlNCR);
 $documentName = $xmlNCR->getDocumentName();
@@ -49,7 +49,7 @@ $resNCR = ServiceGateway::sendBill($documentName);
 var_dump($resNCR);
 
 // NOTA DE DÉBITO
-$dataNDE = require 'tests/cases/notadebito.php';
+$dataNDE = require_once 'tests/cases/notadebito.php';
 $xmlNDE = DocumentGenerator::createDocument('NDE', $dataNDE);
 DocumentGenerator::generateFiles($xmlNDE);
 $documentName = $xmlNDE->getDocumentName();
