@@ -24,14 +24,16 @@ use Twig_Extension_Escaper;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-class PdfGenerator {
+class PdfGenerator
+{
 
     /**
      * Generates a PDF based on the invoice data
      * @param DataMap $Invoice
-     * @param type $documentName
+     * @param string $documentName
      */
-    public static function generatePdf(DataMap $Invoice, $documentName) {
+    public static function generatePdf(DataMap $Invoice, $documentName)
+    {
         Repository::savePDF($documentName, self::buildPdf($Invoice));
     }
 
@@ -40,7 +42,8 @@ class PdfGenerator {
      * @param DataMap $Invoice
      * @return string The PDF stream
      */
-    public static function buildPdf(DataMap $Invoice) {
+    public static function buildPdf(DataMap $Invoice)
+    {
         // Dompdf Options
         $options = new Options();
         $options->set('tempDir', F72X::getTempDir() . '/');
@@ -54,7 +57,8 @@ class PdfGenerator {
         return $dompdf->output();
     }
 
-    private static function getTplFor($docType) {
+    private static function getTplFor($docType)
+    {
         if ($docType == Catalogo::DOCTYPE_FACTURA) {
             return 'factura.html';
         }
@@ -73,13 +77,15 @@ class PdfGenerator {
      * @param string $tpl The template name
      * @return string
      */
-    public static function getRenderedHtml(DataMap $Invoice, $tpl) {
+    public static function getRenderedHtml(DataMap $Invoice, $tpl)
+    {
         $invoiceData = self::getDocumentData($Invoice);
         $renderer = self::getRenderer();
         return $renderer->render($tpl, $invoiceData);
     }
 
-    private static function getDocumentData(DataMap $inv) {
+    private static function getDocumentData(DataMap $inv)
+    {
         $currency = Catalogo::getCurrencyPlural($inv->getCurrencyCode());
         $payableAmount = $inv->getPayableAmount();
         $payableInWords = Operations::getAmountInWords($payableAmount, $currency);
@@ -87,9 +93,9 @@ class PdfGenerator {
         $dueDate = $inv->getDueDate();
         $formOfPayment = $inv->getFormOfPayment();
         $formOfPaymentSrt = "";
-        if($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CONTADO) {
+        if ($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CONTADO) {
             $formOfPaymentSrt = "CONTADO";
-        }elseif($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CREDITO) {
+        } elseif ($formOfPayment == Catalogo::FAC_FORM_OF_PAYMENT_CREDITO) {
             $formOfPaymentSrt = "CRÉDITO";
         }
         $data = [
@@ -139,12 +145,13 @@ class PdfGenerator {
         return $data;
     }
 
-    private static function getDocumentDataItems(DataMap $inv) {
+    private static function getDocumentDataItems(DataMap $inv)
+    {
         $Items = $inv->getItems();
         $ln = $Items->getCount();
         $items2 = [];
         for ($i = 0; $i < $ln; $i++) {
-            $items2[]= [
+            $items2[] = [
                 'productCode'       => $Items->getProductCode($i),
                 'quantity'          => $Items->getQunatity($i),
                 'unitName'          => Catalogo::getUnitName($Items->getUnitCode($i)),
@@ -155,7 +162,8 @@ class PdfGenerator {
         }
         return $items2;
     }
-    private static function getDocumentInstallments(DataMap $inv) {
+    private static function getDocumentInstallments(DataMap $inv)
+    {
         $installments = $inv->getInstallments();
         $out = [];
         foreach ($installments as $installment) {
@@ -166,7 +174,8 @@ class PdfGenerator {
         }
         return $out;
     }
-    private static function getRenderer() {
+    private static function getRenderer()
+    {
         $loader = new Twig_Loader_Filesystem();
         // Custom
         $loader->addPath(Company::getPdfTemplatesPath());
@@ -179,5 +188,4 @@ class PdfGenerator {
         $view->addExtension(new Twig_Extension_Escaper('html'));
         return $view;
     }
-
 }

@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -29,11 +29,11 @@ class DocumentGenerator {
 
     /**
      * Crear documento electrónico
-     * 
+     *
      * Crea Factura, Boleta, Nota de crédito y Nota de débito.
-     * 
+     *
      * Procesa la data proporcionada para el tipo de documento indicado
-     * 
+     *
      * @param string $shortCode FAC|BOL|NCR|NDE
      * @param array $data
      * @param string $currencyCode
@@ -64,7 +64,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param string $documentType 01|03|07|08
      * @param string $affectedDocumentType 01|03
      * @param string $baseSeries ###|C##|D##
@@ -83,7 +83,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param Factura|Boleta|NotaCredito|NotaDebito $XmlDoc
      */
     public static function generateFiles($XmlDoc) {
@@ -100,7 +100,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param Factura|Boleta|NotaCredito|NotaDebito $XmlDoc
      */
     public static function regenerateFiles($XmlDoc) {
@@ -115,7 +115,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param array $data
      * @return ResumenDiario
      */
@@ -124,7 +124,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param array $data La data
      * @return ComunicacionBaja
      */
@@ -133,7 +133,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param array $data La data
      * @return Perception
      */
@@ -143,7 +143,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param array $data La data
      * @return Perception
      */
@@ -189,7 +189,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param string $documentType 01|03|07|08
      * @return string Invoice|CreditNote|DebitNote
      */
@@ -203,7 +203,7 @@ class DocumentGenerator {
     }
 
     /**
-     * 
+     *
      * @param string $documentType 01|03|07|08
      * @return array
      */

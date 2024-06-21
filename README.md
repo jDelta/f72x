@@ -64,6 +64,8 @@ F72X::init([
     'certificate'           => $certificate,
     'prodMode'              => $prodMode
 ]);
+// Configurar el gateway de servicios
+$serviceGateway = new ServiceGateway();
 ```
 ## 2. GENERAR DOCUMENTOS
 ### FACTURA
@@ -76,7 +78,7 @@ $XML = DocumentGenerator::createDocument('FAC', $data);
 DocumentGenerator::generateFiles($XML);
 // Enviar a SUNAT
 $documentName = $xmlFAC->getDocumentName();
-$response = ServiceGateway::sendBill($documentName);
+$response = $serviceGateway->sendBill($documentName);
 // Procesar Respuesta
 var_dump($response);
 ```
@@ -90,7 +92,7 @@ $XML = DocumentGenerator::createDocument('BOL', $data);
 DocumentGenerator::generateFiles($XML);
 // Enviar a SUNAT
 $documentName = $xmlFAC->getDocumentName();
-$response = ServiceGateway::sendBill($documentName);
+$response = $serviceGateway->sendBill($documentName);
 // Procesar Respuesta
 var_dump($response);
 ```
@@ -105,7 +107,7 @@ $XML = DocumentGenerator::createDocument('NCR', $data);
 DocumentGenerator::generateFiles($XML);
 // Enviar a SUNAT
 $documentName = $xmlFAC->getDocumentName();
-$response = ServiceGateway::sendBill($documentName);
+$response = $serviceGateway->sendBill($documentName);
 // Procesar Respuesta
 var_dump($response);
 ```
@@ -120,7 +122,7 @@ $XML = DocumentGenerator::createDocument('NDE', $data);
 DocumentGenerator::generateFiles($XML);
 // Enviar a SUNAT
 $documentName = $xmlFAC->getDocumentName();
-$response = ServiceGateway::sendBill($documentName);
+$response = $serviceGateway->sendBill($documentName);
 // Procesar Respuesta
 var_dump($response);
 ```

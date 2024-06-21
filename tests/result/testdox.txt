@@ -1,0 +1,54 @@
+Catalogo (Tests\Catalogo)
+ [x] Method getdocumentname
+ [x] Method getdocumentname produces an exception on invalid type
+ [x] Get cat items
+ [x] Item exist
+ [x] Get cat item
+ [x] Method get document short code
+
+Document Generation (Tests\DocumentGeneration)
+ [x] Remove bill docs
+ [x] Generat boleta
+ [x] Generate credit note
+ [x] Generate debit note
+ [x] Resumen diario
+ [x] Comunicacion de baja
+ [x] Data map right calcs for boleta
+ [x] Get cat item
+
+FSInput Generation (Tests\FSInputGeneration)
+ [x] True is true
+
+Factura Pago Contado (Tests\FacturaPagoContado)
+ [x] Generar factura
+ [x] Send to sunat
+
+Input Validator (Tests\InputValidator)
+ [x] Validate base
+
+MÓDULO F72X
+ [x] Iniciar sin definir el modo de operaración [prodMode]: No se espera errores
+ [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException with data set #0
+ [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException with data set #1
+ [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException with data set #2
+ [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException with data set #3
+ [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException with data set #4
+ [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException with data set #5
+ [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException with data set #6
+ [x] Iniciar con valores invalidos (null, 0, 1, -1, '0', '1', 'X', []) para el modo de operaración [prodMode]: Se espera una excepcion tipo \F72X\Exception\ConfigException with data set #7
+ [x] Iniciar con [prodMode] = true
+ [x] Iniciar con [prodMode] = false
+
+Pdf Generator (Tests\PdfGenerator)
+ [x] Generar factura contado
+ [x] Generar factura credito
+
+Qr (Tests\Qr)
+ [x] Gen
+
+Repository (Tests\Repository)
+ [x] Gdr info
+
+Xml DSig (Tests\XmlDSig)
+ [x] True is true
+

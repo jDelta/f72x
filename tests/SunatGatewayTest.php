@@ -2,23 +2,23 @@
 
 namespace Tests;
 
+use PHPUnit\Framework\TestCase;
 use F72X\Sunat\ServiceGateway;
 
-final class SunatGatewayTest extends \PHPUnit_Framework_TestCase
+final class SunatGatewayTest extends TestCase
 {
-    public function __construct()
+    private static ServiceGateway $sunatGateway;
+    public static function setUpBeforeClass(): void
     {
-        date_default_timezone_set('America/Lima');
-        Util::initModule();
+        self::$sunatGateway = new ServiceGateway();
     }
-
     public function testSendBoletaCase1()
     {
         $expected = [
             'responseCode' => '0',
             'responseDesc' => 'La Boleta numero B001-00003652, ha sido aceptada'
         ];
-        $response = ServiceGateway::sendBill('20100454523-03-B001-00003652');
+        $response = self::$sunatGateway->sendBill('20100454523-03-B001-00003652');
         $actual = [
             'responseCode' => $response['responseCode'],
             'responseDesc' => $response['responseDesc']
@@ -32,7 +32,7 @@ final class SunatGatewayTest extends \PHPUnit_Framework_TestCase
             'responseCode' => '0',
             'responseDesc' => 'La Nota de Credito numero FC01-00000211, ha sido aceptada'
         ];
-        $response = ServiceGateway::sendBill('20100454523-07-FC01-00000211');
+        $response = self::$sunatGateway->sendBill('20100454523-07-FC01-00000211');
         $actual = [
             'responseCode' => $response['responseCode'],
             'responseDesc' => $response['responseDesc']
@@ -46,7 +46,7 @@ final class SunatGatewayTest extends \PHPUnit_Framework_TestCase
             'responseCode' => '0',
             'responseDesc' => 'La Nota de Debito numero FD01-00000211, ha sido aceptada'
         ];
-        $response = ServiceGateway::sendBill('20100454523-08-FD01-00000211');
+        $response = self::$sunatGateway->sendBill('20100454523-08-FD01-00000211');
         $actual = [
             'responseCode' => $response['responseCode'],
             'responseDesc' => $response['responseDesc']
@@ -54,30 +54,32 @@ final class SunatGatewayTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public static function testSendResumenDiario()
+    public function testSendResumenDiario()
     {
-        $ticket = ServiceGateway::sendSummary('20100454523-RC-20171118-00001');
+        $this->expectNotToPerformAssertions();
+        $ticket = self::$sunatGateway->sendSummary('20100454523-RC-20171118-00001');
         echo $ticket;
     }
     //
     //    public static function testSendComunicacionBaja() {
-    //        $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
+    //        $ticket = self::$sunatGateway->sendSummary('20100454523-RA-20110402-00001');
     //        echo $ticket;
     //    }
     //
     //    public static function testSendPercepcion() {
-    //        $ticket = ServiceGateway::sendSummary('20100454523-RA-20110402-00001');
+    //        $ticket = self::$sunatGateway->sendSummary('20100454523-RA-20110402-00001');
     //        echo $ticket;
     //    }
     //
     //    public static function testGetComunicacionBajaStatus() {
-    //        $response = ServiceGateway::getStatus('20100454523-RA-20110402-00001');
+    //        $response = self::$sunatGateway->getStatus('20100454523-RA-20110402-00001');
     //        echo json_encode($response);
     //    }
 
     public function testGetResumenDiarioStatus()
     {
-        $response = ServiceGateway::getStatus('20100454523-RC-20171118-00001');
+        $this->expectNotToPerformAssertions();
+        $response = self::$sunatGateway->getStatus('20100454523-RC-20171118-00001');
         echo json_encode($response);
     }
 

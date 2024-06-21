@@ -16,25 +16,29 @@ use F72X\Exception\SunatException;
 
 class ServiceGateway
 {
+    private $soapService;
+    public function __construct()
+    {
+        $this->soapService = SunatSoapClient::getService();
+    }
 
     /**
      *
      * @param string $documentName El nombre del documento electrónico.
      * @return array
      */
-    public static function sendBill($documentName)
+    public function sendBill($documentName)
     {
         $contentFile = Repository::getZipContent($documentName);
         try {
-            $soapService = SunatSoapClient::getService();
-            $soapService->__soapCall('sendBill', [['fileName' => "$documentName.zip", 'contentFile' => $contentFile]]);
-            $serverResponse = $soapService->__getLastResponse();
+            $this->soapService->__soapCall('sendBill', [['fileName' => "$documentName.zip", 'contentFile' => $contentFile]]);
+            $serverResponse = $this->soapService->__getLastResponse();
         } catch (Exception $exc) {
             throw new SunatException($exc->getMessage(), $exc->getCode());
         }
 
         // Save Constancia de recepción
-        self::saveCdr($serverResponse, $documentName);
+        $this->saveCdr($serverResponse, $documentName);
         // Get Response info
         return Repository::getCdrInfo($documentName);
     }
@@ -42,39 +46,36 @@ class ServiceGateway
     /**
      *
      * @param string $documentName El nombre del documento electrónico.
-     * @return array
+     * @return string El ticket de recepción.
      */
-    public static function sendSummary($documentName)
+    public function sendSummary($documentName)
     {
         $contentFile = Repository::getZipContent($documentName);
         try {
-            $soapService = SunatSoapClient::getService();
-            $soapService->__soapCall('sendSummary', [['fileName' => "$documentName.zip", 'contentFile' => $contentFile]]);
-            $serverResponse = $soapService->__getLastResponse();
+            $this->soapService->__soapCall('sendSummary', [['fileName' => "$documentName.zip", 'contentFile' => $contentFile]]);
+            $serverResponse = $this->soapService->__getLastResponse();
         } catch (Exception $exc) {
             throw new SunatException($exc->getMessage(), $exc->getCode());
         }
 
         // Save and return ticket
-        $ticket = self::saveTicket($serverResponse, $documentName);
-        return $ticket;
+        return $this->saveTicket($serverResponse, $documentName);
     }
 
-    public static function getStatus($documentName)
+    public function getStatus($documentName)
     {
         $ticket = Repository::getTicketInfo($documentName);
         try {
-            $soapService = SunatSoapClient::getService();
-            $soapService->__soapCall('getStatus', [['ticket' => $ticket]]);
-            $serverResponse = $soapService->__getLastResponse();
+            $this->soapService->__soapCall('getStatus', [['ticket' => $ticket]]);
+            $serverResponse = $this->soapService->__getLastResponse();
         } catch (Exception $exc) {
             throw new SunatException($exc->getMessage(), $exc->getCode());
         }
         // Save Constancia de recepción
-        return self::saveStatusResponse($serverResponse, $documentName);
+        return $this->saveStatusResponse($serverResponse, $documentName);
     }
 
-    private static function saveCdr($response, $documentName)
+    private function saveCdr($response, $documentName)
     {
         $xml = simplexml_load_string($response);
         $appResp = $xml->xpath("//applicationResponse")[0];
@@ -83,7 +84,7 @@ class ServiceGateway
         Repository::saveCdr($documentName, $cdr);
     }
 
-    private static function saveStatusResponse($response, $documentName)
+    private function saveStatusResponse($response, $documentName)
     {
         $xml = simplexml_load_string($response);
         $status = (array)$xml->xpath("//status")[0];
@@ -103,7 +104,7 @@ class ServiceGateway
         return $status;
     }
 
-    private static function saveTicket($response, $documentName)
+    private function saveTicket($response, $documentName)
     {
         $xmlObj = simplexml_load_string($response);
         // Ticket

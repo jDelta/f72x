@@ -2,17 +2,16 @@
 
 namespace Tests;
 
+use PHPUnit\Framework\TestCase;
 //use F72X\Tools\FSInputGenerator;
 
-final class FSInputGenerationTest extends \PHPUnit_Framework_TestCase {
-
-    public function __construct() {
-        Util::initModule();
-    }
-    public function testTrueIsTrue() {
+final class FSInputGenerationTest extends TestCase
+{
+    public function testTrueIsTrue()
+    {
         self::assertTrue(true);
     }
-/*     public function XtestGenerarBoleta() {
+    /*     public function XtestGenerarBoleta() {
         $data = Util::getCaseData('boleta');
         FSInputGenerator::generateBoleta($data, '20100454523');
     }
