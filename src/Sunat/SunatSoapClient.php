@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -35,7 +35,7 @@ class SunatSoapClient extends SoapClient {
 SEC;
 
         $headers = new SoapHeader($nsWsse, 'Security', new SoapVar($WSHeader, XSD_ANYXML));
-        //set the Headers of Soap Client. 
+        //set the Headers of Soap Client.
         $this->__setSoapHeaders($headers);
         parent::__construct($wsdl, $options);
     }

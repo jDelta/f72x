@@ -2,19 +2,22 @@
 
 namespace Tests;
 
-final class FacturaPagoContadoTest extends FacturaTestCase {
+final class FacturaPagoContadoTest extends FacturaTestCase
+{
 
-    public function __construct() {
-        $data = require __DIR__ . '/cases/facturas/factura-pago-contado.php';
-        parent::__construct($data);
+    protected function getDocumentData(): array
+    {
+        return require __DIR__ . '/cases/facturas/factura-pago-contado.php';
     }
 
-    public function testGenerarFactura() {
+    public function testGenerarFactura()
+    {
+        $this->expectNotToPerformAssertions();
         $this->generarFactura();
     }
 
-    public function testSendToSunat() {
+    public function testSendToSunat()
+    {
         $this->sendToSunat();
     }
-
 }

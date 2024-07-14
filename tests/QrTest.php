@@ -2,17 +2,16 @@
 
 namespace Tests;
 
+use PHPUnit\Framework\TestCase;
 use Codelint\QRCode\QRCode;
 
-final class QrTest extends \PHPUnit_Framework_TestCase {
+final class QrTest extends TestCase
+{
 
-    protected function setUp() {
-        Util::initModule();
-    }
-
-    public function testGen() {
+    public function testGen()
+    {
+        $this->expectNotToPerformAssertions();
         $qr = new QRCode();
         $qr->png('Hi! Developer!', __DIR__ . '/temp/qr.png', 'Q', 8, 2);
     }
-
 }

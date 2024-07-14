@@ -2,54 +2,58 @@
 
 namespace Tests;
 
-use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use F72X\Sunat\Catalogo;
 
-final class CatalogoTest extends \PHPUnit_Framework_TestCase {
+final class CatalogoTest extends TestCase
+{
 
-    public function testMethodGetdocumentname() {
-        self::assertEquals('NOTA DE DÉBITO', Catalogo::getOfficialDocumentName(Catalogo::DOCTYPE_NOTA_DEBITO));
+    public function testMethodGetdocumentname()
+    {
+        $this->assertEquals('NOTA DE DÉBITO', Catalogo::getOfficialDocumentName(Catalogo::DOCTYPE_NOTA_DEBITO));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testMethodGetdocumentnameProducesAnExceptionOnInvalidType() {
+    public function testMethodGetdocumentnameProducesAnExceptionOnInvalidType()
+    {
+        $this->expectException(\InvalidArgumentException::class);
         Catalogo::getOfficialDocumentName('x');
     }
 
-    public function testGetCatItems() {
+    public function testGetCatItems()
+    {
         $expected = [
             'NIU' => ['id' => 'NIU', 'value' => 'UNIDAD (BIENES)'],
             'ZZ' => ['id' => 'ZZ', 'value' => 'UNIDAD (SERVICIOS)']
         ];
         $actual = Catalogo::getCatItems(3);
-        self::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
-    public static function testItemExist() {
-        self::assertTrue(Catalogo::itemExist(3, 'NIU'));
-        self::assertTrue(Catalogo::itemExist(3, 'ZZ'));
-        self::assertFalse(Catalogo::itemExist(3, 'XX'));
+    public function testItemExist()
+    {
+        $this->assertTrue(Catalogo::itemExist(3, 'NIU'));
+        $this->assertTrue(Catalogo::itemExist(3, 'ZZ'));
+        $this->assertFalse(Catalogo::itemExist(3, 'XX'));
     }
 
-    public function testGetCatItem() {
+    public function testGetCatItem()
+    {
         $expected = [
             'id' => '01',
             'value' => 'Precio unitario (incluye el IGV)'
         ];
         $actual = Catalogo::getCatItem(16, '01');
-        self::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testMethodGetDocumentShortCode() {
-        self::assertEquals('FAC', Catalogo::getDocumentShortCode('01'));
-        self::assertEquals('BOL', Catalogo::getDocumentShortCode('03'));
-        self::assertEquals('NCR', Catalogo::getDocumentShortCode('07'));
-        self::assertEquals('NDE', Catalogo::getDocumentShortCode('08'));
-        
-        self::setExpectedException('InvalidArgumentException');
+    public function testMethodGetDocumentShortCode()
+    {
+        $this->assertEquals('FAC', Catalogo::getDocumentShortCode('01'));
+        $this->assertEquals('BOL', Catalogo::getDocumentShortCode('03'));
+        $this->assertEquals('NCR', Catalogo::getDocumentShortCode('07'));
+        $this->assertEquals('NDE', Catalogo::getDocumentShortCode('08'));
+
+        $this->expectException(\InvalidArgumentException::class);
         Catalogo::getDocumentShortCode('09');
     }
-
 }

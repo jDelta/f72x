@@ -2,14 +2,14 @@
 
 namespace Tests;
 
+use PHPUnit\Framework\TestCase;
 use F72X\Tools\XmlDSig;
 
-final class XmlDSigTest extends \PHPUnit_Framework_TestCase {
+final class XmlDSigTest extends TestCase {
     public function testTrueIsTrue(){
         self::assertTrue(true);
     }
     //public function testSignCulturalInvoice() {
-    //    Util::initModule();
     //    XmlDSig::sign('20100454523-03-B001-00003652');
     //}
 

@@ -1,21 +1,24 @@
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/4.8/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.2/phpunit.xsd"
     backupGlobals="true"
-    backupStaticAttributes="false"
-    bootstrap="vendor/autoload.php">
+    bootstrap="tests/init.php">
     <testsuites>
         <testsuite name="My Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
     <logging>
-        <log type="testdox-text" target="tests/testdox.txt"/>
-        <log type="coverage-text" target="tests/coverage.txt"></log>
+        <testdoxText outputFile="tests/result/testdox.txt" />
     </logging>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+    <coverage>
+        <report>
+            <text outputFile="tests/result/coverage.txt" />
+        </report>
+    </coverage>
+    <source>
+        <include>
             <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </source>
 </phpunit>
