@@ -23,6 +23,10 @@ Factura Pago Contado (Tests\FacturaPagoContado)
  [x] Generar factura
  [x] Send to sunat
 
+Factura Pago Credito (Tests\FacturaPagoCredito)
+ [x] Generar factura
+ [x] Send to sunat
+
 Input Validator (Tests\InputValidator)
  [x] Validate base
 
@@ -48,6 +52,14 @@ Qr (Tests\Qr)
 
 Repository (Tests\Repository)
  [x] Gdr info
+
+Sunat Gateway (Tests\SunatGateway)
+ [x] Send boleta case 1
+ [x] Send credit note case 1
+ [x] Send debit note case 1
+ [x] Send resumen diario
+ [x] Get resumen diario status
+ [x] Get ticket
 
 Xml DSig (Tests\XmlDSig)
  [x] True is true
