@@ -23,10 +23,6 @@ Factura Pago Contado (Tests\FacturaPagoContado)
  [x] Generar factura
  [x] Send to sunat
 
-Factura Pago Credito (Tests\FacturaPagoCredito)
- [x] Generar factura
- [x] Send to sunat
-
 Input Validator (Tests\InputValidator)
  [x] Validate base
 

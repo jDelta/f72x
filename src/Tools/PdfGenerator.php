@@ -19,7 +19,6 @@ use F72X\Company;
 use F72X\Repository;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
-use Twig_Extensions_Extension_Intl;
 use Twig_Extension_Escaper;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -99,45 +98,45 @@ class PdfGenerator
             $formOfPaymentSrt = "CRÉDITO";
         }
         $data = [
-            'companyName'           => Company::getCompanyName(),
-            'companyRuc'           => Company::getRUC(),
-            'companyAddress'       => Company::getAddress(),
-            'companyCity'          => Company::getCity(),
-            'edocHeaderContent'    => Company::getEdocHeaderContent(),
-            'edocFooterContent'    => Company::getEdocFooterContent(),
-            'documentSeries'       => $inv->getDocumentSeries(),
-            'documentNumber'       => $inv->getDocumentNumber(),
+            'companyName' => Company::getCompanyName(),
+            'companyRuc' => Company::getRUC(),
+            'companyAddress' => Company::getAddress(),
+            'companyCity' => Company::getCity(),
+            'edocHeaderContent' => Company::getEdocHeaderContent(),
+            'edocFooterContent' => Company::getEdocFooterContent(),
+            'documentSeries' => $inv->getDocumentSeries(),
+            'documentNumber' => $inv->getDocumentNumber(),
             'officialDocumentName' => $inv->getOfficialDocumentName(),
-            'currency'             => $currency,
-            'customerRegName'      => $inv->getCustomerRegName(),
-            'customerDocNumber'    => $inv->getCustomerDocNumber(),
-            'customerAddress'      => $inv->getCustomerAddress(),
-            'issueDate'            => $inv->getIssueDate()->format('d-m-Y'),
-            'dueDate'              => $dueDate ? $dueDate->format('d-m-Y') : '',
-            'igvPercent'           => SunatVars::IGV_PERCENT,
-            'logo'                 => LogoMgr::getLogoString(),
-            'qr'                   => QrGenerator::getQrString($inv), // QR Code
-            'taxableOperations'    => $inv->getTotalTaxableOperations(),    // Total operaciones gravadas
-            'freeOperations'       => $inv->getTotalFreeOperations(),       // Total operaciones gratuitas
+            'currency' => $currency,
+            'customerRegName' => $inv->getCustomerRegName(),
+            'customerDocNumber' => $inv->getCustomerDocNumber(),
+            'customerAddress' => $inv->getCustomerAddress(),
+            'issueDate' => $inv->getIssueDate()->format('d-m-Y'),
+            'dueDate' => $dueDate ? $dueDate->format('d-m-Y') : '',
+            'igvPercent' => SunatVars::IGV_PERCENT,
+            'logo' => LogoMgr::getLogoString(),
+            'qr' => QrGenerator::getQrString($inv), // QR Code
+            'taxableOperations' => $inv->getTotalTaxableOperations(),    // Total operaciones gravadas
+            'freeOperations' => $inv->getTotalFreeOperations(),       // Total operaciones gratuitas
             'unaffectedOperations' => $inv->getTotalUnaffectedOperations(), // Total operaciones inafectas
-            'exemptedOperations'   => $inv->getTotalExemptedOperations(),   // Total operaciones exoneradas
-            'totalAllowances'      => $inv->getTotalAllowances(),           // Total operaciones exoneradas
-            'igvAmount'            => $inv->getIGV(),                       // IGV
-            'payableAmount'        => $payableAmount,                       // Total a pagar
-            'formOfPaymentStr'     => $formOfPaymentSrt,             // Forma de pago
-            'pendingAmount'        => $inv->getPendingAmount(),             // Forma de pago
-            'payableInWords'       => $payableInWords,                      // Monto en palabras
-            'items'                => self::getDocumentDataItems($inv),     // Items
-            'installments'         => self::getDocumentInstallments($inv),              // Cuotas
+            'exemptedOperations' => $inv->getTotalExemptedOperations(),   // Total operaciones exoneradas
+            'totalAllowances' => $inv->getTotalAllowances(),           // Total operaciones exoneradas
+            'igvAmount' => $inv->getIGV(),                       // IGV
+            'payableAmount' => $payableAmount,                       // Total a pagar
+            'formOfPaymentStr' => $formOfPaymentSrt,             // Forma de pago
+            'pendingAmount' => $inv->getPendingAmount(),             // Forma de pago
+            'payableInWords' => $payableInWords,                      // Monto en palabras
+            'items' => self::getDocumentDataItems($inv),     // Items
+            'installments' => self::getDocumentInstallments($inv),              // Cuotas
         ];
         // For credit and debit notes
         if (in_array($inv->getDocumentType(), [Catalogo::DOCTYPE_NOTA_CREDITO, Catalogo::DOCTYPE_NOTA_DEBITO])) {
             $noteData = [
-                'noteType'                    => $inv->getNoteType(),
-                'discrepancyResponseReason'   => $inv->getDiscrepancyResponseReason(),
-                'affectedDocumentId'          => $inv->getNoteAffectedDocId(),
+                'noteType' => $inv->getNoteType(),
+                'discrepancyResponseReason' => $inv->getDiscrepancyResponseReason(),
+                'affectedDocumentId' => $inv->getNoteAffectedDocId(),
                 'affectedDocumentOficialName' => Catalogo::getOfficialDocumentName($inv->getNoteAffectedDocType()),
-                'note'                        => $inv->getNoteDescription()
+                'note' => $inv->getNoteDescription()
             ];
             return array_merge($data, $noteData);
         }
@@ -152,12 +151,12 @@ class PdfGenerator
         $items2 = [];
         for ($i = 0; $i < $ln; $i++) {
             $items2[] = [
-                'productCode'       => $Items->getProductCode($i),
-                'quantity'          => $Items->getQunatity($i),
-                'unitName'          => Catalogo::getUnitName($Items->getUnitCode($i)),
+                'productCode' => $Items->getProductCode($i),
+                'quantity' => $Items->getQunatity($i),
+                'unitName' => Catalogo::getUnitName($Items->getUnitCode($i)),
                 'unitBillableValue' => $Items->getUnitBillableValue($i),
                 'itemPayableAmount' => $Items->getPayableAmount($i),
-                'description'       => $Items->getDescription($i)
+                'description' => $Items->getDescription($i)
             ];
         }
         return $items2;
@@ -168,24 +167,19 @@ class PdfGenerator
         $out = [];
         foreach ($installments as $installment) {
             $out[] = [
-                'amount'          => $installment->getAmmount(),
-                'paymentDueDate'  => $installment->getPaymentDueDate()->format('d-m-Y'),
+                'amount' => $installment->getAmmount(),
+                'paymentDueDate' => $installment->getPaymentDueDate()->format('d-m-Y'),
             ];
         }
         return $out;
     }
     private static function getRenderer()
     {
-        $loader = new Twig_Loader_Filesystem();
+        $loader = new \Twig\Loader\FilesystemLoader();
         // Custom
         $loader->addPath(Company::getPdfTemplatesPath());
         // Defaults
         $loader->addPath(F72X::getDefaultPdfTemplatesPath());
-        $view = new Twig_Environment($loader, ['cache' => false]);
-        // I18n ext
-        $view->addExtension(new Twig_Extensions_Extension_Intl());
-        // Scape html ext
-        $view->addExtension(new Twig_Extension_Escaper('html'));
-        return $view;
+        return new \Twig\Environment($loader, ['cache' => false]);
     }
 }
