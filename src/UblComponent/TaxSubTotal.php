@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -13,7 +13,8 @@ namespace F72X\UblComponent;
 use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
-class TaxSubTotal extends BaseComponent {
+class TaxSubTotal extends BaseComponent
+{
 
     const DECIMALS = 2;
 
@@ -25,19 +26,20 @@ class TaxSubTotal extends BaseComponent {
     protected $TaxCategory;
     protected $validations = ['currencyID', 'TaxableAmount', 'TaxAmount', 'TaxCategory'];
 
-    function xmlSerialize(Writer $writer) {
+    function xmlSerialize(Writer $writer): void
+    {
         $this->validate();
 
         $writer->write([
             [
-                'name'  => SchemaNS::CBC . 'TaxableAmount',
+                'name' => SchemaNS::CBC . 'TaxableAmount',
                 'value' => Operations::formatAmount($this->TaxableAmount, self::DECIMALS),
                 'attributes' => [
                     'currencyID' => $this->currencyID
                 ]
             ],
             [
-                'name'  => SchemaNS::CBC . 'TaxAmount',
+                'name' => SchemaNS::CBC . 'TaxAmount',
                 'value' => Operations::formatAmount($this->TaxAmount, self::DECIMALS),
                 'attributes' => [
                     'currencyID' => $this->currencyID
@@ -47,38 +49,46 @@ class TaxSubTotal extends BaseComponent {
         ]);
     }
 
-    public function getTaxableAmount() {
+    public function getTaxableAmount()
+    {
         return $this->TaxableAmount;
     }
 
-    public function setTaxableAmount($TaxableAmount) {
+    public function setTaxableAmount($TaxableAmount)
+    {
         $this->TaxableAmount = $TaxableAmount;
         return $this;
     }
 
-    public function getTaxAmount() {
+    public function getTaxAmount()
+    {
         return $this->TaxAmount;
     }
 
-    public function setTaxAmount($TaxAmount) {
+    public function setTaxAmount($TaxAmount)
+    {
         $this->TaxAmount = $TaxAmount;
         return $this;
     }
 
-    public function getCurrencyID() {
+    public function getCurrencyID()
+    {
         return $this->currencyID;
     }
 
-    public function setCurrencyID($currencyID) {
+    public function setCurrencyID($currencyID)
+    {
         $this->currencyID = $currencyID;
         return $this;
     }
 
-    public function getTaxCategory() {
+    public function getTaxCategory()
+    {
         return $this->TaxCategory;
     }
 
-    public function setTaxCategory($TaxCategory) {
+    public function setTaxCategory($TaxCategory)
+    {
         $this->TaxCategory = $TaxCategory;
         return $this;
     }

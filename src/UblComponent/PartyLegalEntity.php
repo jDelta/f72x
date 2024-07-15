@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -13,14 +13,16 @@ namespace F72X\UblComponent;
 use Sabre\Xml\Writer;
 use Sabre\Xml\Element\Cdata;
 
-class PartyLegalEntity extends BaseComponent {
+class PartyLegalEntity extends BaseComponent
+{
 
     protected $RegistrationName;
 
     /** @var RegistrationAddress */
     protected $RegistrationAddress;
-    
-    function xmlSerialize(Writer $writer) {
+
+    function xmlSerialize(Writer $writer): void
+    {
         $writer->write([
             SchemaNS::CBC . 'RegistrationName' => new Cdata($this->RegistrationName)
         ]);
@@ -31,20 +33,24 @@ class PartyLegalEntity extends BaseComponent {
         }
     }
 
-    public function getRegistrationName() {
+    public function getRegistrationName()
+    {
         return $this->RegistrationName;
     }
 
-    public function setRegistrationName($RegistrationName) {
+    public function setRegistrationName($RegistrationName)
+    {
         $this->RegistrationName = $RegistrationName;
         return $this;
     }
 
-    public function getRegistrationAddress() {
+    public function getRegistrationAddress()
+    {
         return $this->RegistrationAddress;
     }
 
-    public function setRegistrationAddress(RegistrationAddress $RegistrationAddress) {
+    public function setRegistrationAddress(RegistrationAddress $RegistrationAddress)
+    {
         $this->RegistrationAddress = $RegistrationAddress;
         return $this;
     }

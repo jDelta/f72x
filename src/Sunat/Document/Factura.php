@@ -15,27 +15,29 @@ use F72X\Tools\TemplateMgr;
 use F72X\UblComponent\SchemaNS;
 use Sabre\Xml\Writer;
 
-class Factura extends SunatInvoice {
+class Factura extends SunatInvoice
+{
 
     protected $UBLVersionID = '2.1';
     protected $CustomizationID = '2.0';
 
-    public function xmlSerialize(Writer $writer) {
-        $dataMap     = $this->getDataMap();
-        $companyRUC  = Company::getRUC();
+    public function xmlSerialize(Writer $writer): void
+    {
+        $dataMap = $this->getDataMap();
+        $companyRUC = Company::getRUC();
         $companyName = Company::getCompanyName();
         // SchemaNS::EXT . 'UBLExtensions'
         $UBLExtensions = TemplateMgr::getTpl('UBLExtensions.xml');
-        $Signature     = TemplateMgr::getTpl('Signature.xml', [
-                    'ruc'         => $companyRUC,
-                    'companyName' => $companyName
+        $Signature = TemplateMgr::getTpl('Signature.xml', [
+            'ruc' => $companyRUC,
+            'companyName' => $companyName
         ]);
         $this->writeLineJump($writer);
         $writer->writeRaw($UBLExtensions);
 
         $writer->write([
-            SchemaNS::CBC . 'UBLVersionID'         => $this->UBLVersionID,
-            SchemaNS::CBC . 'CustomizationID'      => $this->CustomizationID,
+            SchemaNS::CBC . 'UBLVersionID' => $this->UBLVersionID,
+            SchemaNS::CBC . 'CustomizationID' => $this->CustomizationID,
             [
                 'name' => SchemaNS::CBC . 'ProfileID',
                 'value' => $this->ProfileID,
@@ -60,11 +62,11 @@ class Factura extends SunatInvoice {
                 'value' => $this->InvoiceTypeCode,
                 'attributes' => [
                     'listAgencyName' => 'PE:SUNAT',
-                    'listID'         => $this->ProfileID,
-                    'listName'       => 'Tipo de Documento',
-                    'listSchemeURI'  => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51',
-                    'listURI'        => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01',
-                    'name'           => 'Tipo de Operacion'
+                    'listID' => $this->ProfileID,
+                    'listName' => 'Tipo de Documento',
+                    'listSchemeURI' => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo51',
+                    'listURI' => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo01',
+                    'name' => 'Tipo de Operacion'
                 ]
             ]
         ]);
@@ -76,12 +78,12 @@ class Factura extends SunatInvoice {
 
         $writer->write([
             [
-                'name'  => SchemaNS::CBC . 'DocumentCurrencyCode',
+                'name' => SchemaNS::CBC . 'DocumentCurrencyCode',
                 'value' => $this->DocumentCurrencyCode,
                 'attributes' => [
-                    'listID'            => 'ISO 4217 Alpha',
-                    'listName'          => 'Currency',
-                    'listAgencyName'    => 'United Nations Economic Commission for Europe'
+                    'listID' => 'ISO 4217 Alpha',
+                    'listName' => 'Currency',
+                    'listAgencyName' => 'United Nations Economic Commission for Europe'
                 ]
             ],
             SchemaNS::CBC . 'LineCountNumeric' => $this->LineCountNumeric
@@ -104,8 +106,8 @@ class Factura extends SunatInvoice {
         $writer->writeRaw($Signature);
         // cac:AccountingSupplierParty/AccountingCustomerParty
         $writer->write([
-            SchemaNS::CAC . 'AccountingSupplierParty'   => $this->AccountingSupplierParty,
-            SchemaNS::CAC . 'AccountingCustomerParty'   => $this->AccountingCustomerParty
+            SchemaNS::CAC . 'AccountingSupplierParty' => $this->AccountingSupplierParty,
+            SchemaNS::CAC . 'AccountingCustomerParty' => $this->AccountingCustomerParty
         ]);
         // Cargos y descuentos
         foreach ($this->AllowanceCharges as $AllowanceCharge) {

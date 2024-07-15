@@ -22,13 +22,13 @@ class PaymentTerms extends BaseComponent
     protected $PaymentDueDate;
     public function __construct($ID, $PaymentMeansID)
     {
-        $this->ID             = $ID;
+        $this->ID = $ID;
         $this->PaymentMeansID = $PaymentMeansID;
     }
-    function xmlSerialize(Writer $writer)
+    function xmlSerialize(Writer $writer): void
     {
         $writer->write([
-            SchemaNS::CBC . 'ID'             => $this->ID,
+            SchemaNS::CBC . 'ID' => $this->ID,
             SchemaNS::CBC . 'PaymentMeansID' => $this->PaymentMeansID
         ]);
         if ($this->Amount) {

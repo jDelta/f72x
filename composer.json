@@ -27,7 +27,7 @@
     ],
     "require": {
         "php": ">=5.5",
-        "sabre/xml": "^1.5",
+        "sabre/xml": "^4.0",
         "greenter/xmldsig": "^5.0",
         "twig/twig": "^1.35",
         "twig/extensions": "^1.5",

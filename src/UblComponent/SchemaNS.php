@@ -4,13 +4,14 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
 namespace F72X\UblComponent;
 
-class SchemaNS {
+class SchemaNS
+{
 
     const _ROOT = "{urn:oasis:names:specification:ubl:schema:xsd:Invoice-2}";
     const CAC = "{urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2}";

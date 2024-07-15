@@ -4,15 +4,17 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
 namespace F72X\UblComponent;
 
+use Sabre\Xml\Writer;
 use DateTime;
 
-class CreditNote extends BaseComponent {
+class CreditNote extends BaseComponent
+{
 
     /** @var UBLExtensions */
     protected $UBLExtensions;
@@ -54,151 +56,186 @@ class CreditNote extends BaseComponent {
 
     /** @var CreditNoteLine[] */
     protected $CreditNoteLines = [];
-
-    public function getUBLExtensions() {
+    public function xmlSerialize(Writer $writer): void
+    {
+        // Este documento no se serializa, pero usa metodos de la clase BaseComponent
+    }
+    public function getUBLExtensions()
+    {
         return $this->UBLExtensions;
     }
 
-    public function setUBLExtensions($UBLExtensions) {
+    public function setUBLExtensions($UBLExtensions)
+    {
         $this->UBLExtensions = $UBLExtensions;
         return $this;
     }
 
-    public function getProfileID() {
+    public function getProfileID()
+    {
         return $this->ProfileID;
     }
 
-    public function setProfileID($ProfileID) {
+    public function setProfileID($ProfileID)
+    {
         $this->ProfileID = $ProfileID;
         return $this;
     }
 
-    public function getID() {
+    public function getID()
+    {
         return $this->ID;
     }
 
-    public function setID($ID) {
+    public function setID($ID)
+    {
         $this->ID = $ID;
         return $this;
     }
 
-    public function getIssueDate() {
+    public function getIssueDate()
+    {
         return $this->IssueDate;
     }
 
-    public function setIssueDate(DateTime $IssueDate) {
+    public function setIssueDate(DateTime $IssueDate)
+    {
         $this->IssueDate = $IssueDate;
     }
 
-    public function getNotes() {
+    public function getNotes()
+    {
         return $this->Notes;
     }
 
-    public function setNotes($Notes) {
+    public function setNotes($Notes)
+    {
         $this->Notes = $Notes;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param Note $Note
      * @return $this
      */
-    public function addNote(Note $Note) {
+    public function addNote(Note $Note)
+    {
         $this->Notes[] = $Note;
         return $this;
     }
 
-    public function getDocumentCurrencyCode() {
+    public function getDocumentCurrencyCode()
+    {
         return $this->DocumentCurrencyCode;
     }
 
-    public function setDocumentCurrencyCode($DocumentCurrencyCode) {
+    public function setDocumentCurrencyCode($DocumentCurrencyCode)
+    {
         $this->DocumentCurrencyCode = $DocumentCurrencyCode;
         return $this;
     }
 
-    public function getDiscrepancyResponse() {
+    public function getDiscrepancyResponse()
+    {
         return $this->DiscrepancyResponse;
     }
 
-    public function setDiscrepancyResponse(DiscrepancyResponse $DiscrepancyResponse) {
+    public function setDiscrepancyResponse(DiscrepancyResponse $DiscrepancyResponse)
+    {
         $this->DiscrepancyResponse = $DiscrepancyResponse;
         return $this;
     }
 
-    public function getBillingReference() {
+    public function getBillingReference()
+    {
         return $this->BillingReference;
     }
 
-    public function setBillingReference(BillingReference $BillingReference) {
+    public function setBillingReference(BillingReference $BillingReference)
+    {
         $this->BillingReference = $BillingReference;
         return $this;
     }
 
-    public function getSignature() {
+    public function getSignature()
+    {
         return $this->Signature;
     }
 
-    public function setSignature(Signature $Signature) {
+    public function setSignature(Signature $Signature)
+    {
         $this->Signature = $Signature;
         return $this;
     }
 
-    public function getAccountingSupplierParty() {
+    public function getAccountingSupplierParty()
+    {
         return $this->AccountingSupplierParty;
     }
 
-    public function setAccountingSupplierParty(AccountingSupplierParty $AccountingSupplierParty) {
+    public function setAccountingSupplierParty(AccountingSupplierParty $AccountingSupplierParty)
+    {
         $this->AccountingSupplierParty = $AccountingSupplierParty;
         return $this;
     }
 
-    public function getAccountingCustomerParty() {
+    public function getAccountingCustomerParty()
+    {
         return $this->AccountingCustomerParty;
     }
 
-    public function setAccountingCustomerParty(AccountingCustomerParty $AccountingCustomerParty) {
+    public function setAccountingCustomerParty(AccountingCustomerParty $AccountingCustomerParty)
+    {
         $this->AccountingCustomerParty = $AccountingCustomerParty;
         return $this;
     }
 
-    public function getDespatchDocumentReference() {
+    public function getDespatchDocumentReference()
+    {
         return $this->DespatchDocumentReference;
     }
 
-    public function setDespatchDocumentReference(DespatchDocumentReference $DespatchDocumentReference) {
+    public function setDespatchDocumentReference(DespatchDocumentReference $DespatchDocumentReference)
+    {
         $this->DespatchDocumentReference = $DespatchDocumentReference;
     }
 
-    public function getTaxTotal() {
+    public function getTaxTotal()
+    {
         return $this->TaxTotal;
     }
 
-    public function setTaxTotal(TaxTotal $TaxTotal) {
+    public function setTaxTotal(TaxTotal $TaxTotal)
+    {
         $this->TaxTotal = $TaxTotal;
         return $this;
     }
 
-    public function getLegalMonetaryTotal() {
+    public function getLegalMonetaryTotal()
+    {
         return $this->LegalMonetaryTotal;
     }
 
-    public function setLegalMonetaryTotal(LegalMonetaryTotal $LegalMonetaryTotal) {
+    public function setLegalMonetaryTotal(LegalMonetaryTotal $LegalMonetaryTotal)
+    {
         $this->LegalMonetaryTotal = $LegalMonetaryTotal;
         return $this;
     }
 
-    public function getCreditNoteLines() {
+    public function getCreditNoteLines()
+    {
         return $this->CreditNoteLines;
     }
 
-    public function setCreditNoteLines($CreditNoteLines) {
+    public function setCreditNoteLines($CreditNoteLines)
+    {
         $this->CreditNoteLines = $CreditNoteLines;
         return $this;
     }
 
-    public function addCreditNoteLine(CreditNoteLine $InvoiceLine) {
+    public function addCreditNoteLine(CreditNoteLine $InvoiceLine)
+    {
         $this->CreditNoteLines[] = $InvoiceLine;
         return $this;
     }

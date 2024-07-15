@@ -12,7 +12,8 @@ namespace F72X\UblComponent;
 
 use Sabre\Xml\Writer;
 
-class Amount extends BaseComponent {
+class Amount extends BaseComponent
+{
 
     /** @var string */
     protected $CurrencyID;
@@ -20,26 +21,30 @@ class Amount extends BaseComponent {
     /** @var decimal */
     protected $Value;
 
-    public function __construct($Value, $CurrencyID) {
+    public function __construct($Value, $CurrencyID)
+    {
         $this->Value = $Value;
         $this->CurrencyID = $CurrencyID;
     }
 
-    public function xmlSerialize(Writer $writer) {
+    public function xmlSerialize(Writer $writer): void
+    {
         $writer->write([
-            'name'  => SchemaNS::CBC . 'Amount',
+            'name' => SchemaNS::CBC . 'Amount',
             'value' => $this->Value,
             'attributes' => [
-                'currencyID'  => $this->CurrencyID
+                'currencyID' => $this->CurrencyID
             ]
         ]);
     }
 
-    public function getCurrencyID() {
+    public function getCurrencyID()
+    {
         return $this->CurrencyID;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->Value;
     }
 

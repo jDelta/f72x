@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -12,7 +12,8 @@ namespace F72X\UblComponent;
 
 use Sabre\Xml\Writer;
 
-class Note extends BaseComponent {
+class Note extends BaseComponent
+{
 
     /** @var string */
     protected $languageLocaleID;
@@ -20,34 +21,40 @@ class Note extends BaseComponent {
     /** @var string */
     protected $Value;
 
-    public function __construct($Value) {
+    public function __construct($Value)
+    {
         $this->Value = $Value;
     }
 
-    public function xmlSerialize(Writer $writer) {
+    public function xmlSerialize(Writer $writer): void
+    {
         $writer->write([
-            'name'  => SchemaNS::CBC . 'Note',
+            'name' => SchemaNS::CBC . 'Note',
             'value' => $this->Value,
             'attributes' => [
-                'languageLocaleID'  => $this->languageLocaleID
+                'languageLocaleID' => $this->languageLocaleID
             ]
         ]);
     }
 
-    public function getLanguageLocaleID() {
+    public function getLanguageLocaleID()
+    {
         return $this->languageLocaleID;
     }
 
-    public function setLanguageLocaleID($languageLocaleID) {
+    public function setLanguageLocaleID($languageLocaleID)
+    {
         $this->languageLocaleID = $languageLocaleID;
         return $this;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->Value;
     }
 
-    public function setValue($Value) {
+    public function setValue($Value)
+    {
         $this->Value = $Value;
         return $this;
     }

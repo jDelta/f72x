@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -13,7 +13,8 @@ namespace F72X\UblComponent;
 use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
-class CreditNoteLine extends BaseComponent {
+class CreditNoteLine extends BaseComponent
+{
 
     const DECIMALS = 2;
 
@@ -47,111 +48,130 @@ class CreditNoteLine extends BaseComponent {
         'Price'
     ];
 
-    function xmlSerialize(Writer $writer) {
+    function xmlSerialize(Writer $writer): void
+    {
         $this->validate();
         $writer->write([
             SchemaNS::CBC . 'ID' => $this->ID,
             [
-                'name'          => SchemaNS::CBC . 'CreditedQuantity',
-                'value'         => $this->CreditedQuantity,
-                'attributes'    => [
-                    'unitCode'                  => $this->unitCode,
-                    'unitCodeListID'            => 'UN/ECE rec 20',
-                    'unitCodeListAgencyName'    => 'United Nations Economic Commission for Europe'
+                'name' => SchemaNS::CBC . 'CreditedQuantity',
+                'value' => $this->CreditedQuantity,
+                'attributes' => [
+                    'unitCode' => $this->unitCode,
+                    'unitCodeListID' => 'UN/ECE rec 20',
+                    'unitCodeListAgencyName' => 'United Nations Economic Commission for Europe'
                 ]
             ],
             [
-                'name'          => SchemaNS::CBC . 'LineExtensionAmount',
-                'value'         => Operations::formatAmount($this->LineExtensionAmount, self::DECIMALS),
-                'attributes'    => [
+                'name' => SchemaNS::CBC . 'LineExtensionAmount',
+                'value' => Operations::formatAmount($this->LineExtensionAmount, self::DECIMALS),
+                'attributes' => [
                     'currencyID' => $this->currencyID
                 ]
             ],
             SchemaNS::CAC . 'PricingReference' => $this->PricingReference
         ]);
         $writer->write([
-            SchemaNS::CAC . 'TaxTotal'  => $this->TaxTotal,
-            SchemaNS::CAC . 'Item'      => $this->Item,
-            SchemaNS::CAC . 'Price'     => $this->Price
+            SchemaNS::CAC . 'TaxTotal' => $this->TaxTotal,
+            SchemaNS::CAC . 'Item' => $this->Item,
+            SchemaNS::CAC . 'Price' => $this->Price
         ]);
 
     }
 
-    public function getCurrencyID() {
+    public function getCurrencyID()
+    {
         return $this->currencyID;
     }
 
-    public function setCurrencyID($currencyID) {
+    public function setCurrencyID($currencyID)
+    {
         $this->currencyID = $currencyID;
         return $this;
     }
 
-    public function getID() {
+    public function getID()
+    {
         return $this->ID;
     }
 
-    public function setID($ID) {
+    public function setID($ID)
+    {
         $this->ID = $ID;
         return $this;
     }
-    public function getUnitCode() {
+    public function getUnitCode()
+    {
         return $this->unitCode;
     }
 
-    public function setUnitCode($unitCode) {
+    public function setUnitCode($unitCode)
+    {
         $this->unitCode = $unitCode;
         return $this;
     }
 
-    public function getCreditedQuantity() {
+    public function getCreditedQuantity()
+    {
         return $this->CreditedQuantity;
     }
 
-    public function setCreditedQuantity($CreditedQuantity) {
+    public function setCreditedQuantity($CreditedQuantity)
+    {
         $this->CreditedQuantity = $CreditedQuantity;
         return $this;
     }
 
-    public function getLineExtensionAmount() {
+    public function getLineExtensionAmount()
+    {
         return $this->LineExtensionAmount;
     }
 
-    public function setLineExtensionAmount($LineExtensionAmount) {
+    public function setLineExtensionAmount($LineExtensionAmount)
+    {
         $this->LineExtensionAmount = $LineExtensionAmount;
         return $this;
     }
-    public function getPricingReference() {
+    public function getPricingReference()
+    {
         return $this->PricingReference;
     }
 
-    public function setPricingReference(PricingReference $PricingReference) {
+    public function setPricingReference(PricingReference $PricingReference)
+    {
         $this->PricingReference = $PricingReference;
         return $this;
     }
 
-    public function getTaxTotal() {
+    public function getTaxTotal()
+    {
         return $this->TaxTotal;
     }
 
-    public function setTaxTotal(TaxTotal $TaxTotal) {
+    public function setTaxTotal(TaxTotal $TaxTotal)
+    {
         $this->TaxTotal = $TaxTotal;
         return $this;
     }
 
-    public function getItem() {
+    public function getItem()
+    {
         return $this->Item;
     }
 
-    public function setItem(Item $Item) {
+    public function setItem(Item $Item)
+    {
         $this->Item = $Item;
         return $this;
     }
 
-    public function getPrice() {
+    public function getPrice()
+    {
         return $this->Price;
     }
 
-    public function setPrice(Price $Price) {
+    public function setPrice(Price $Price)
+    {
         $this->Price = $Price;
         return $this;
     }

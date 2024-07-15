@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -12,7 +12,8 @@ namespace F72X\UblComponent;
 
 use Sabre\Xml\Writer;
 
-class SignatoryParty extends BaseComponent {
+class SignatoryParty extends BaseComponent
+{
 
     /** @var PartyIdentification */
     protected $PartyIdentification;
@@ -20,28 +21,33 @@ class SignatoryParty extends BaseComponent {
     /** @var PartyName */
     protected $PartyName;
 
-    function xmlSerialize(Writer $writer) {
+    function xmlSerialize(Writer $writer): void
+    {
         $me = $this;
         $writer->write([
-            SchemaNS::CAC . 'PartyIdentification'  => $me->PartyIdentification,
-            SchemaNS::CAC . 'PartyName'         => $me->PartyName
+            SchemaNS::CAC . 'PartyIdentification' => $me->PartyIdentification,
+            SchemaNS::CAC . 'PartyName' => $me->PartyName
         ]);
     }
 
-    public function getPartyIdentification() {
+    public function getPartyIdentification()
+    {
         return $this->PartyIdentification;
     }
 
-    public function setPartyIdentification(PartyIdentification $PartyIdentification) {
+    public function setPartyIdentification(PartyIdentification $PartyIdentification)
+    {
         $this->PartyIdentification = $PartyIdentification;
         return $this;
     }
 
-    public function getPartyName() {
+    public function getPartyName()
+    {
         return $this->PartyName;
     }
 
-    public function setPartyName(PartyName $PartyName) {
+    public function setPartyName(PartyName $PartyName)
+    {
         $this->PartyName = $PartyName;
         return $this;
     }

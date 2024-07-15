@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -12,7 +12,8 @@ namespace F72X\UblComponent;
 
 use DateTime;
 
-abstract class SummaryDocuments extends BaseComponent {
+abstract class SummaryDocuments extends BaseComponent
+{
 
     /** @var UBLExtensions */
     protected $UBLExtensions;
@@ -59,184 +60,223 @@ abstract class SummaryDocuments extends BaseComponent {
     /** @var InvoiceLine[] */
     protected $InvoiceLines = [];
 
-    public function getUBLExtensions() {
+    public function getUBLExtensions()
+    {
         return $this->UBLExtensions;
     }
 
-    public function setUBLExtensions($UBLExtensions) {
+    public function setUBLExtensions($UBLExtensions)
+    {
         $this->UBLExtensions = $UBLExtensions;
         return $this;
     }
 
-    public function getProfileID() {
+    public function getProfileID()
+    {
         return $this->ProfileID;
     }
 
-    public function setProfileID($ProfileID) {
+    public function setProfileID($ProfileID)
+    {
         $this->ProfileID = $ProfileID;
         return $this;
     }
 
-    public function getID() {
+    public function getID()
+    {
         return $this->ID;
     }
 
-    public function setID($ID) {
+    public function setID($ID)
+    {
         $this->ID = $ID;
         return $this;
     }
 
-    public function getIssueDate() {
+    public function getIssueDate()
+    {
         return $this->IssueDate;
     }
 
-    public function setIssueDate(DateTime $IssueDate) {
+    public function setIssueDate(DateTime $IssueDate)
+    {
         $this->IssueDate = $IssueDate;
     }
 
-    public function getDueDate() {
+    public function getDueDate()
+    {
         return $this->DueDate;
     }
 
-    public function setDueDate(DateTime $DueDate) {
+    public function setDueDate(DateTime $DueDate)
+    {
         $this->DueDate = $DueDate;
     }
 
-    public function getInvoiceTypeCode() {
+    public function getInvoiceTypeCode()
+    {
         return $this->InvoiceTypeCode;
     }
 
-    public function setInvoiceTypeCode($InvoiceTypeCode) {
+    public function setInvoiceTypeCode($InvoiceTypeCode)
+    {
         $this->InvoiceTypeCode = $InvoiceTypeCode;
         return $this;
     }
 
-    public function getNotes() {
+    public function getNotes()
+    {
         return $this->Notes;
     }
 
-    public function setNotes($Notes) {
+    public function setNotes($Notes)
+    {
         $this->Notes = $Notes;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param Note $Note
      * @return $this
      */
-    public function addNote(Note $Note) {
+    public function addNote(Note $Note)
+    {
         $this->Notes[] = $Note;
         return $this;
     }
 
-    public function getDocumentCurrencyCode() {
+    public function getDocumentCurrencyCode()
+    {
         return $this->DocumentCurrencyCode;
     }
 
-    public function setDocumentCurrencyCode($DocumentCurrencyCode) {
+    public function setDocumentCurrencyCode($DocumentCurrencyCode)
+    {
         $this->DocumentCurrencyCode = $DocumentCurrencyCode;
         return $this;
     }
 
-    public function getLineCountNumeric() {
+    public function getLineCountNumeric()
+    {
         return $this->LineCountNumeric;
     }
 
-    public function setLineCountNumeric($LineCountNumeric) {
+    public function setLineCountNumeric($LineCountNumeric)
+    {
         $this->LineCountNumeric = $LineCountNumeric;
     }
 
-    public function getOrderReference() {
+    public function getOrderReference()
+    {
         return $this->OrderReference;
     }
 
-    public function setOrderReference(OrderReference $OrderReference) {
+    public function setOrderReference(OrderReference $OrderReference)
+    {
         $this->OrderReference = $OrderReference;
     }
 
-    public function getSignature() {
+    public function getSignature()
+    {
         return $this->Signature;
     }
 
-    public function setSignature(Signature $Signature) {
+    public function setSignature(Signature $Signature)
+    {
         $this->Signature = $Signature;
         return $this;
     }
 
-    public function getAccountingSupplierParty() {
+    public function getAccountingSupplierParty()
+    {
         return $this->AccountingSupplierParty;
     }
 
-    public function setAccountingSupplierParty(AccountingSupplierParty $AccountingSupplierParty) {
+    public function setAccountingSupplierParty(AccountingSupplierParty $AccountingSupplierParty)
+    {
         $this->AccountingSupplierParty = $AccountingSupplierParty;
         return $this;
     }
 
-    public function getAccountingCustomerParty() {
+    public function getAccountingCustomerParty()
+    {
         return $this->AccountingCustomerParty;
     }
 
-    public function setAccountingCustomerParty(AccountingCustomerParty $AccountingCustomerParty) {
+    public function setAccountingCustomerParty(AccountingCustomerParty $AccountingCustomerParty)
+    {
         $this->AccountingCustomerParty = $AccountingCustomerParty;
         return $this;
     }
 
-    public function getDespatchDocumentReference() {
+    public function getDespatchDocumentReference()
+    {
         return $this->DespatchDocumentReference;
     }
 
-    public function setDespatchDocumentReference(DespatchDocumentReference $DespatchDocumentReference) {
+    public function setDespatchDocumentReference(DespatchDocumentReference $DespatchDocumentReference)
+    {
         $this->DespatchDocumentReference = $DespatchDocumentReference;
     }
 
-    public function getAllowanceCharges() {
+    public function getAllowanceCharges()
+    {
         return $this->AllowanceCharges;
     }
 
-    public function setAllowanceCharges(array $AllowanceCharges) {
+    public function setAllowanceCharges(array $AllowanceCharges)
+    {
         $this->AllowanceCharges = $AllowanceCharges;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param AllowanceCharge $AllowanceCharge
      * @return $this
      */
-    public function addAllowanceCharge(AllowanceCharge $AllowanceCharge) {
+    public function addAllowanceCharge(AllowanceCharge $AllowanceCharge)
+    {
         $this->AllowanceCharges[] = $AllowanceCharge;
         return $this;
     }
 
-    public function getTaxTotal() {
+    public function getTaxTotal()
+    {
         return $this->TaxTotal;
     }
 
-    public function setTaxTotal(TaxTotal $TaxTotal) {
+    public function setTaxTotal(TaxTotal $TaxTotal)
+    {
         $this->TaxTotal = $TaxTotal;
         return $this;
     }
 
-    public function getLegalMonetaryTotal() {
+    public function getLegalMonetaryTotal()
+    {
         return $this->LegalMonetaryTotal;
     }
 
-    public function setLegalMonetaryTotal(LegalMonetaryTotal $LegalMonetaryTotal) {
+    public function setLegalMonetaryTotal(LegalMonetaryTotal $LegalMonetaryTotal)
+    {
         $this->LegalMonetaryTotal = $LegalMonetaryTotal;
         return $this;
     }
 
-    public function getInvoiceLines() {
+    public function getInvoiceLines()
+    {
         return $this->InvoiceLines;
     }
 
-    public function setInvoiceLines($InvoiceLines) {
+    public function setInvoiceLines($InvoiceLines)
+    {
         $this->InvoiceLines = $InvoiceLines;
         return $this;
     }
 
-    public function addInvoiceLine(InvoiceLine $InvoiceLine) {
+    public function addInvoiceLine(InvoiceLine $InvoiceLine)
+    {
         $this->InvoiceLines[] = $InvoiceLine;
         return $this;
     }

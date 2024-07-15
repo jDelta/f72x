@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -13,7 +13,8 @@ namespace F72X\UblComponent;
 use Sabre\Xml\Writer;
 use Sabre\Xml\Element\Cdata;
 
-class PartyTaxScheme extends BaseComponent {
+class PartyTaxScheme extends BaseComponent
+{
 
     protected $RegistrationName;
     protected $CompanyID;
@@ -25,17 +26,18 @@ class PartyTaxScheme extends BaseComponent {
     /** @var TaxScheme */
     protected $TaxScheme;
 
-    function xmlSerialize(Writer $writer) {
+    function xmlSerialize(Writer $writer): void
+    {
         $writer->write([
-            SchemaNS::CBC . 'RegistrationName'  => new Cdata($this->RegistrationName),
+            SchemaNS::CBC . 'RegistrationName' => new Cdata($this->RegistrationName ?? ''),
             [
-                'name'          => SchemaNS::CBC . 'CompanyID',
-                'value'         => $this->CompanyID,
-                'attributes'    => [
-                    'schemeID'          => $this->schemeID,
-                    'schemeName'        => 'SUNAT:Identificador de Documento de Identidad',
-                    'schemeAgencyName'  => 'PE:SUNAT',
-                    'schemeURI'         => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06'
+                'name' => SchemaNS::CBC . 'CompanyID',
+                'value' => $this->CompanyID,
+                'attributes' => [
+                    'schemeID' => $this->schemeID ?? '',
+                    'schemeName' => 'SUNAT:Identificador de Documento de Identidad',
+                    'schemeAgencyName' => 'PE:SUNAT',
+                    'schemeURI' => 'urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06'
                 ]
             ]
         ]);
@@ -45,50 +47,60 @@ class PartyTaxScheme extends BaseComponent {
             ]);
         }
         $writer->write([
-            SchemaNS::CAC . 'TaxScheme'         => $this->TaxScheme
+            SchemaNS::CAC . 'TaxScheme' => $this->TaxScheme
         ]);
     }
 
-    public function getRegistrationName() {
+    public function getRegistrationName()
+    {
         return $this->RegistrationName;
     }
 
-    public function setRegistrationName($RegistrationName) {
+    public function setRegistrationName($RegistrationName)
+    {
         $this->RegistrationName = $RegistrationName;
         return $this;
     }
 
-    public function getCompanyID() {
+    public function getCompanyID()
+    {
         return $this->CompanyID;
     }
 
-    public function setCompanyID($CompanyID) {
+    public function setCompanyID($CompanyID)
+    {
         $this->CompanyID = $CompanyID;
         return $this;
     }
-    public function getSchemeID() {
+    public function getSchemeID()
+    {
         return $this->schemeID;
     }
 
-    public function setSchemeID($schemeID) {
+    public function setSchemeID($schemeID)
+    {
         $this->schemeID = $schemeID;
         return $this;
     }
 
-    public function getRegistrationAddress() {
+    public function getRegistrationAddress()
+    {
         return $this->RegistrationAddress;
     }
 
-    public function setRegistrationAddress(RegistrationAddress $RegistrationAddress) {
+    public function setRegistrationAddress(RegistrationAddress $RegistrationAddress)
+    {
         $this->RegistrationAddress = $RegistrationAddress;
         return $this;
     }
 
-    public function getTaxScheme() {
+    public function getTaxScheme()
+    {
         return $this->TaxScheme;
     }
 
-    public function setTaxScheme(TaxScheme $TaxScheme) {
+    public function setTaxScheme(TaxScheme $TaxScheme)
+    {
         $this->TaxScheme = $TaxScheme;
         return $this;
     }

@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -12,7 +12,8 @@ namespace F72X\UblComponent;
 
 use Sabre\Xml\Writer;
 
-class Party extends BaseComponent {
+class Party extends BaseComponent
+{
 
     /** @var PartyIdentification */
     protected $PartyIdentification;
@@ -26,7 +27,8 @@ class Party extends BaseComponent {
     /** @var PartyLegalEntity */
     protected $PartyLegalEntity;
 
-    function xmlSerialize(Writer $writer) {
+    function xmlSerialize(Writer $writer): void
+    {
         if ($this->PartyIdentification) {
             $writer->write([
                 SchemaNS::CAC . 'PartyIdentification' => $this->PartyIdentification
@@ -49,38 +51,46 @@ class Party extends BaseComponent {
         }
     }
 
-    public function getPartyIdentification() {
+    public function getPartyIdentification()
+    {
         return $this->PartyIdentification;
     }
 
-    public function setPartyIdentification(PartyIdentification $PartyIdentification) {
+    public function setPartyIdentification(PartyIdentification $PartyIdentification)
+    {
         $this->PartyIdentification = $PartyIdentification;
         return $this;
     }
 
-    public function getPartyName() {
+    public function getPartyName()
+    {
         return $this->PartyName;
     }
 
-    public function setPartyName(PartyName $PartyName) {
+    public function setPartyName(PartyName $PartyName)
+    {
         $this->PartyName = $PartyName;
         return $this;
     }
 
-    public function getPartyTaxScheme() {
+    public function getPartyTaxScheme()
+    {
         return $this->PartyTaxScheme;
     }
 
-    public function setPartyTaxScheme($PartyTaxScheme) {
+    public function setPartyTaxScheme($PartyTaxScheme)
+    {
         $this->PartyTaxScheme = $PartyTaxScheme;
         return $this;
     }
 
-    public function getPartyLegalEntity() {
+    public function getPartyLegalEntity()
+    {
         return $this->PartyLegalEntity;
     }
 
-    public function setPartyLegalEntity($PartyLegalEntity) {
+    public function setPartyLegalEntity($PartyLegalEntity)
+    {
         $this->PartyLegalEntity = $PartyLegalEntity;
         return $this;
     }

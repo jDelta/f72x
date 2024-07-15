@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -13,14 +13,15 @@ namespace F72X\UblComponent;
 use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
-class AllowanceCharge extends BaseComponent {
+class AllowanceCharge extends BaseComponent
+{
 
     const DECIMALS = 2;
 
     protected $currencyID;
 
     /**
-     * 
+     *
      * @var string True|False
      * True: Para cargos
      * False: Para descuentos
@@ -52,11 +53,12 @@ class AllowanceCharge extends BaseComponent {
         'BaseAmount'
     ];
 
-    function xmlSerialize(Writer $writer) {
+    function xmlSerialize(Writer $writer): void
+    {
         $me = $this;
         $me->validate();
         $writer->write([
-            SchemaNS::CBC . 'ChargeIndicator'           => $me->ChargeIndicator,
+            SchemaNS::CBC . 'ChargeIndicator' => $me->ChargeIndicator,
             SchemaNS::CBC . 'AllowanceChargeReasonCode' => $me->AllowanceChargeReasonCode
         ]);
         if ($me->MultiplierFactorNumeric) {
@@ -82,63 +84,75 @@ class AllowanceCharge extends BaseComponent {
         ]);
     }
 
-    public function getCurrencyID() {
+    public function getCurrencyID()
+    {
         return $this->currencyID;
     }
 
-    public function setCurrencyID($currencyID) {
+    public function setCurrencyID($currencyID)
+    {
         $this->currencyID = $currencyID;
         return $this;
     }
 
-    public function getChargeIndicator() {
+    public function getChargeIndicator()
+    {
         return $this->ChargeIndicator;
     }
 
     /**
-     * 
+     *
      * @param string $ChargeIndicator True|False
      *     True: Para cargos
      *     False: Para descuentos
      * @return $this
      */
-    public function setChargeIndicator($ChargeIndicator) {
+    public function setChargeIndicator($ChargeIndicator)
+    {
         $this->ChargeIndicator = $ChargeIndicator;
         return $this;
     }
 
-    public function getAllowanceChargeReasonCode() {
+    public function getAllowanceChargeReasonCode()
+    {
         return $this->AllowanceChargeReasonCode;
     }
 
-    public function setAllowanceChargeReasonCode($AllowanceChargeReasonCode) {
+    public function setAllowanceChargeReasonCode($AllowanceChargeReasonCode)
+    {
         $this->AllowanceChargeReasonCode = $AllowanceChargeReasonCode;
         return $this;
     }
 
-    public function getMultiplierFactorNumeric() {
+    public function getMultiplierFactorNumeric()
+    {
         return $this->MultiplierFactorNumeric;
     }
 
-    public function setMultiplierFactorNumeric($MultiplierFactorNumeric) {
+    public function setMultiplierFactorNumeric($MultiplierFactorNumeric)
+    {
         $this->MultiplierFactorNumeric = $MultiplierFactorNumeric;
         return $this;
     }
 
-    public function getAmount() {
+    public function getAmount()
+    {
         return $this->Amount;
     }
 
-    public function setAmount($Amount) {
+    public function setAmount($Amount)
+    {
         $this->Amount = $Amount;
         return $this;
     }
 
-    public function getBaseAmount() {
+    public function getBaseAmount()
+    {
         return $this->BaseAmount;
     }
 
-    public function setBaseAmount($BaseAmount) {
+    public function setBaseAmount($BaseAmount)
+    {
         $this->BaseAmount = $BaseAmount;
         return $this;
     }

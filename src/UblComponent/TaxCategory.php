@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -13,7 +13,8 @@ namespace F72X\UblComponent;
 use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
-class TaxCategory extends BaseComponent {
+class TaxCategory extends BaseComponent
+{
 
     const DECIMALS = 2;
 
@@ -27,11 +28,12 @@ class TaxCategory extends BaseComponent {
     /** @var TaxScheme */
     protected $TaxScheme;
 
-    function xmlSerialize(Writer $writer) {
+    function xmlSerialize(Writer $writer): void
+    {
         $writer->write([
-            'name'          => SchemaNS::CBC . 'ID',
-            'value'         => $this->ID,
-            'attributes'    => $this->IDAttributes
+            'name' => SchemaNS::CBC . 'ID',
+            'value' => $this->ID,
+            'attributes' => $this->IDAttributes
         ]);
 
         if (!is_null($this->Name)) {
@@ -48,9 +50,9 @@ class TaxCategory extends BaseComponent {
 
         if (!is_null($this->TaxExemptionReasonCode)) {
             $writer->write([
-                'name'          => SchemaNS::CBC . 'TaxExemptionReasonCode',
-                'value'         => $this->TaxExemptionReasonCode,
-                'attributes'    => $this->TaxExemptionReasonCodeAttributes
+                'name' => SchemaNS::CBC . 'TaxExemptionReasonCode',
+                'value' => $this->TaxExemptionReasonCode,
+                'attributes' => $this->TaxExemptionReasonCodeAttributes
             ]);
         }
 
@@ -61,47 +63,57 @@ class TaxCategory extends BaseComponent {
         }
     }
 
-    public function getID() {
+    public function getID()
+    {
         return $this->ID;
     }
 
-    public function setID($ID) {
+    public function setID($ID)
+    {
         $this->ID = $ID;
         return $this;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->Name;
     }
 
-    public function setName($Name) {
+    public function setName($Name)
+    {
         $this->Name = $Name;
         return $this;
     }
 
-    public function getPercent() {
+    public function getPercent()
+    {
         return $this->Percent;
     }
 
-    public function setPercent($Percent) {
+    public function setPercent($Percent)
+    {
         $this->Percent = $Percent;
         return $this;
     }
 
-    public function getTaxExemptionReasonCode() {
+    public function getTaxExemptionReasonCode()
+    {
         return $this->TaxExemptionReasonCode;
     }
 
-    public function setTaxExemptionReasonCode($TaxExemptionReasonCode) {
+    public function setTaxExemptionReasonCode($TaxExemptionReasonCode)
+    {
         $this->TaxExemptionReasonCode = $TaxExemptionReasonCode;
         return $this;
     }
 
-    public function getTaxScheme() {
+    public function getTaxScheme()
+    {
         return $this->TaxScheme;
     }
 
-    public function setTaxScheme(TaxScheme $TaxScheme) {
+    public function setTaxScheme(TaxScheme $TaxScheme)
+    {
         $this->TaxScheme = $TaxScheme;
         return $this;
     }

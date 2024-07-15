@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -13,7 +13,8 @@ namespace F72X\UblComponent;
 use F72X\Sunat\Operations;
 use Sabre\Xml\Writer;
 
-class LegalMonetaryTotal extends BaseComponent {
+class LegalMonetaryTotal extends BaseComponent
+{
 
     const DECIMALS = 2;
 
@@ -29,16 +30,17 @@ class LegalMonetaryTotal extends BaseComponent {
         'AllowanceTotalAmount',
         'PayableAmount'
     ];
-    function xmlSerialize(Writer $writer) {
+    function xmlSerialize(Writer $writer): void
+    {
         $this->validate();
         $writer->write([
             [
-                'name'  => SchemaNS::CBC . 'LineExtensionAmount',
+                'name' => SchemaNS::CBC . 'LineExtensionAmount',
                 'value' => Operations::formatAmount($this->LineExtensionAmount, self::DECIMALS),
                 'attributes' => ['currencyID' => $this->currencyID]
             ],
             [
-                'name'  => SchemaNS::CBC . 'TaxInclusiveAmount',
+                'name' => SchemaNS::CBC . 'TaxInclusiveAmount',
                 'value' => Operations::formatAmount($this->TaxInclusiveAmount, self::DECIMALS),
                 'attributes' => ['currencyID' => $this->currencyID]
             ],
@@ -54,56 +56,68 @@ class LegalMonetaryTotal extends BaseComponent {
             ],
         ]);
     }
-    public function getCurrencyID() {
+    public function getCurrencyID()
+    {
         return $this->currencyID;
     }
 
-    public function setCurrencyID($currencyID) {
+    public function setCurrencyID($currencyID)
+    {
         $this->currencyID = $currencyID;
         return $this;
     }
 
-    public function getLineExtensionAmount() {
+    public function getLineExtensionAmount()
+    {
         return $this->LineExtensionAmount;
     }
 
-    public function setLineExtensionAmount($LineExtensionAmount) {
+    public function setLineExtensionAmount($LineExtensionAmount)
+    {
         $this->LineExtensionAmount = $LineExtensionAmount;
         return $this;
     }
 
-    public function getTaxInclusiveAmount() {
+    public function getTaxInclusiveAmount()
+    {
         return $this->TaxInclusiveAmount;
     }
 
-    public function setTaxInclusiveAmount($TaxInclusiveAmount) {
+    public function setTaxInclusiveAmount($TaxInclusiveAmount)
+    {
         $this->TaxInclusiveAmount = $TaxInclusiveAmount;
         return $this;
     }
 
-    public function getAllowanceTotalAmount() {
+    public function getAllowanceTotalAmount()
+    {
         return $this->AllowanceTotalAmount;
     }
 
-    public function setAllowanceTotalAmount($AllowanceTotalAmount) {
+    public function setAllowanceTotalAmount($AllowanceTotalAmount)
+    {
         $this->AllowanceTotalAmount = $AllowanceTotalAmount;
         return $this;
     }
 
-    public function getPayableAmount() {
+    public function getPayableAmount()
+    {
         return $this->PayableAmount;
     }
 
-    public function setPayableAmount($PayableAmount) {
+    public function setPayableAmount($PayableAmount)
+    {
         $this->PayableAmount = $PayableAmount;
         return $this;
     }
 
-    public function getValidations() {
+    public function getValidations()
+    {
         return $this->validations;
     }
 
-    public function setValidations($validations) {
+    public function setValidations($validations)
+    {
         $this->validations = $validations;
         return $this;
     }
