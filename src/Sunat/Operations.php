@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -12,17 +12,30 @@ namespace F72X\Sunat;
 
 use NumberToWords\NumberToWords;
 
-class Operations {
+class Operations
+{
 
-    public static function formatAmount($amount, $decimals = 2) {
+    /**
+     * Formatear monto
+     * Si el monto es nulo, se devuelve 0
+     * @param float $amount
+     * @param int $decimals
+     * @return string
+     */
+    public static function formatAmount($amount, $decimals = 2)
+    {
+        if ($amount === null) {
+            $amount = 0;
+        }
         return number_format($amount, $decimals, '.', '');
     }
 
-    public static function getAmountInWords($amount, $currency = '') {
+    public static function getAmountInWords($amount, $currency = '')
+    {
         $formatedNumber = self::formatAmount($amount);
 
         $parts = explode('.', $formatedNumber);
-        $intPart = (int)$parts[0];
+        $intPart = (int) $parts[0];
         $decimalPart = $parts[1];
         $numberTransformer = (new NumberToWords())->getNumberTransformer('es');
         $t1 = mb_strtoupper($numberTransformer->toWords($intPart));
@@ -31,12 +44,13 @@ class Operations {
     }
 
     /**
-     * 
+     *
      * @param float $amount
      * @param array $items
      * @return float
      */
-    public static function applyAllowancesAndCharges($amount, array $items = []) {
+    public static function applyAllowancesAndCharges($amount, array $items = [])
+    {
         if (!$amount) {
             return 0;
         }
@@ -55,7 +69,8 @@ class Operations {
         return $amount - $totalAllowances + $totalCharges;
     }
 
-    public static function getTotalAllowanceCharge($amount, array $items, $isCharge) {
+    public static function getTotalAllowanceCharge($amount, array $items, $isCharge)
+    {
         $total = 0;
         foreach ($items as $item) {
             $k = $item['multiplierFactor'];
@@ -66,11 +81,13 @@ class Operations {
         return $total;
     }
 
-    public static function getTotalCharges($amount, array $items) {
+    public static function getTotalCharges($amount, array $items)
+    {
         return self::getTotalAllowanceCharge($amount, $items, true);
     }
 
-    public static function getTotalAllowances($amount, array $items) {
+    public static function getTotalAllowances($amount, array $items)
+    {
         return self::getTotalAllowanceCharge($amount, $items, false);
     }
 
@@ -79,7 +96,8 @@ class Operations {
      * @param float $baseAmount
      * @return float
      */
-    public static function calcIGV($baseAmount) {
+    public static function calcIGV($baseAmount)
+    {
         return $baseAmount * SunatVars::IGV;
     }
 
@@ -88,7 +106,8 @@ class Operations {
      * @IMP
      * @return float
      */
-    public static function calcISC() {
+    public static function calcISC()
+    {
         return 0;
     }
 
@@ -97,18 +116,20 @@ class Operations {
      * @IMP
      * @return float
      */
-    public static function calcIVAP() {
+    public static function calcIVAP()
+    {
         return 0;
     }
 
     /**
      * Aplica IGV?
-     * 
+     *
      * @param string $igvAffectCode @CAT7
      * @return boolean
      */
-    public static function isIGVAffected($igvAffectCode) {
-        return ($igvAffectCode === Catalogo::CAT7_GRA_IGV);
+    public static function isIGVAffected($igvAffectCode)
+    {
+        return $igvAffectCode === Catalogo::CAT7_GRA_IGV;
     }
 
 }
