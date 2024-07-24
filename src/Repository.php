@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -15,18 +15,21 @@ use F72X\F72X;
 use F72X\Tools\ZipFile;
 use F72X\Exception\FileException;
 
-class Repository {
+class Repository
+{
 
-    public static function saveDocument($documentName, $billContent) {
+    public static function saveDocument($documentName, $billContent)
+    {
         self::saveFile("xml/$documentName.xml", $billContent);
     }
 
     /**
-     * 
+     *
      * @param string $documentName
      * @param boolean $throwEx set to *false*, to avoid an exception if the file doesn't exist
      */
-    public static function removeFiles($documentName, $throwEx = true) {
+    public static function removeFiles($documentName, $throwEx = true)
+    {
         $rp = self::getRepositoryPath();
         self::removeFile("$rp/xml/$documentName.xml", $throwEx);
         self::removeFile("$rp/input/$documentName.json", $throwEx);
@@ -38,10 +41,11 @@ class Repository {
     }
 
     /**
-     * 
+     *
      * @param string $documentName
      */
-    public static function removeInputBasedFiles($documentName) {
+    public static function removeInputBasedFiles($documentName)
+    {
         $rp = self::getRepositoryPath();
         self::removeFile("$rp/xml/$documentName.xml", false);
         self::removeFile("$rp/sxml/S-$documentName.xml", false);
@@ -49,27 +53,33 @@ class Repository {
         self::removeFile("$rp/pdf/$documentName.pdf", false);
     }
 
-    public static function saveDocumentInput($documentName, $billContent) {
+    public static function saveDocumentInput($documentName, $billContent)
+    {
         self::saveFile("input/$documentName.json", $billContent);
     }
 
-    public static function saveSignedXml($documentName, $billContent) {
+    public static function saveSignedXml($documentName, $billContent)
+    {
         self::saveFile("sxml/S-$documentName.xml", $billContent);
     }
 
-    public static function saveTicket($documentName, $ticket) {
+    public static function saveTicket($documentName, $ticket)
+    {
         self::saveFile("ticket/$documentName.txt", $ticket, true);
     }
 
-    public static function saveCdr($documentName, $billContent) {
+    public static function saveCdr($documentName, $billContent)
+    {
         self::saveFile("cdr/R$documentName.zip", $billContent, true);
     }
 
-    public static function savePDF($documentName, $fileContent) {
+    public static function savePDF($documentName, $fileContent)
+    {
         self::saveFile("pdf/$documentName.pdf", $fileContent);
     }
 
-    public static function zipDocument($documentName) {
+    public static function zipDocument($documentName)
+    {
         $rp = self::getRepositoryPath();
         $zipPath = "$rp/zip/$documentName.zip";
         $xmlPath = "$rp/sxml/S-$documentName.xml";
@@ -87,46 +97,55 @@ class Repository {
         }
     }
 
-    public static function billExist($documentName) {
+    public static function billExist($documentName)
+    {
         $rp = self::getRepositoryPath();
         return fileExists("$rp/xml/$documentName.xml");
     }
 
-    public static function cdrExist($documentName) {
+    public static function cdrExist($documentName)
+    {
         $rp = self::getRepositoryPath();
         return fileExists("$rp/cdr/R$documentName.zip");
     }
 
-    public static function getRepositoryPath() {
+    public static function getRepositoryPath()
+    {
         return Company::getRepositoryPath();
     }
 
-    public static function getXmlPath($documentName) {
+    public static function getXmlPath($documentName)
+    {
         $rp = self::getRepositoryPath();
         return "$rp/xml/$documentName.xml";
     }
 
-    public static function getBillInputPath($documentName) {
+    public static function getBillInputPath($documentName)
+    {
         $rp = self::getRepositoryPath();
         return "$rp/input/$documentName.json";
     }
 
-    public static function getSignedBillPath($documentName) {
+    public static function getSignedBillPath($documentName)
+    {
         $rp = self::getRepositoryPath();
         return "$rp/sxml/S-$documentName.xml";
     }
 
-    public static function getZippedBillPath($documentName) {
+    public static function getZippedBillPath($documentName)
+    {
         $rp = self::getRepositoryPath();
         return "$rp/zip/$documentName.zip";
     }
 
-    public static function getDocumentTicketPath($documentName) {
+    public static function getDocumentTicketPath($documentName)
+    {
         $rp = self::getRepositoryPath();
         return "$rp/ticket/$documentName.txt";
     }
 
-    public static function getBillInputContent($documentName) {
+    public static function getBillInputContent($documentName)
+    {
         $filePath = self::getBillInputPath($documentName);
         if (file_exists($filePath)) {
             return file_get_contents($filePath);
@@ -134,25 +153,30 @@ class Repository {
         throw new FileException("El archivo: $filePath no existe.");
     }
 
-    public static function getZipContent($documentName) {
+    public static function getZipContent($documentName)
+    {
         return file_get_contents(self::getZippedBillPath($documentName));
     }
 
-    public static function getDocumentTicketContent($documentName) {
+    public static function getDocumentTicketContent($documentName)
+    {
         return file_get_contents(self::getDocumentTicketPath($documentName));
     }
 
-    public static function getPdfPath($documentName) {
+    public static function getPdfPath($documentName)
+    {
         $rp = self::getRepositoryPath();
         return "$rp/pdf/$documentName.pdf";
     }
 
-    private static function saveFile($filePath, $fileContent, $overwrite = false) {
+    private static function saveFile($filePath, $fileContent, $overwrite = false)
+    {
         $rp = self::getRepositoryPath();
         self::writeFile("$rp/$filePath", $fileContent, $overwrite);
     }
 
-    public static function removeFile($filePath, $throwEx = true) {
+    public static function removeFile($filePath, $throwEx = true)
+    {
         if (!file_exists($filePath)) {
             if ($throwEx) {
                 throw new FileException("El archivo: $filePath no existe.");
@@ -162,11 +186,13 @@ class Repository {
         unlink($filePath);
     }
 
-    public static function getTicketInfo($documentName) {
+    public static function getTicketInfo($documentName)
+    {
         return self::getDocumentTicketContent($documentName);
     }
 
-    public static function getCdrInfo($documentName) {
+    public static function getCdrInfo($documentName)
+    {
         $rp = self::getRepositoryPath();
         $zipPath = "$rp/cdr/R$documentName.zip";
         $xmlFile = "R-$documentName.xml";
@@ -188,7 +214,8 @@ class Repository {
         return $info;
     }
 
-    private static function getMapCdr($xmlString) {
+    private static function getMapCdr($xmlString)
+    {
         $xmlStringI1 = str_replace(['ar:', 'ext:', 'cac:', 'cbc:'], '', $xmlString);
         $SimpleXml = simplexml_load_string($xmlStringI1);
         $origin = json_decode(json_encode($SimpleXml), 1);
@@ -206,7 +233,8 @@ class Repository {
         ];
     }
 
-    public static function xmlStream($documentName) {
+    public static function xmlStream($documentName)
+    {
         $filePath = self::getXmlPath($documentName);
         if (file_exists($filePath)) {
             header('Content-Type: application/xml');
@@ -218,7 +246,8 @@ class Repository {
         throw new FileException("El archivo: $filePath no existe.");
     }
 
-    public static function signedXmlStream($documentName) {
+    public static function signedXmlStream($documentName)
+    {
         $filePath = self::getSignedBillPath($documentName);
         if (file_exists($filePath)) {
             header('Content-Type: application/xml');
@@ -230,7 +259,8 @@ class Repository {
         throw new FileException("El archivo: $filePath no existe.");
     }
 
-    public static function getPdfStream($documentName) {
+    public static function getPdfStream($documentName)
+    {
         $filePath = self::getPdfPath($documentName);
         if (file_exists($filePath)) {
             return file_get_contents($filePath);
@@ -238,7 +268,8 @@ class Repository {
         throw new FileException("El archivo: $filePath no existe.");
     }
 
-    public static function pdfStream($documentName, $browserView = false) {
+    public static function pdfStream($documentName, $browserView = false)
+    {
         $stream = self::getPdfStream($documentName);
         header('Content-Type: application/pdf');
         if (!$browserView) {
@@ -249,7 +280,8 @@ class Repository {
         exit();
     }
 
-    public static function billInputStream($documentName) {
+    public static function billInputStream($documentName)
+    {
         $filePath = self::getBillInputPath($documentName);
         if (file_exists($filePath)) {
             header('Content-Type: application/json');
@@ -261,7 +293,8 @@ class Repository {
         throw new FileException("El archivo: $filePath no existe.");
     }
 
-    public static function writeFile($filePath, $fileContent, $overwrite = false) {
+    public static function writeFile($filePath, $fileContent, $overwrite = false)
+    {
         if (file_exists($filePath) && !$overwrite) {
             throw new FileException("El archivo: $filePath ya existe.");
         }

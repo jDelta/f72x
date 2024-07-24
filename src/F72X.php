@@ -4,7 +4,7 @@
  * MÓDULO DE EMISIÓN ELECTRÓNICA F72X
  * UBL 2.1
  * Version 1.0
- * 
+ *
  * Copyright 2019, Jaime Cruz
  */
 
@@ -12,12 +12,8 @@ namespace F72X;
 
 use F72X\Exception\ConfigException;
 
-class F72X {
-
-    const RUNNING_ENV_GAE = 1;
-    const RUNNING_ENV_GAE_DEV_SERVER = 2;
-    const RUNNING_ENV_X = 3;
-
+class F72X
+{
     private static $production = null;
     private static $requiredConfigFields = [
         'cconfigPath',
@@ -29,7 +25,8 @@ class F72X {
      * @param array $cfg datos del contribuyente
      * @throws ConfigException
      */
-    public static function init(array $cfg) {
+    public static function init(array $cfg)
+    {
         self::validateConfig($cfg);
         // Wrong production mode config
         if (array_key_exists('prodMode', $cfg) && !is_bool($cfg['prodMode'])) {
@@ -42,7 +39,8 @@ class F72X {
         Company::setConfig($cfg);
     }
 
-    public static function isProductionMode() {
+    public static function isProductionMode()
+    {
         if (is_null(self::$production)) {
             throw new ConfigException("F72x::init error: La propiedad [prodMode] no fue definida");
         }
@@ -50,11 +48,12 @@ class F72X {
     }
 
     /**
-     * 
+     *
      * @param array $config
      * @throws ConfigException
      */
-    private static function validateConfig(array $config) {
+    private static function validateConfig(array $config)
+    {
         foreach (self::$requiredConfigFields as $field) {
             if (!isset($config[$field])) {
                 throw new ConfigException(sprintf('La propiedad %s es obligatoria, por favor revise su cofiguración.', $field));
@@ -68,27 +67,33 @@ class F72X {
         }
     }
 
-    public static function getModuleDir() {
+    public static function getModuleDir()
+    {
         return __DIR__ . '/..';
     }
 
-    public static function getCatalogoSunatDir() {
+    public static function getCatalogoSunatDir()
+    {
         return __DIR__ . '/Sunat/catalogo';
     }
 
-    public static function getTempDir() {
+    public static function getTempDir()
+    {
         return Company::getTempPath();
     }
 
-    public static function getDefaultPdfTemplatesPath() {
+    public static function getDefaultPdfTemplatesPath()
+    {
         return self::getModuleDir() . '/cdefaults/tpls';
     }
 
-    public static function getDefaultListsPath() {
+    public static function getDefaultListsPath()
+    {
         return self::getModuleDir() . '/cdefaults/lists';
     }
 
-    public static function getSrcDir() {
+    public static function getSrcDir()
+    {
         return __DIR__;
     }
 
@@ -96,24 +101,9 @@ class F72X {
      * Return the environment code where this module is running.
      * @return int
      */
-    public static function getRunningEnvironment() {
-        $serverSofware = getenv('SERVER_SOFTWARE');
-        if (strpos($serverSofware, 'Google App Engine') === 0) {
-            return self::RUNNING_ENV_GAE;
-        }
-        if (strpos($serverSofware, 'Development') === 0) {
-            return self::RUNNING_ENV_GAE_DEV_SERVER;
-        }
-        return self::RUNNING_ENV_X;
-    }
-
-    /**
-     * Return the environment code where this module is running.
-     * @return int
-     */
-    public static function isRunninOnGAE() {
-        $re = self::getRunningEnvironment();
-        return ($re == self::RUNNING_ENV_GAE || $re == self::RUNNING_ENV_GAE_DEV_SERVER);
+    public static function isRunninOnGAE()
+    {
+        return (bool) getenv('GAE_ENV');
     }
 
 }
